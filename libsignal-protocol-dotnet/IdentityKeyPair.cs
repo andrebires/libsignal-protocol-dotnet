@@ -29,13 +29,13 @@ namespace libsignal
     public class IdentityKeyPair
     {
 
-        private readonly IdentityKey publicKey;
-        private readonly ECPrivateKey privateKey;
+        private readonly IdentityKey _publicKey;
+        private readonly IEcPrivateKey _privateKey;
 
-        public IdentityKeyPair(IdentityKey publicKey, ECPrivateKey privateKey)
+        public IdentityKeyPair(IdentityKey publicKey, IEcPrivateKey privateKey)
         {
-            this.publicKey = publicKey;
-            this.privateKey = privateKey;
+            this._publicKey = publicKey;
+            this._privateKey = privateKey;
         }
 
         public IdentityKeyPair(byte[] serialized)
@@ -43,8 +43,8 @@ namespace libsignal
             try
             {
                 IdentityKeyPairStructure structure = IdentityKeyPairStructure.Parser.ParseFrom(serialized);
-                this.publicKey = new IdentityKey(structure.PublicKey.ToByteArray(), 0);
-                this.privateKey = Curve.decodePrivatePoint(structure.PrivateKey.ToByteArray());
+                this._publicKey = new IdentityKey(structure.PublicKey.ToByteArray(), 0);
+                this._privateKey = Curve.DecodePrivatePoint(structure.PrivateKey.ToByteArray());
             }
             catch (InvalidProtocolBufferException e)
             {
@@ -52,22 +52,22 @@ namespace libsignal
             }
         }
 
-        public IdentityKey getPublicKey()
+        public IdentityKey GetPublicKey()
         {
-            return publicKey;
+            return _publicKey;
         }
 
-        public ECPrivateKey getPrivateKey()
+        public IEcPrivateKey GetPrivateKey()
         {
-            return privateKey;
+            return _privateKey;
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
             return new IdentityKeyPairStructure
             {
-                PublicKey = ByteString.CopyFrom(publicKey.serialize()),
-                PrivateKey = ByteString.CopyFrom(privateKey.serialize())
+                PublicKey = ByteString.CopyFrom(_publicKey.Serialize()),
+                PrivateKey = ByteString.CopyFrom(_privateKey.Serialize())
 
             }.ToByteArray();
         }

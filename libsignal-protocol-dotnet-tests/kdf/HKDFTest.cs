@@ -21,10 +21,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace libsignal_test
 {
     [TestClass]
-    public class HKDFTest
+    public class HkdfTest
     {
         [TestMethod, TestCategory("libsignal.kdf")]
-        public void testVectorV3()
+        public void TestVectorV3()
         {
             byte[] ikm =
             {
@@ -61,12 +61,12 @@ namespace libsignal_test
                 0x58, 0x65
             };
 
-            byte[] actualOutput = HKDF.createFor(3).deriveSecrets(ikm, salt, info, 42);
+            byte[] actualOutput = Hkdf.CreateFor(3).DeriveSecrets(ikm, salt, info, 42);
             CollectionAssert.AreEqual(okm, actualOutput);
         }
 
         [TestMethod, TestCategory("libsignal.kdf")]
-        public void testVectorLongV3()
+        public void TestVectorLongV3()
         {
             byte[] ikm =
             {
@@ -149,12 +149,12 @@ namespace libsignal_test
                 0x1d, 0x87
             };
 
-            byte[] actualOutput = HKDF.createFor(3).deriveSecrets(ikm, salt, info, 82);
+            byte[] actualOutput = Hkdf.CreateFor(3).DeriveSecrets(ikm, salt, info, 82);
             CollectionAssert.AreEqual(okm, actualOutput);
         }
 
         [TestMethod, TestCategory("libsignal.kdf")]
-        public void testVectorV2()
+        public void TestVectorV2()
         {
             byte[] ikm =
             {
@@ -195,7 +195,7 @@ namespace libsignal_test
                 0x99, 0xda, 0xeb, 0xec
             };
 
-            byte[] actualOutput = HKDF.createFor(2).deriveSecrets(ikm, salt, info, 64);
+            byte[] actualOutput = Hkdf.CreateFor(2).DeriveSecrets(ikm, salt, info, 64);
             CollectionAssert.AreEqual(okm, actualOutput);
         }
     }

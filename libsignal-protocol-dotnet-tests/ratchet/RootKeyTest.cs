@@ -27,7 +27,7 @@ namespace libsignal_test
     public class RootKeyTest
     {
         [TestMethod, TestCategory("libsignal.ratchet")]
-        public void testRootKeyDerivationV2()
+        public void TestRootKeyDerivationV2()
         {
             byte[] rootKeySeed =
             {
@@ -95,20 +95,20 @@ namespace libsignal_test
                 0xca, 0x5f
             };
 
-            ECPublicKey alicePublicKey = Curve.decodePoint(alicePublic, 0);
-            ECPrivateKey alicePrivateKey = Curve.decodePrivatePoint(alicePrivate);
-            ECKeyPair aliceKeyPair = new ECKeyPair(alicePublicKey, alicePrivateKey);
+            IEcPublicKey alicePublicKey = Curve.DecodePoint(alicePublic, 0);
+            IEcPrivateKey alicePrivateKey = Curve.DecodePrivatePoint(alicePrivate);
+            EcKeyPair aliceKeyPair = new EcKeyPair(alicePublicKey, alicePrivateKey);
 
-            ECPublicKey bobPublicKey = Curve.decodePoint(bobPublic, 0);
-            RootKey rootKey = new RootKey(HKDF.createFor(2), rootKeySeed);
+            IEcPublicKey bobPublicKey = Curve.DecodePoint(bobPublic, 0);
+            RootKey rootKey = new RootKey(Hkdf.CreateFor(2), rootKeySeed);
 
-            Pair<RootKey, ChainKey> rootKeyChainKeyPair = rootKey.createChain(bobPublicKey, aliceKeyPair);
-            RootKey nextRootKey = rootKeyChainKeyPair.first();
-            ChainKey nextChainKey = rootKeyChainKeyPair.second();
+            Pair<RootKey, ChainKey> rootKeyChainKeyPair = rootKey.CreateChain(bobPublicKey, aliceKeyPair);
+            RootKey nextRootKey = rootKeyChainKeyPair.First();
+            ChainKey nextChainKey = rootKeyChainKeyPair.Second();
 
-            CollectionAssert.AreEqual(rootKey.getKeyBytes(), rootKeySeed);
-            CollectionAssert.AreEqual(nextRootKey.getKeyBytes(), nextRoot);
-            CollectionAssert.AreEqual(nextChainKey.getKey(), nextChain);
+            CollectionAssert.AreEqual(rootKey.GetKeyBytes(), rootKeySeed);
+            CollectionAssert.AreEqual(nextRootKey.GetKeyBytes(), nextRoot);
+            CollectionAssert.AreEqual(nextChainKey.GetKey(), nextChain);
         }
     }
 }

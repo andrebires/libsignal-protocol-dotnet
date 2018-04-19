@@ -16,10 +16,10 @@ namespace Libsignal.Sample
             // 1. Sender setup
 
             // At install time, a libsignal client needs to generate its identity keys, registration id, and prekeys.
-            var senderIdentityKeyPair = KeyHelper.generateIdentityKeyPair();
-            var senderRegistrationId = KeyHelper.generateRegistrationId(false);
-            var senderPreKeys = KeyHelper.generatePreKeys(0, 100);
-            var senderSignedPreKey = KeyHelper.generateSignedPreKey(senderIdentityKeyPair, KeyHelper.generateSenderKeyId());
+            var senderIdentityKeyPair = KeyHelper.GenerateIdentityKeyPair();
+            var senderRegistrationId = KeyHelper.GenerateRegistrationId(false);
+            var senderPreKeys = KeyHelper.GeneratePreKeys(0, 100);
+            var senderSignedPreKey = KeyHelper.GenerateSignedPreKey(senderIdentityKeyPair, KeyHelper.GenerateSenderKeyId());
             var senderAddress = new SignalProtocolAddress("sender", 1);
 
             // TODO: Store identityKeyPair somewhere durable and safe.
@@ -29,12 +29,12 @@ namespace Libsignal.Sample
             var senderPreKeyStore = new InMemoryPreKeyStore();
             foreach (var senderPreKey in senderPreKeys)
             {
-                senderPreKeyStore.StorePreKey(senderPreKey.getId(), senderPreKey);
+                senderPreKeyStore.StorePreKey(senderPreKey.GetId(), senderPreKey);
             }
 
             // Store signed prekey in SignedPreKeyStore.
             var senderSignedPreKeyStore = new InMemorySignedPreKeyStore();
-            senderSignedPreKeyStore.StoreSignedPreKey(senderSignedPreKey.getId(), senderSignedPreKey);
+            senderSignedPreKeyStore.StoreSignedPreKey(senderSignedPreKey.GetId(), senderSignedPreKey);
 
             var senderSessionStore = new InMemorySessionStore();
             var senderIdentityStore = new InMemoryIdentityKeyStore(senderIdentityKeyPair, senderRegistrationId);
@@ -42,23 +42,23 @@ namespace Libsignal.Sample
             var senderPreKeyBundle = new PreKeyBundle(
                 senderProtocolStore.GetLocalRegistrationId(),
                 senderAddress.DeviceId,
-                senderPreKeys[0].getId(),
-                senderPreKeys[0].getKeyPair().getPublicKey(),
-                senderSignedPreKey.getId(),
-                senderSignedPreKey.getKeyPair().getPublicKey(),
-                senderSignedPreKey.getSignature(),
-                senderProtocolStore.GetIdentityKeyPair().getPublicKey()
+                senderPreKeys[0].GetId(),
+                senderPreKeys[0].GetKeyPair().GetPublicKey(),
+                senderSignedPreKey.GetId(),
+                senderSignedPreKey.GetKeyPair().GetPublicKey(),
+                senderSignedPreKey.GetSignature(),
+                senderProtocolStore.GetIdentityKeyPair().GetPublicKey()
             );
 
-            senderProtocolStore.StorePreKey(senderPreKeys[0].getId(), new PreKeyRecord(senderPreKeyBundle.getPreKeyId(), senderPreKeys[0].getKeyPair()));
-            senderProtocolStore.StoreSignedPreKey(senderSignedPreKey.getId(), new SignedPreKeyRecord(22, (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), senderSignedPreKey.getKeyPair(), senderSignedPreKey.getSignature()));
+            senderProtocolStore.StorePreKey(senderPreKeys[0].GetId(), new PreKeyRecord(senderPreKeyBundle.GetPreKeyId(), senderPreKeys[0].GetKeyPair()));
+            senderProtocolStore.StoreSignedPreKey(senderSignedPreKey.GetId(), new SignedPreKeyRecord(22, (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), senderSignedPreKey.GetKeyPair(), senderSignedPreKey.GetSignature()));
 
 
             // 2. Destination setup
-            var destinationIdentityKeyPair = KeyHelper.generateIdentityKeyPair();
-            var destinationRegistrationId = KeyHelper.generateRegistrationId(false);
-            var destinationPreKeys = KeyHelper.generatePreKeys(0, 100);
-            var destinationSignedPreKey = KeyHelper.generateSignedPreKey(destinationIdentityKeyPair, KeyHelper.generateSenderKeyId());
+            var destinationIdentityKeyPair = KeyHelper.GenerateIdentityKeyPair();
+            var destinationRegistrationId = KeyHelper.GenerateRegistrationId(false);
+            var destinationPreKeys = KeyHelper.GeneratePreKeys(0, 100);
+            var destinationSignedPreKey = KeyHelper.GenerateSignedPreKey(destinationIdentityKeyPair, KeyHelper.GenerateSenderKeyId());
             var destinationAddress = new SignalProtocolAddress("destination", 1);
 
             // TODO: Store identityKeyPair somewhere durable and safe.
@@ -67,12 +67,12 @@ namespace Libsignal.Sample
             var destinationPreKeyStore = new InMemoryPreKeyStore();
             foreach (var destinationPreKey in destinationPreKeys)
             {
-                destinationPreKeyStore.StorePreKey(destinationPreKey.getId(), destinationPreKey);
+                destinationPreKeyStore.StorePreKey(destinationPreKey.GetId(), destinationPreKey);
             }
 
             // Store signed prekey in SignedPreKeyStore.
             var destinationSignedPreKeyStore = new InMemorySignedPreKeyStore();
-            destinationSignedPreKeyStore.StoreSignedPreKey(destinationSignedPreKey.getId(), destinationSignedPreKey);
+            destinationSignedPreKeyStore.StoreSignedPreKey(destinationSignedPreKey.GetId(), destinationSignedPreKey);
 
             var destinationSessionStore = new InMemorySessionStore();
             var destinationIdentityStore = new InMemoryIdentityKeyStore(destinationIdentityKeyPair, destinationRegistrationId);
@@ -80,24 +80,24 @@ namespace Libsignal.Sample
             var destinationPreKeyBundle = new PreKeyBundle(
                 destinationProtocolStore.GetLocalRegistrationId(),
                 destinationAddress.DeviceId,
-                destinationPreKeys[0].getId(),
-                destinationPreKeys[0].getKeyPair().getPublicKey(),
-                destinationSignedPreKey.getId(),
-                destinationSignedPreKey.getKeyPair().getPublicKey(),
-                destinationSignedPreKey.getSignature(),
-                destinationProtocolStore.GetIdentityKeyPair().getPublicKey()
+                destinationPreKeys[0].GetId(),
+                destinationPreKeys[0].GetKeyPair().GetPublicKey(),
+                destinationSignedPreKey.GetId(),
+                destinationSignedPreKey.GetKeyPair().GetPublicKey(),
+                destinationSignedPreKey.GetSignature(),
+                destinationProtocolStore.GetIdentityKeyPair().GetPublicKey()
                 );
 
-            destinationProtocolStore.StorePreKey(destinationPreKeys[0].getId(), new PreKeyRecord(destinationPreKeyBundle.getPreKeyId(), destinationPreKeys[0].getKeyPair()));
-            destinationProtocolStore.StoreSignedPreKey(destinationSignedPreKey.getId(), new SignedPreKeyRecord(22, (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), destinationSignedPreKey.getKeyPair(), destinationSignedPreKey.getSignature()));
+            destinationProtocolStore.StorePreKey(destinationPreKeys[0].GetId(), new PreKeyRecord(destinationPreKeyBundle.GetPreKeyId(), destinationPreKeys[0].GetKeyPair()));
+            destinationProtocolStore.StoreSignedPreKey(destinationSignedPreKey.GetId(), new SignedPreKeyRecord(22, (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), destinationSignedPreKey.GetKeyPair(), destinationSignedPreKey.GetSignature()));
 
             // Instantiate a SessionBuilder for a remote recipientId + deviceId tuple.
             var senderToDestinationSessionBuilder = new SessionBuilder(senderProtocolStore, destinationAddress);
             var destinationToSenderSessionBuilder = new SessionBuilder(destinationProtocolStore, senderAddress);
             
             // Build a session with a PreKey retrieved from the server.
-            senderToDestinationSessionBuilder.process(destinationPreKeyBundle);
-            destinationToSenderSessionBuilder.process(senderPreKeyBundle);
+            senderToDestinationSessionBuilder.Process(destinationPreKeyBundle);
+            destinationToSenderSessionBuilder.Process(senderPreKeyBundle);
 
             SessionCipher senderToDestinationSessionCipher = new SessionCipher(senderProtocolStore, destinationAddress);
 
@@ -110,10 +110,10 @@ namespace Libsignal.Sample
 
 
                 CiphertextMessage message =
-                    senderToDestinationSessionCipher.encrypt(Encoding.UTF8.GetBytes(text));
+                    senderToDestinationSessionCipher.Encrypt(Encoding.UTF8.GetBytes(text));
 
 
-                var encryptedMessage = message.serialize();
+                var encryptedMessage = message.Serialize();
 
                 Console.WriteLine("Encrypted message: {0}", Convert.ToBase64String(encryptedMessage));
 
@@ -123,7 +123,7 @@ namespace Libsignal.Sample
 
 
                 PreKeySignalMessage incomingMessage = new PreKeySignalMessage(encryptedMessage);
-                var decryptedMessage = destinationToSenderSessionCipher.decrypt(incomingMessage);
+                var decryptedMessage = destinationToSenderSessionCipher.Decrypt(incomingMessage);
 
                 Console.WriteLine("Decrypted message: {0}", Encoding.UTF8.GetString(decryptedMessage));
 
@@ -132,17 +132,17 @@ namespace Libsignal.Sample
             }
         }
 
-        private static PreKeyBundle CcreatePreKeyBundle(SignalProtocolStore store, uint preKeyId, ECKeyPair signedPreKey)
+        private static PreKeyBundle CcreatePreKeyBundle(ISignalProtocolStore store, uint preKeyId, EcKeyPair signedPreKey)
         {
-            ECKeyPair aliceUnsignedPreKey = Curve.generateKeyPair();
-            int aliceUnsignedPreKeyId = new Random().Next((int)Medium.MAX_VALUE);
-            byte[] aliceSignature = Curve.calculateSignature(store.GetIdentityKeyPair().getPrivateKey(),
-                signedPreKey.getPublicKey().serialize());
+            EcKeyPair aliceUnsignedPreKey = Curve.GenerateKeyPair();
+            int aliceUnsignedPreKeyId = new Random().Next((int)Medium.MaxValue);
+            byte[] aliceSignature = Curve.CalculateSignature(store.GetIdentityKeyPair().GetPrivateKey(),
+                signedPreKey.GetPublicKey().Serialize());
 
             PreKeyBundle alicePreKeyBundle = new PreKeyBundle(1, 1,
-                (uint)aliceUnsignedPreKeyId, aliceUnsignedPreKey.getPublicKey(),
-                preKeyId, signedPreKey.getPublicKey(),
-                aliceSignature, store.GetIdentityKeyPair().getPublicKey());
+                (uint)aliceUnsignedPreKeyId, aliceUnsignedPreKey.GetPublicKey(),
+                preKeyId, signedPreKey.GetPublicKey(),
+                aliceSignature, store.GetIdentityKeyPair().GetPublicKey());
 
             store.StoreSignedPreKey(preKeyId, new SignedPreKeyRecord(preKeyId, (ulong)DateTime.UtcNow.Ticks, signedPreKey, aliceSignature));
             store.StorePreKey((uint)aliceUnsignedPreKeyId, new PreKeyRecord((uint)aliceUnsignedPreKeyId, aliceUnsignedPreKey));

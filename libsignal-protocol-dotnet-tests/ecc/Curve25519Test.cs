@@ -25,7 +25,7 @@ namespace libsignal_test
     public class Curve25519Test
     {
         [TestMethod, TestCategory("libsignal.ecc")]
-        public void testAgreement()
+        public void TestAgreement()
         {
 
             byte[] alicePublic =
@@ -83,36 +83,36 @@ namespace libsignal_test
                 0xe6, 0x29
             };
 
-            ECPublicKey alicePublicKey = Curve.decodePoint(alicePublic, 0);
-            ECPrivateKey alicePrivateKey = Curve.decodePrivatePoint(alicePrivate);
+            IEcPublicKey alicePublicKey = Curve.DecodePoint(alicePublic, 0);
+            IEcPrivateKey alicePrivateKey = Curve.DecodePrivatePoint(alicePrivate);
 
-            ECPublicKey bobPublicKey = Curve.decodePoint(bobPublic, 0);
-            ECPrivateKey bobPrivateKey = Curve.decodePrivatePoint(bobPrivate);
+            IEcPublicKey bobPublicKey = Curve.DecodePoint(bobPublic, 0);
+            IEcPrivateKey bobPrivateKey = Curve.DecodePrivatePoint(bobPrivate);
 
-            byte[] sharedOne = Curve.calculateAgreement(alicePublicKey, bobPrivateKey);
-            byte[] sharedTwo = Curve.calculateAgreement(bobPublicKey, alicePrivateKey);
+            byte[] sharedOne = Curve.CalculateAgreement(alicePublicKey, bobPrivateKey);
+            byte[] sharedTwo = Curve.CalculateAgreement(bobPublicKey, alicePrivateKey);
 
             CollectionAssert.AreEqual(sharedOne, shared);
             CollectionAssert.AreEqual(sharedTwo, shared);
         }
 
         [TestMethod, TestCategory("libsignal.ecc")]
-        public void testRandomAgreements()
+        public void TestRandomAgreements()
         {
             for (int i = 0; i < 50; i++)
             {
-                ECKeyPair alice = Curve.generateKeyPair();
-                ECKeyPair bob = Curve.generateKeyPair();
+                EcKeyPair alice = Curve.GenerateKeyPair();
+                EcKeyPair bob = Curve.GenerateKeyPair();
 
-                byte[] sharedAlice = Curve.calculateAgreement(bob.getPublicKey(), alice.getPrivateKey());
-                byte[] sharedBob = Curve.calculateAgreement(alice.getPublicKey(), bob.getPrivateKey());
+                byte[] sharedAlice = Curve.CalculateAgreement(bob.GetPublicKey(), alice.GetPrivateKey());
+                byte[] sharedBob = Curve.CalculateAgreement(alice.GetPublicKey(), bob.GetPrivateKey());
 
                 CollectionAssert.AreEqual(sharedAlice, sharedBob);
             }
         }
 
         [TestMethod, TestCategory("libsignal.ecc")]
-        public void testSignature()
+        public void TestSignature()
         {
             byte[] aliceIdentityPrivate =
             {
@@ -164,11 +164,11 @@ namespace libsignal_test
                 0x60, 0xb8, 0x6e, 0x88
             };
 
-            ECPrivateKey alicePrivateKey = Curve.decodePrivatePoint(aliceIdentityPrivate);
-            ECPublicKey alicePublicKey = Curve.decodePoint(aliceIdentityPublic, 0);
-            ECPublicKey aliceEphemeral = Curve.decodePoint(aliceEphemeralPublic, 0);
+            IEcPrivateKey alicePrivateKey = Curve.DecodePrivatePoint(aliceIdentityPrivate);
+            IEcPublicKey alicePublicKey = Curve.DecodePoint(aliceIdentityPublic, 0);
+            IEcPublicKey aliceEphemeral = Curve.DecodePoint(aliceEphemeralPublic, 0);
 
-            if (!Curve.verifySignature(alicePublicKey, aliceEphemeral.serialize(), aliceSignature))
+            if (!Curve.VerifySignature(alicePublicKey, aliceEphemeral.Serialize(), aliceSignature))
             {
                 Assert.Fail("Sig verification failed!");
             }
@@ -180,7 +180,7 @@ namespace libsignal_test
 
                 modifiedSignature[i] ^= 0x01;
 
-                if (Curve.verifySignature(alicePublicKey, aliceEphemeral.serialize(), modifiedSignature))
+                if (Curve.VerifySignature(alicePublicKey, aliceEphemeral.Serialize(), modifiedSignature))
                 {
                     Assert.Fail("Sig verification succeeded!");
                 }
@@ -188,14 +188,14 @@ namespace libsignal_test
         }
 
         [TestMethod, TestCategory("libsignal.ecc")]
-        public void testSignatureOverflow()
+        public void TestSignatureOverflow()
         {
-            ECKeyPair keys = Curve.generateKeyPair();
+            EcKeyPair keys = Curve.GenerateKeyPair();
             byte[] message = new byte[4096];
 
             try
             {
-                byte[] signature = Curve.calculateSignature(keys.getPrivateKey(), message);
+                byte[] signature = Curve.CalculateSignature(keys.GetPrivateKey(), message);
                 throw new InvalidKeyException("Should have asserted!");
             }
             catch (InvalidKeyException)

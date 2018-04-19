@@ -34,25 +34,25 @@ namespace libsignal_test
     public class SessionCipherTest
     {
         [TestMethod, TestCategory("libsignal")]
-        public void testBasicSessionV3()
+        public void TestBasicSessionV3()
         {
             SessionRecord aliceSessionRecord = new SessionRecord();
             SessionRecord bobSessionRecord = new SessionRecord();
 
-            initializeSessionsV3(aliceSessionRecord.getSessionState(), bobSessionRecord.getSessionState());
-            runInteraction(aliceSessionRecord, bobSessionRecord);
+            InitializeSessionsV3(aliceSessionRecord.GetSessionState(), bobSessionRecord.GetSessionState());
+            RunInteraction(aliceSessionRecord, bobSessionRecord);
         }
 
         [TestMethod, TestCategory("libsignal")]
-        public void testMessageKeyLimits()
+        public void TestMessageKeyLimits()
         {
             SessionRecord aliceSessionRecord = new SessionRecord();
             SessionRecord bobSessionRecord = new SessionRecord();
 
-            initializeSessionsV3(aliceSessionRecord.getSessionState(), bobSessionRecord.getSessionState());
+            InitializeSessionsV3(aliceSessionRecord.GetSessionState(), bobSessionRecord.GetSessionState());
 
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
             aliceStore.StoreSession(new SignalProtocolAddress("+14159999999", 1), aliceSessionRecord);
             bobStore.StoreSession(new SignalProtocolAddress("+14158888888", 1), bobSessionRecord);
@@ -64,15 +64,15 @@ namespace libsignal_test
 
             for (int i = 0; i < 2010; i++)
             {
-                inflight.Add(aliceCipher.encrypt(Encoding.UTF8.GetBytes("you've never been so hungry, you've never been so cold")));
+                inflight.Add(aliceCipher.Encrypt(Encoding.UTF8.GetBytes("you've never been so hungry, you've never been so cold")));
             }
 
-            bobCipher.decrypt(new SignalMessage(inflight[1000].serialize()));
-            bobCipher.decrypt(new SignalMessage(inflight[inflight.Count - 1].serialize()));
+            bobCipher.Decrypt(new SignalMessage(inflight[1000].Serialize()));
+            bobCipher.Decrypt(new SignalMessage(inflight[inflight.Count - 1].Serialize()));
 
             try
             {
-                bobCipher.decrypt(new SignalMessage(inflight[0].serialize()));
+                bobCipher.Decrypt(new SignalMessage(inflight[0].Serialize()));
                 throw new Exception("Should have failed!");
             }
             catch (DuplicateMessageException)
@@ -81,10 +81,10 @@ namespace libsignal_test
             }
         }
 
-        private void runInteraction(SessionRecord aliceSessionRecord, SessionRecord bobSessionRecord)
+        private void RunInteraction(SessionRecord aliceSessionRecord, SessionRecord bobSessionRecord)
         {
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
             aliceStore.StoreSession(new SignalProtocolAddress("+14159999999", 1), aliceSessionRecord);
             bobStore.StoreSession(new SignalProtocolAddress("+14158888888", 1), bobSessionRecord);
@@ -93,14 +93,14 @@ namespace libsignal_test
             SessionCipher bobCipher = new SessionCipher(bobStore, new SignalProtocolAddress("+14158888888", 1));
 
             byte[] alicePlaintext = Encoding.UTF8.GetBytes("This is a plaintext message.");
-            CiphertextMessage message = aliceCipher.encrypt(alicePlaintext);
-            byte[] bobPlaintext = bobCipher.decrypt(new SignalMessage(message.serialize()));
+            CiphertextMessage message = aliceCipher.Encrypt(alicePlaintext);
+            byte[] bobPlaintext = bobCipher.Decrypt(new SignalMessage(message.Serialize()));
 
             CollectionAssert.AreEqual(alicePlaintext, bobPlaintext);
 
             byte[] bobReply = Encoding.UTF8.GetBytes("This is a message from Bob.");
-            CiphertextMessage reply = bobCipher.encrypt(bobReply);
-            byte[] receivedReply = aliceCipher.decrypt(new SignalMessage(reply.serialize()));
+            CiphertextMessage reply = bobCipher.Encrypt(bobReply);
+            byte[] receivedReply = aliceCipher.Decrypt(new SignalMessage(reply.Serialize()));
 
             CollectionAssert.AreEqual(bobReply, receivedReply);
 
@@ -110,18 +110,18 @@ namespace libsignal_test
             for (int i = 0; i < 50; i++)
             {
                 alicePlaintextMessages.Add(Encoding.UTF8.GetBytes("смерть за смерть " + i));
-                aliceCiphertextMessages.Add(aliceCipher.encrypt(Encoding.UTF8.GetBytes("смерть за смерть " + i)));
+                aliceCiphertextMessages.Add(aliceCipher.Encrypt(Encoding.UTF8.GetBytes("смерть за смерть " + i)));
             }
 
-            ulong seed = DateUtil.currentTimeMillis();
+            ulong seed = DateUtil.CurrentTimeMillis();
 
             HelperMethods.Shuffle(aliceCiphertextMessages, new Random((int)seed));
             HelperMethods.Shuffle(alicePlaintextMessages, new Random((int)seed));
 
             for (int i = 0; i < aliceCiphertextMessages.Count / 2; i++)
             {
-                byte[] receivedPlaintext = bobCipher.decrypt(new SignalMessage(aliceCiphertextMessages[i].serialize()));
-                Assert.IsTrue(libsignal.util.ByteUtil.isEqual(receivedPlaintext, alicePlaintextMessages[i]));
+                byte[] receivedPlaintext = bobCipher.Decrypt(new SignalMessage(aliceCiphertextMessages[i].Serialize()));
+                Assert.IsTrue(libsignal.util.ByteUtil.IsEqual(receivedPlaintext, alicePlaintextMessages[i]));
             }
 
             List<CiphertextMessage> bobCiphertextMessages = new List<CiphertextMessage>();
@@ -130,70 +130,70 @@ namespace libsignal_test
             for (int i = 0; i < 20; i++)
             {
                 bobPlaintextMessages.Add(Encoding.UTF8.GetBytes("смерть за смерть " + i));
-                bobCiphertextMessages.Add(bobCipher.encrypt(Encoding.UTF8.GetBytes("смерть за смерть " + i)));
+                bobCiphertextMessages.Add(bobCipher.Encrypt(Encoding.UTF8.GetBytes("смерть за смерть " + i)));
             }
 
-            seed = DateUtil.currentTimeMillis();
+            seed = DateUtil.CurrentTimeMillis();
 
             HelperMethods.Shuffle(bobCiphertextMessages, new Random((int)seed));
             HelperMethods.Shuffle(bobPlaintextMessages, new Random((int)seed));
 
             for (int i = 0; i < bobCiphertextMessages.Count / 2; i++)
             {
-                byte[] receivedPlaintext = aliceCipher.decrypt(new SignalMessage(bobCiphertextMessages[i].serialize()));
+                byte[] receivedPlaintext = aliceCipher.Decrypt(new SignalMessage(bobCiphertextMessages[i].Serialize()));
                 CollectionAssert.AreEqual(receivedPlaintext, bobPlaintextMessages[i]);
             }
 
             for (int i = aliceCiphertextMessages.Count / 2; i < aliceCiphertextMessages.Count; i++)
             {
-                byte[] receivedPlaintext = bobCipher.decrypt(new SignalMessage(aliceCiphertextMessages[i].serialize()));
+                byte[] receivedPlaintext = bobCipher.Decrypt(new SignalMessage(aliceCiphertextMessages[i].Serialize()));
                 CollectionAssert.AreEqual(receivedPlaintext, alicePlaintextMessages[i]);
             }
 
             for (int i = bobCiphertextMessages.Count / 2; i < bobCiphertextMessages.Count; i++)
             {
-                byte[] receivedPlaintext = aliceCipher.decrypt(new SignalMessage(bobCiphertextMessages[i].serialize()));
+                byte[] receivedPlaintext = aliceCipher.Decrypt(new SignalMessage(bobCiphertextMessages[i].Serialize()));
                 CollectionAssert.AreEqual(receivedPlaintext, bobPlaintextMessages[i]);
             }
         }
-        private void initializeSessionsV3(SessionState aliceSessionState, SessionState bobSessionState)
+        private void InitializeSessionsV3(SessionState aliceSessionState, SessionState bobSessionState)
         {
-            ECKeyPair aliceIdentityKeyPair = Curve.generateKeyPair();
-            IdentityKeyPair aliceIdentityKey = new IdentityKeyPair(new IdentityKey(aliceIdentityKeyPair.getPublicKey()),
-                                                                   aliceIdentityKeyPair.getPrivateKey());
-            ECKeyPair aliceBaseKey = Curve.generateKeyPair();
-            ECKeyPair aliceEphemeralKey = Curve.generateKeyPair();
+            EcKeyPair aliceIdentityKeyPair = Curve.GenerateKeyPair();
+            IdentityKeyPair aliceIdentityKey = new IdentityKeyPair(new IdentityKey(aliceIdentityKeyPair.GetPublicKey()),
+                                                                   aliceIdentityKeyPair.GetPrivateKey());
+            EcKeyPair aliceBaseKey = Curve.GenerateKeyPair();
+            EcKeyPair aliceEphemeralKey = Curve.GenerateKeyPair();
 
-            ECKeyPair alicePreKey = aliceBaseKey;
+            EcKeyPair alicePreKey = aliceBaseKey;
 
-            ECKeyPair bobIdentityKeyPair = Curve.generateKeyPair();
-            IdentityKeyPair bobIdentityKey = new IdentityKeyPair(new IdentityKey(bobIdentityKeyPair.getPublicKey()),
-                                                                 bobIdentityKeyPair.getPrivateKey());
-            ECKeyPair bobBaseKey = Curve.generateKeyPair();
-            ECKeyPair bobEphemeralKey = bobBaseKey;
+            EcKeyPair bobIdentityKeyPair = Curve.GenerateKeyPair();
+            IdentityKeyPair bobIdentityKey = new IdentityKeyPair(new IdentityKey(bobIdentityKeyPair.GetPublicKey()),
+                                                                 bobIdentityKeyPair.GetPrivateKey());
+            EcKeyPair bobBaseKey = Curve.GenerateKeyPair();
+            EcKeyPair bobEphemeralKey = bobBaseKey;
 
-            ECKeyPair bobPreKey = Curve.generateKeyPair();
+            EcKeyPair bobPreKey = Curve.GenerateKeyPair();
 
-            AliceSignalProtocolParameters aliceParameters = AliceSignalProtocolParameters.newBuilder()
-                .setOurBaseKey(aliceBaseKey)
-                .setOurIdentityKey(aliceIdentityKey)
-                .setTheirOneTimePreKey(May<ECPublicKey>.NoValue)
-                .setTheirRatchetKey(bobEphemeralKey.getPublicKey())
-                .setTheirSignedPreKey(bobBaseKey.getPublicKey())
-                .setTheirIdentityKey(bobIdentityKey.getPublicKey())
-                .create();
+            AliceSignalProtocolParameters aliceParameters = AliceSignalProtocolParameters.NewBuilder()
+                .SetOurBaseKey(aliceBaseKey)
+                .SetOurIdentityKey(aliceIdentityKey)
+                .SetTheirOneTimePreKey(May<IEcPublicKey>.NoValue)
+                .SetTheirRatchetKey(bobEphemeralKey.GetPublicKey())
+                .SetTheirSignedPreKey(bobBaseKey.GetPublicKey())
+                .SetTheirIdentityKey(bobIdentityKey.GetPublicKey())
+                .Create();
 
-            BobSignalProtocolParameters bobParameters = BobSignalProtocolParameters.newBuilder()
-                .setOurRatchetKey(bobEphemeralKey)
-                .setOurSignedPreKey(bobBaseKey)
-                .setOurOneTimePreKey(May<ECKeyPair>.NoValue)
-                .setOurIdentityKey(bobIdentityKey)
-                .setTheirIdentityKey(aliceIdentityKey.getPublicKey())
-                .setTheirBaseKey(aliceBaseKey.getPublicKey())
-                .create();
+            BobSignalProtocolParameters bobParameters = BobSignalProtocolParameters.NewBuilder()
+                .SetOurRatchetKey(bobEphemeralKey)
+                .SetOurSignedPreKey(bobBaseKey)
+                .SetOurOneTimePreKey(May<EcKeyPair>.NoValue)
+                .SetOurIdentityKey(bobIdentityKey)
+                .SetTheirIdentityKey(aliceIdentityKey.GetPublicKey())
+                .SetTheirBaseKey(aliceBaseKey.GetPublicKey())
+                .Create();
 
-            RatchetingSession.initializeSession(aliceSessionState, aliceParameters);
-            RatchetingSession.initializeSession(bobSessionState, bobParameters);
+            RatchetingSession.InitializeSession(aliceSessionState, aliceParameters);
+            RatchetingSession.InitializeSession(bobSessionState, bobParameters);
         }
 
         

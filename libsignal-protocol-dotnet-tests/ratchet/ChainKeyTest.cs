@@ -25,7 +25,7 @@ namespace libsignal_test
     public class ChainKeyTest
     {
         [TestMethod, TestCategory("libsignal.ratchet")]
-        public void testChainKeyDerivationV2()
+        public void TestChainKeyDerivationV2()
         {
             byte[] seed =
             {
@@ -71,20 +71,20 @@ namespace libsignal_test
                 0xd1, 0x5d
             };
 
-            ChainKey chainKey = new ChainKey(HKDF.createFor(2), seed, 0);
+            ChainKey chainKey = new ChainKey(Hkdf.CreateFor(2), seed, 0);
 
-            Assert.AreEqual(seed, chainKey.getKey());
-            CollectionAssert.AreEqual(messageKey, chainKey.getMessageKeys().getCipherKey());
-            CollectionAssert.AreEqual(macKey, chainKey.getMessageKeys().getMacKey());
-            CollectionAssert.AreEqual(nextChainKey, chainKey.getNextChainKey().getKey());
-            Assert.AreEqual<uint>(0, chainKey.getIndex());
-            Assert.AreEqual<uint>(0, chainKey.getMessageKeys().getCounter());
-            Assert.AreEqual<uint>(1, chainKey.getNextChainKey().getIndex());
-            Assert.AreEqual<uint>(1, chainKey.getNextChainKey().getMessageKeys().getCounter());
+            Assert.AreEqual(seed, chainKey.GetKey());
+            CollectionAssert.AreEqual(messageKey, chainKey.GetMessageKeys().GetCipherKey());
+            CollectionAssert.AreEqual(macKey, chainKey.GetMessageKeys().GetMacKey());
+            CollectionAssert.AreEqual(nextChainKey, chainKey.GetNextChainKey().GetKey());
+            Assert.AreEqual<uint>(0, chainKey.GetIndex());
+            Assert.AreEqual<uint>(0, chainKey.GetMessageKeys().GetCounter());
+            Assert.AreEqual<uint>(1, chainKey.GetNextChainKey().GetIndex());
+            Assert.AreEqual<uint>(1, chainKey.GetNextChainKey().GetMessageKeys().GetCounter());
         }
 
         [TestMethod, TestCategory("libsignal.ratchet")]
-        public void testChainKeyDerivationV3()
+        public void TestChainKeyDerivationV3()
         {
             byte[] seed =
             {
@@ -131,16 +131,16 @@ namespace libsignal_test
                 0xd1, 0x5d
             };
 
-            ChainKey chainKey = new ChainKey(HKDF.createFor(3), seed, 0);
+            ChainKey chainKey = new ChainKey(Hkdf.CreateFor(3), seed, 0);
 
-            CollectionAssert.AreEqual(seed, chainKey.getKey());
-            CollectionAssert.AreEqual(messageKey, chainKey.getMessageKeys().getCipherKey());
-            CollectionAssert.AreEqual(macKey, chainKey.getMessageKeys().getMacKey());
-            CollectionAssert.AreEqual(nextChainKey, chainKey.getNextChainKey().getKey());
-            Assert.AreEqual<uint>(0, chainKey.getIndex());
-            Assert.AreEqual<uint>(0, chainKey.getMessageKeys().getCounter());
-            Assert.AreEqual<uint>(1, chainKey.getNextChainKey().getIndex());
-            Assert.AreEqual<uint>(1, chainKey.getNextChainKey().getMessageKeys().getCounter());
+            CollectionAssert.AreEqual(seed, chainKey.GetKey());
+            CollectionAssert.AreEqual(messageKey, chainKey.GetMessageKeys().GetCipherKey());
+            CollectionAssert.AreEqual(macKey, chainKey.GetMessageKeys().GetMacKey());
+            CollectionAssert.AreEqual(nextChainKey, chainKey.GetNextChainKey().GetKey());
+            Assert.AreEqual<uint>(0, chainKey.GetIndex());
+            Assert.AreEqual<uint>(0, chainKey.GetMessageKeys().GetCounter());
+            Assert.AreEqual<uint>(1, chainKey.GetNextChainKey().GetIndex());
+            Assert.AreEqual<uint>(1, chainKey.GetNextChainKey().GetMessageKeys().GetCounter());
         }
     }
 }

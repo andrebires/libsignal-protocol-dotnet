@@ -29,31 +29,31 @@ namespace libsignal
     public class IdentityKey
     {
 
-        private ECPublicKey publicKey;
+        private IEcPublicKey _publicKey;
 
-        public IdentityKey(ECPublicKey publicKey)
+        public IdentityKey(IEcPublicKey publicKey)
         {
-            this.publicKey = publicKey;
+            this._publicKey = publicKey;
         }
 
         public IdentityKey(byte[] bytes, int offset)
         {
-            this.publicKey = Curve.decodePoint(bytes, offset);
+            this._publicKey = Curve.DecodePoint(bytes, offset);
         }
 
-        public ECPublicKey getPublicKey()
+        public IEcPublicKey GetPublicKey()
         {
-            return publicKey;
+            return _publicKey;
         }
 
-        public byte[] serialize()
+        public byte[] Serialize()
         {
-            return publicKey.serialize();
+            return _publicKey.Serialize();
         }
 
-        public String getFingerprint()
+        public String GetFingerprint()
         {
-            return publicKey.serialize().ToString(); //Hex
+            return _publicKey.Serialize().ToString(); //Hex
         }
 
         public override bool Equals(Object other)
@@ -61,13 +61,13 @@ namespace libsignal
             if (other == null) return false;
             if (!(other is IdentityKey)) return false;
 
-            return publicKey.Equals(((IdentityKey)other).getPublicKey());
+            return _publicKey.Equals(((IdentityKey)other).GetPublicKey());
         }
 
 
         public override int GetHashCode()
         {
-            return publicKey.GetHashCode();
+            return _publicKey.GetHashCode();
         }
     }
 }

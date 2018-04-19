@@ -40,13 +40,13 @@ namespace libsignal
     public class SessionCipher
     {
 
-        public static readonly Object SESSION_LOCK = new Object();
+        public static readonly Object SessionLock = new Object();
 
-        private readonly SessionStore sessionStore;
-        private readonly IdentityKeyStore identityKeyStore;
-        private readonly SessionBuilder sessionBuilder;
-        private readonly PreKeyStore preKeyStore;
-        private readonly SignalProtocolAddress remoteAddress;
+        private readonly ISessionStore _sessionStore;
+        private readonly IDentityKeyStore _identityKeyStore;
+        private readonly SessionBuilder _sessionBuilder;
+        private readonly IPreKeyStore _preKeyStore;
+        private readonly SignalProtocolAddress _remoteAddress;
 
         /**
          * Construct a SessionCipher for encrypt/decrypt operations on a session.
@@ -56,19 +56,19 @@ namespace libsignal
          * @param  sessionStore The {@link SessionStore} that contains a session for this recipient.
          * @param  remoteAddress  The remote address that messages will be encrypted to or decrypted from.
          */
-        public SessionCipher(SessionStore sessionStore, PreKeyStore preKeyStore,
-                             SignedPreKeyStore signedPreKeyStore, IdentityKeyStore identityKeyStore,
+        public SessionCipher(ISessionStore sessionStore, IPreKeyStore preKeyStore,
+                             ISignedPreKeyStore signedPreKeyStore, IDentityKeyStore identityKeyStore,
                              SignalProtocolAddress remoteAddress)
         {
-            this.sessionStore = sessionStore;
-            this.preKeyStore = preKeyStore;
-            this.identityKeyStore = identityKeyStore;
-            this.remoteAddress = remoteAddress;
-            this.sessionBuilder = new SessionBuilder(sessionStore, preKeyStore, signedPreKeyStore,
+            this._sessionStore = sessionStore;
+            this._preKeyStore = preKeyStore;
+            this._identityKeyStore = identityKeyStore;
+            this._remoteAddress = remoteAddress;
+            this._sessionBuilder = new SessionBuilder(sessionStore, preKeyStore, signedPreKeyStore,
                                                      identityKeyStore, remoteAddress);
         }
 
-        public SessionCipher(SignalProtocolStore store, SignalProtocolAddress remoteAddress)
+        public SessionCipher(ISignalProtocolStore store, SignalProtocolAddress remoteAddress)
             : this(store, store, store, store, remoteAddress)
         {
 
@@ -80,46 +80,46 @@ namespace libsignal
          * @param  paddedMessage The plaintext message bytes, optionally padded to a constant multiple.
          * @return A ciphertext message encrypted to the recipient+device tuple.
          */
-        public CiphertextMessage encrypt(byte[] paddedMessage)
+        public CiphertextMessage Encrypt(byte[] paddedMessage)
         {
-            lock (SESSION_LOCK)
+            lock (SessionLock)
             {
-                SessionRecord sessionRecord = sessionStore.LoadSession(remoteAddress);
-                SessionState sessionState = sessionRecord.getSessionState();
-                ChainKey chainKey = sessionState.getSenderChainKey();
-                MessageKeys messageKeys = chainKey.getMessageKeys();
-                ECPublicKey senderEphemeral = sessionState.getSenderRatchetKey();
-                uint previousCounter = sessionState.getPreviousCounter();
-                uint sessionVersion = sessionState.getSessionVersion();
+                SessionRecord sessionRecord = _sessionStore.LoadSession(_remoteAddress);
+                SessionState sessionState = sessionRecord.GetSessionState();
+                ChainKey chainKey = sessionState.GetSenderChainKey();
+                MessageKeys messageKeys = chainKey.GetMessageKeys();
+                IEcPublicKey senderEphemeral = sessionState.GetSenderRatchetKey();
+                uint previousCounter = sessionState.GetPreviousCounter();
+                uint sessionVersion = sessionState.GetSessionVersion();
 
-                byte[] ciphertextBody = getCiphertext(messageKeys, paddedMessage);
-                CiphertextMessage ciphertextMessage = new SignalMessage(sessionVersion, messageKeys.getMacKey(),
-                                                                         senderEphemeral, chainKey.getIndex(),
+                byte[] ciphertextBody = GetCiphertext(messageKeys, paddedMessage);
+                CiphertextMessage ciphertextMessage = new SignalMessage(sessionVersion, messageKeys.GetMacKey(),
+                                                                         senderEphemeral, chainKey.GetIndex(),
                                                                          previousCounter, ciphertextBody,
-                                                                         sessionState.getLocalIdentityKey(),
-                                                                         sessionState.getRemoteIdentityKey());
+                                                                         sessionState.GetLocalIdentityKey(),
+                                                                         sessionState.GetRemoteIdentityKey());
 
-                if (sessionState.hasUnacknowledgedPreKeyMessage())
+                if (sessionState.HasUnacknowledgedPreKeyMessage())
                 {
-                    SessionState.UnacknowledgedPreKeyMessageItems items = sessionState.getUnacknowledgedPreKeyMessageItems();
+                    SessionState.UnacknowledgedPreKeyMessageItems items = sessionState.GetUnacknowledgedPreKeyMessageItems();
                     uint localRegistrationId = sessionState.GetLocalRegistrationId();
 
-                    ciphertextMessage = new PreKeySignalMessage(sessionVersion, localRegistrationId, items.getPreKeyId(),
-                                                                 items.getSignedPreKeyId(), items.getBaseKey(),
-                                                                 sessionState.getLocalIdentityKey(),
+                    ciphertextMessage = new PreKeySignalMessage(sessionVersion, localRegistrationId, items.GetPreKeyId(),
+                                                                 items.GetSignedPreKeyId(), items.GetBaseKey(),
+                                                                 sessionState.GetLocalIdentityKey(),
                                                                  (SignalMessage)ciphertextMessage);
                 }
 
-                sessionState.setSenderChainKey(chainKey.getNextChainKey());
+                sessionState.SetSenderChainKey(chainKey.GetNextChainKey());
 
-                if (!identityKeyStore.IsTrustedIdentity(remoteAddress, sessionState.getRemoteIdentityKey(), Direction.SENDING))
+                if (!_identityKeyStore.IsTrustedIdentity(_remoteAddress, sessionState.GetRemoteIdentityKey(), Direction.Sending))
                 {
-                    throw new UntrustedIdentityException(remoteAddress.Name, sessionState.getRemoteIdentityKey());
+                    throw new UntrustedIdentityException(_remoteAddress.Name, sessionState.GetRemoteIdentityKey());
                 }
 
-                identityKeyStore.SaveIdentity(remoteAddress, sessionState.getRemoteIdentityKey());
+                _identityKeyStore.SaveIdentity(_remoteAddress, sessionState.GetRemoteIdentityKey());
 
-                sessionStore.StoreSession(remoteAddress, sessionRecord);
+                _sessionStore.StoreSession(_remoteAddress, sessionRecord);
                 return ciphertextMessage;
             }
         }
@@ -139,9 +139,9 @@ namespace libsignal
          * @throws InvalidKeyException when the message is formatted incorrectly.
          * @throws UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
          */
-        public byte[] decrypt(PreKeySignalMessage ciphertext)
+        public byte[] Decrypt(PreKeySignalMessage ciphertext)
         {
-            return decrypt(ciphertext, new NullDecryptionCallback());
+            return Decrypt(ciphertext, new NullDecryptionCallback());
         }
 
         /**
@@ -165,23 +165,23 @@ namespace libsignal
          * @throws InvalidKeyException when the message is formatted incorrectly.
          * @throws UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
          */
-        public byte[] decrypt(PreKeySignalMessage ciphertext, DecryptionCallback callback)
+        public byte[] Decrypt(PreKeySignalMessage ciphertext, IDecryptionCallback callback)
         {
-            lock (SESSION_LOCK)
+            lock (SessionLock)
             {
-                SessionRecord sessionRecord = sessionStore.LoadSession(remoteAddress);
-                May<uint> unsignedPreKeyId = sessionBuilder.process(sessionRecord, ciphertext);
-                byte[] plaintext = decrypt(sessionRecord, ciphertext.getSignalMessage());
+                SessionRecord sessionRecord = _sessionStore.LoadSession(_remoteAddress);
+                May<uint> unsignedPreKeyId = _sessionBuilder.Process(sessionRecord, ciphertext);
+                byte[] plaintext = Decrypt(sessionRecord, ciphertext.GetSignalMessage());
 
-                identityKeyStore.SaveIdentity(remoteAddress, sessionRecord.getSessionState().getRemoteIdentityKey());
+                _identityKeyStore.SaveIdentity(_remoteAddress, sessionRecord.GetSessionState().GetRemoteIdentityKey());
 
-                callback.handlePlaintext(plaintext);
+                callback.HandlePlaintext(plaintext);
 
-                sessionStore.StoreSession(remoteAddress, sessionRecord);
+                _sessionStore.StoreSession(_remoteAddress, sessionRecord);
 
                 if (unsignedPreKeyId.HasValue)
                 {
-                    preKeyStore.RemovePreKey(unsignedPreKeyId.ForceGetValue());
+                    _preKeyStore.RemovePreKey(unsignedPreKeyId.ForceGetValue());
                 }
 
                 return plaintext;
@@ -200,9 +200,9 @@ namespace libsignal
          *                                is no longer supported.
          * @throws NoSessionException if there is no established session for this contact.
          */
-        public byte[] decrypt(SignalMessage ciphertext)
+        public byte[] Decrypt(SignalMessage ciphertext)
         {
-            return decrypt(ciphertext, new NullDecryptionCallback());
+            return Decrypt(ciphertext, new NullDecryptionCallback());
         }
 
         /**
@@ -223,45 +223,45 @@ namespace libsignal
          *                                is no longer supported.
          * @throws NoSessionException if there is no established session for this contact.
          */
-        public byte[] decrypt(SignalMessage ciphertext, DecryptionCallback callback)
+        public byte[] Decrypt(SignalMessage ciphertext, IDecryptionCallback callback)
         {
-            lock (SESSION_LOCK)
+            lock (SessionLock)
             {
 
-                if (!sessionStore.ContainsSession(remoteAddress))
+                if (!_sessionStore.ContainsSession(_remoteAddress))
                 {
-                    throw new NoSessionException($"No session for: {remoteAddress}");
+                    throw new NoSessionException($"No session for: {_remoteAddress}");
                 }
 
-                SessionRecord sessionRecord = sessionStore.LoadSession(remoteAddress);
-                byte[] plaintext = decrypt(sessionRecord, ciphertext);
+                SessionRecord sessionRecord = _sessionStore.LoadSession(_remoteAddress);
+                byte[] plaintext = Decrypt(sessionRecord, ciphertext);
 
-                if (!identityKeyStore.IsTrustedIdentity(remoteAddress, sessionRecord.getSessionState().getRemoteIdentityKey(), Direction.RECEIVING))
+                if (!_identityKeyStore.IsTrustedIdentity(_remoteAddress, sessionRecord.GetSessionState().GetRemoteIdentityKey(), Direction.Receiving))
                 {
-                    throw new UntrustedIdentityException(remoteAddress.Name, sessionRecord.getSessionState().getRemoteIdentityKey());
+                    throw new UntrustedIdentityException(_remoteAddress.Name, sessionRecord.GetSessionState().GetRemoteIdentityKey());
                 }
 
-                callback.handlePlaintext(plaintext);
+                callback.HandlePlaintext(plaintext);
 
-                sessionStore.StoreSession(remoteAddress, sessionRecord);
+                _sessionStore.StoreSession(_remoteAddress, sessionRecord);
 
                 return plaintext;
             }
         }
 
-        private byte[] decrypt(SessionRecord sessionRecord, SignalMessage ciphertext)
+        private byte[] Decrypt(SessionRecord sessionRecord, SignalMessage ciphertext)
         {
-            lock (SESSION_LOCK)
+            lock (SessionLock)
             {
-                IEnumerator<SessionState> previousStates = sessionRecord.getPreviousSessionStates().GetEnumerator(); //iterator
+                IEnumerator<SessionState> previousStates = sessionRecord.GetPreviousSessionStates().GetEnumerator(); //iterator
                 LinkedList<Exception> exceptions = new LinkedList<Exception>();
 
                 try
                 {
-                    SessionState sessionState = new SessionState(sessionRecord.getSessionState());
-                    byte[] plaintext = decrypt(sessionState, ciphertext);
+                    SessionState sessionState = new SessionState(sessionRecord.GetSessionState());
+                    byte[] plaintext = Decrypt(sessionState, ciphertext);
 
-                    sessionRecord.setState(sessionState);
+                    sessionRecord.SetState(sessionState);
                     return plaintext;
                 }
                 catch (InvalidMessageException e)
@@ -274,10 +274,10 @@ namespace libsignal
                     try
                     {
                         SessionState promotedState = new SessionState(previousStates.Current); //.next()
-                        byte[] plaintext = decrypt(promotedState, ciphertext);
+                        byte[] plaintext = Decrypt(promotedState, ciphertext);
 
-                        sessionRecord.getPreviousSessionStates().Remove(previousStates.Current); // previousStates.remove()
-                        sessionRecord.promoteState(promotedState);
+                        sessionRecord.GetPreviousSessionStates().Remove(previousStates.Current); // previousStates.remove()
+                        sessionRecord.PromoteState(promotedState);
 
                         return plaintext;
                     }
@@ -291,85 +291,85 @@ namespace libsignal
             }
         }
 
-        private byte[] decrypt(SessionState sessionState, SignalMessage ciphertextMessage)
+        private byte[] Decrypt(SessionState sessionState, SignalMessage ciphertextMessage)
         {
-            if (!sessionState.hasSenderChain())
+            if (!sessionState.HasSenderChain())
             {
                 throw new InvalidMessageException("Uninitialized session!");
             }
 
-            if (sessionState.getStructure().SenderChain.SenderRatchetKey.Length <= 0)
+            if (sessionState.GetStructure().SenderChain.SenderRatchetKey.Length <= 0)
             {
                 throw new InvalidMessageException("SenderRatchetKey is empty!");
             }
 
-            if (ciphertextMessage.getMessageVersion() != sessionState.getSessionVersion())
+            if (ciphertextMessage.GetMessageVersion() != sessionState.GetSessionVersion())
             {
-                throw new InvalidMessageException($"Message version {ciphertextMessage.getMessageVersion()}, but session version {sessionState.getSessionVersion()}");
+                throw new InvalidMessageException($"Message version {ciphertextMessage.GetMessageVersion()}, but session version {sessionState.GetSessionVersion()}");
             }
 
-            ECPublicKey theirEphemeral = ciphertextMessage.getSenderRatchetKey();
-            uint counter = ciphertextMessage.getCounter();
-            ChainKey chainKey = getOrCreateChainKey(sessionState, theirEphemeral);
-            MessageKeys messageKeys = getOrCreateMessageKeys(sessionState, theirEphemeral,
+            IEcPublicKey theirEphemeral = ciphertextMessage.GetSenderRatchetKey();
+            uint counter = ciphertextMessage.GetCounter();
+            ChainKey chainKey = GetOrCreateChainKey(sessionState, theirEphemeral);
+            MessageKeys messageKeys = GetOrCreateMessageKeys(sessionState, theirEphemeral,
                                                                       chainKey, counter);
 
-            ciphertextMessage.verifyMac(sessionState.getRemoteIdentityKey(),
-                                            sessionState.getLocalIdentityKey(),
-                                            messageKeys.getMacKey());
+            ciphertextMessage.VerifyMac(sessionState.GetRemoteIdentityKey(),
+                                            sessionState.GetLocalIdentityKey(),
+                                            messageKeys.GetMacKey());
 
-            byte[] plaintext = getPlaintext(messageKeys, ciphertextMessage.getBody());
+            byte[] plaintext = GetPlaintext(messageKeys, ciphertextMessage.GetBody());
 
-            sessionState.clearUnacknowledgedPreKeyMessage();
+            sessionState.ClearUnacknowledgedPreKeyMessage();
 
             return plaintext;
         }
 
-        public uint getRemoteRegistrationId()
+        public uint GetRemoteRegistrationId()
         {
-            lock (SESSION_LOCK)
+            lock (SessionLock)
             {
-                SessionRecord record = sessionStore.LoadSession(remoteAddress);
-                return record.getSessionState().getRemoteRegistrationId();
+                SessionRecord record = _sessionStore.LoadSession(_remoteAddress);
+                return record.GetSessionState().GetRemoteRegistrationId();
             }
         }
 
-        public uint getSessionVersion()
+        public uint GetSessionVersion()
         {
-            lock (SESSION_LOCK)
+            lock (SessionLock)
             {
-                if (!sessionStore.ContainsSession(remoteAddress))
+                if (!_sessionStore.ContainsSession(_remoteAddress))
                 {
-                    throw new Exception($"No session for {remoteAddress}!"); // IllegalState
+                    throw new Exception($"No session for {_remoteAddress}!"); // IllegalState
                 }
 
-                SessionRecord record = sessionStore.LoadSession(remoteAddress);
-                return record.getSessionState().getSessionVersion();
+                SessionRecord record = _sessionStore.LoadSession(_remoteAddress);
+                return record.GetSessionState().GetSessionVersion();
             }
         }
 
-        private ChainKey getOrCreateChainKey(SessionState sessionState, ECPublicKey theirEphemeral)
+        private ChainKey GetOrCreateChainKey(SessionState sessionState, IEcPublicKey theirEphemeral)
         {
             try
             {
-                if (sessionState.hasReceiverChain(theirEphemeral))
+                if (sessionState.HasReceiverChain(theirEphemeral))
                 {
-                    return sessionState.getReceiverChainKey(theirEphemeral);
+                    return sessionState.GetReceiverChainKey(theirEphemeral);
                 }
                 else
                 {
-                    RootKey rootKey = sessionState.getRootKey();
-                    ECKeyPair ourEphemeral = sessionState.getSenderRatchetKeyPair();
-                    Pair<RootKey, ChainKey> receiverChain = rootKey.createChain(theirEphemeral, ourEphemeral);
-                    ECKeyPair ourNewEphemeral = Curve.generateKeyPair();
-                    Pair<RootKey, ChainKey> senderChain = receiverChain.first().createChain(theirEphemeral, ourNewEphemeral);
+                    RootKey rootKey = sessionState.GetRootKey();
+                    EcKeyPair ourEphemeral = sessionState.GetSenderRatchetKeyPair();
+                    Pair<RootKey, ChainKey> receiverChain = rootKey.CreateChain(theirEphemeral, ourEphemeral);
+                    EcKeyPair ourNewEphemeral = Curve.GenerateKeyPair();
+                    Pair<RootKey, ChainKey> senderChain = receiverChain.First().CreateChain(theirEphemeral, ourNewEphemeral);
 
-                    sessionState.setRootKey(senderChain.first());
-                    sessionState.addReceiverChain(theirEphemeral, receiverChain.second());
-                    sessionState.setPreviousCounter(Math.Max(sessionState.getSenderChainKey().getIndex() - 1, 0));
-                    sessionState.setSenderChain(ourNewEphemeral, senderChain.second());
+                    sessionState.SetRootKey(senderChain.First());
+                    sessionState.AddReceiverChain(theirEphemeral, receiverChain.Second());
+                    sessionState.SetPreviousCounter(Math.Max(sessionState.GetSenderChainKey().GetIndex() - 1, 0));
+                    sessionState.SetSenderChain(ourNewEphemeral, senderChain.Second());
 
-                    return receiverChain.second();
+                    return receiverChain.Second();
                 }
             }
             catch (InvalidKeyException e)
@@ -378,54 +378,54 @@ namespace libsignal
             }
         }
 
-        private MessageKeys getOrCreateMessageKeys(SessionState sessionState,
-                                                   ECPublicKey theirEphemeral,
+        private MessageKeys GetOrCreateMessageKeys(SessionState sessionState,
+                                                   IEcPublicKey theirEphemeral,
                                                    ChainKey chainKey, uint counter)
         {
-            if (chainKey.getIndex() > counter)
+            if (chainKey.GetIndex() > counter)
             {
-                if (sessionState.hasMessageKeys(theirEphemeral, counter))
+                if (sessionState.HasMessageKeys(theirEphemeral, counter))
                 {
-                    return sessionState.removeMessageKeys(theirEphemeral, counter);
+                    return sessionState.RemoveMessageKeys(theirEphemeral, counter);
                 }
                 else
                 {
-                    throw new DuplicateMessageException($"Received message with old counter: {chainKey.getIndex()}  , {counter}");
+                    throw new DuplicateMessageException($"Received message with old counter: {chainKey.GetIndex()}  , {counter}");
                 }
             }
 
             //Avoiding a uint overflow
-            uint chainKeyIndex = chainKey.getIndex();
+            uint chainKeyIndex = chainKey.GetIndex();
             if ((counter > chainKeyIndex) && (counter - chainKeyIndex > 2000))
             {
                 throw new InvalidMessageException("Over 2000 messages into the future!");
             }
 
-            while (chainKey.getIndex() < counter)
+            while (chainKey.GetIndex() < counter)
             {
-                MessageKeys messageKeys = chainKey.getMessageKeys();
-                sessionState.setMessageKeys(theirEphemeral, messageKeys);
-                chainKey = chainKey.getNextChainKey();
+                MessageKeys messageKeys = chainKey.GetMessageKeys();
+                sessionState.SetMessageKeys(theirEphemeral, messageKeys);
+                chainKey = chainKey.GetNextChainKey();
             }
 
-            sessionState.setReceiverChainKey(theirEphemeral, chainKey.getNextChainKey());
-            return chainKey.getMessageKeys();
+            sessionState.SetReceiverChainKey(theirEphemeral, chainKey.GetNextChainKey());
+            return chainKey.GetMessageKeys();
         }
 
-        private byte[] getCiphertext(MessageKeys messageKeys, byte[] plaintext)
+        private byte[] GetCiphertext(MessageKeys messageKeys, byte[] plaintext)
         {
-            return Encrypt.aesCbcPkcs5(plaintext, messageKeys.getCipherKey(), messageKeys.getIv());
+            return util.Encrypt.AesCbcPkcs5(plaintext, messageKeys.GetCipherKey(), messageKeys.GetIv());
         }
 
-        private byte[] getPlaintext(MessageKeys messageKeys, byte[] cipherText)
+        private byte[] GetPlaintext(MessageKeys messageKeys, byte[] cipherText)
         {
-            return Decrypt.aesCbcPkcs5(cipherText, messageKeys.getCipherKey(), messageKeys.getIv());
+            return util.Decrypt.AesCbcPkcs5(cipherText, messageKeys.GetCipherKey(), messageKeys.GetIv());
         }
 
-        private class NullDecryptionCallback : DecryptionCallback
+        private class NullDecryptionCallback : IDecryptionCallback
         {
 
-            public void handlePlaintext(byte[] plaintext) { }
+            public void HandlePlaintext(byte[] plaintext) { }
         }
     }
 }

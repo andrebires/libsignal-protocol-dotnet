@@ -46,11 +46,11 @@ namespace libsignal
     public class SessionBuilder
     {
 
-        private readonly SessionStore sessionStore;
-        private readonly PreKeyStore preKeyStore;
-        private readonly SignedPreKeyStore signedPreKeyStore;
-        private readonly IdentityKeyStore identityKeyStore;
-        private readonly SignalProtocolAddress remoteAddress;
+        private readonly ISessionStore _sessionStore;
+        private readonly IPreKeyStore _preKeyStore;
+        private readonly ISignedPreKeyStore _signedPreKeyStore;
+        private readonly IDentityKeyStore _identityKeyStore;
+        private readonly SignalProtocolAddress _remoteAddress;
 
         /**
          * Constructs a SessionBuilder.
@@ -60,17 +60,17 @@ namespace libsignal
          * @param identityKeyStore The {@link org.whispersystems.libsignal.state.IdentityKeyStore} containing the client's identity key information.
          * @param remoteAddress The address of the remote user to build a session with.
          */
-        public SessionBuilder(SessionStore sessionStore,
-                              PreKeyStore preKeyStore,
-                              SignedPreKeyStore signedPreKeyStore,
-                              IdentityKeyStore identityKeyStore,
+        public SessionBuilder(ISessionStore sessionStore,
+                              IPreKeyStore preKeyStore,
+                              ISignedPreKeyStore signedPreKeyStore,
+                              IDentityKeyStore identityKeyStore,
                               SignalProtocolAddress remoteAddress)
         {
-            this.sessionStore = sessionStore;
-            this.preKeyStore = preKeyStore;
-            this.signedPreKeyStore = signedPreKeyStore;
-            this.identityKeyStore = identityKeyStore;
-            this.remoteAddress = remoteAddress;
+            this._sessionStore = sessionStore;
+            this._preKeyStore = preKeyStore;
+            this._signedPreKeyStore = signedPreKeyStore;
+            this._identityKeyStore = identityKeyStore;
+            this._remoteAddress = remoteAddress;
         }
 
         /**
@@ -78,7 +78,7 @@ namespace libsignal
          * @param store The {@link SignalProtocolStore} to store all state information in.
          * @param remoteAddress The address of the remote user to build a session with.
          */
-        public SessionBuilder(SignalProtocolStore store, SignalProtocolAddress remoteAddress)
+        public SessionBuilder(ISignalProtocolStore store, SignalProtocolAddress remoteAddress)
             : this(store, store, store, store, remoteAddress)
         {
         }
@@ -98,61 +98,61 @@ namespace libsignal
          * @throws org.whispersystems.libsignal.UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
          */
         /*package*/
-        internal May<uint>  process(SessionRecord sessionRecord, PreKeySignalMessage message)
+        internal May<uint>  Process(SessionRecord sessionRecord, PreKeySignalMessage message)
         {
-            uint messageVersion = message.getMessageVersion();
-            IdentityKey theirIdentityKey = message.getIdentityKey();
+            uint messageVersion = message.GetMessageVersion();
+            IdentityKey theirIdentityKey = message.GetIdentityKey();
 
-            if (!identityKeyStore.IsTrustedIdentity(remoteAddress, theirIdentityKey, Direction.RECEIVING))
+            if (!_identityKeyStore.IsTrustedIdentity(_remoteAddress, theirIdentityKey, Direction.Receiving))
             {
-                throw new UntrustedIdentityException(remoteAddress.Name, theirIdentityKey);
+                throw new UntrustedIdentityException(_remoteAddress.Name, theirIdentityKey);
             }
 
-            May<uint> unsignedPreKeyId = processV3(sessionRecord, message);
+            May<uint> unsignedPreKeyId = ProcessV3(sessionRecord, message);
 
-            identityKeyStore.SaveIdentity(remoteAddress, theirIdentityKey);
+            _identityKeyStore.SaveIdentity(_remoteAddress, theirIdentityKey);
             return unsignedPreKeyId;
         }
 
-        private May<uint> processV3(SessionRecord sessionRecord, PreKeySignalMessage message)
+        private May<uint> ProcessV3(SessionRecord sessionRecord, PreKeySignalMessage message)
         {
 
-            if (sessionRecord.hasSessionState(message.getMessageVersion(), message.getBaseKey().serialize()))
+            if (sessionRecord.HasSessionState(message.GetMessageVersion(), message.GetBaseKey().Serialize()))
             {
                 Debug.WriteLine("We've already setup a session for this V3 message, letting bundled message fall through...");
                 return May<uint>.NoValue;
             }
 
-            ECKeyPair ourSignedPreKey = signedPreKeyStore.LoadSignedPreKey(message.getSignedPreKeyId()).getKeyPair();
+            EcKeyPair ourSignedPreKey = _signedPreKeyStore.LoadSignedPreKey(message.GetSignedPreKeyId()).GetKeyPair();
 
-            BobSignalProtocolParameters.Builder parameters = BobSignalProtocolParameters.newBuilder();
+            BobSignalProtocolParameters.Builder parameters = BobSignalProtocolParameters.NewBuilder();
 
-            parameters.setTheirBaseKey(message.getBaseKey())
-                      .setTheirIdentityKey(message.getIdentityKey())
-                      .setOurIdentityKey(identityKeyStore.GetIdentityKeyPair())
-                      .setOurSignedPreKey(ourSignedPreKey)
-                      .setOurRatchetKey(ourSignedPreKey);
+            parameters.SetTheirBaseKey(message.GetBaseKey())
+                      .SetTheirIdentityKey(message.GetIdentityKey())
+                      .SetOurIdentityKey(_identityKeyStore.GetIdentityKeyPair())
+                      .SetOurSignedPreKey(ourSignedPreKey)
+                      .SetOurRatchetKey(ourSignedPreKey);
 
-            if (message.getPreKeyId().HasValue)
+            if (message.GetPreKeyId().HasValue)
             {
-                parameters.setOurOneTimePreKey(new May<ECKeyPair>(preKeyStore.LoadPreKey(message.getPreKeyId().ForceGetValue()).getKeyPair()));
+                parameters.SetOurOneTimePreKey(new May<EcKeyPair>(_preKeyStore.LoadPreKey(message.GetPreKeyId().ForceGetValue()).GetKeyPair()));
             }
             else
             {
-                parameters.setOurOneTimePreKey(May<ECKeyPair>.NoValue);
+                parameters.SetOurOneTimePreKey(May<EcKeyPair>.NoValue);
             }
 
-            if (!sessionRecord.isFresh()) sessionRecord.archiveCurrentState();
+            if (!sessionRecord.IsFresh()) sessionRecord.ArchiveCurrentState();
 
-            RatchetingSession.initializeSession(sessionRecord.getSessionState(), parameters.create());
+            RatchetingSession.InitializeSession(sessionRecord.GetSessionState(), parameters.Create());
 
-            sessionRecord.getSessionState().setLocalRegistrationId(identityKeyStore.GetLocalRegistrationId());
-            sessionRecord.getSessionState().setRemoteRegistrationId(message.getRegistrationId());
-            sessionRecord.getSessionState().setAliceBaseKey(message.getBaseKey().serialize());
+            sessionRecord.GetSessionState().SetLocalRegistrationId(_identityKeyStore.GetLocalRegistrationId());
+            sessionRecord.GetSessionState().SetRemoteRegistrationId(message.GetRegistrationId());
+            sessionRecord.GetSessionState().SetAliceBaseKey(message.GetBaseKey().Serialize());
 
-            if (message.getPreKeyId().HasValue)
+            if (message.GetPreKeyId().HasValue)
             {
-                return message.getPreKeyId();
+                return message.GetPreKeyId();
             }
             else
             {
@@ -171,57 +171,57 @@ namespace libsignal
          *                                                                  {@link IdentityKey} is not
          *                                                                  trusted.
          */
-        public void process(PreKeyBundle preKey)
+        public void Process(PreKeyBundle preKey)
         {
-            lock (SessionCipher.SESSION_LOCK)
+            lock (SessionCipher.SessionLock)
             {
-                if (!identityKeyStore.IsTrustedIdentity(remoteAddress, preKey.getIdentityKey(), Direction.SENDING))
+                if (!_identityKeyStore.IsTrustedIdentity(_remoteAddress, preKey.GetIdentityKey(), Direction.Sending))
                 {
-                    throw new UntrustedIdentityException(remoteAddress.Name, preKey.getIdentityKey());
+                    throw new UntrustedIdentityException(_remoteAddress.Name, preKey.GetIdentityKey());
                 }
 
-                if (preKey.getSignedPreKey() != null &&
-                    !Curve.verifySignature(preKey.getIdentityKey().getPublicKey(),
-                                           preKey.getSignedPreKey().serialize(),
-                                           preKey.getSignedPreKeySignature()))
+                if (preKey.GetSignedPreKey() != null &&
+                    !Curve.VerifySignature(preKey.GetIdentityKey().GetPublicKey(),
+                                           preKey.GetSignedPreKey().Serialize(),
+                                           preKey.GetSignedPreKeySignature()))
                 {
                     throw new InvalidKeyException("Invalid signature on device key!");
                 }
 
-                if (preKey.getSignedPreKey() == null)
+                if (preKey.GetSignedPreKey() == null)
                 {
                     throw new InvalidKeyException("No signed prekey!");
                 }
 
-                SessionRecord sessionRecord = sessionStore.LoadSession(remoteAddress);
-                ECKeyPair ourBaseKey = Curve.generateKeyPair();
-                ECPublicKey theirSignedPreKey = preKey.getSignedPreKey();
-                ECPublicKey test = preKey.getPreKey();
-                May<ECPublicKey> theirOneTimePreKey = (test == null) ? May<ECPublicKey>.NoValue : new May<ECPublicKey>(test);
-                May<uint> theirOneTimePreKeyId = theirOneTimePreKey.HasValue ? new May<uint>(preKey.getPreKeyId()) :
+                SessionRecord sessionRecord = _sessionStore.LoadSession(_remoteAddress);
+                EcKeyPair ourBaseKey = Curve.GenerateKeyPair();
+                IEcPublicKey theirSignedPreKey = preKey.GetSignedPreKey();
+                IEcPublicKey test = preKey.GetPreKey();
+                May<IEcPublicKey> theirOneTimePreKey = (test == null) ? May<IEcPublicKey>.NoValue : new May<IEcPublicKey>(test);
+                May<uint> theirOneTimePreKeyId = theirOneTimePreKey.HasValue ? new May<uint>(preKey.GetPreKeyId()) :
                                                                                               May<uint>.NoValue;
 
-                AliceSignalProtocolParameters.Builder parameters = AliceSignalProtocolParameters.newBuilder();
+                AliceSignalProtocolParameters.Builder parameters = AliceSignalProtocolParameters.NewBuilder();
 
-                parameters.setOurBaseKey(ourBaseKey)
-                              .setOurIdentityKey(identityKeyStore.GetIdentityKeyPair())
-                              .setTheirIdentityKey(preKey.getIdentityKey())
-                              .setTheirSignedPreKey(theirSignedPreKey)
-                              .setTheirRatchetKey(theirSignedPreKey)
-                              .setTheirOneTimePreKey(theirOneTimePreKey);
+                parameters.SetOurBaseKey(ourBaseKey)
+                              .SetOurIdentityKey(_identityKeyStore.GetIdentityKeyPair())
+                              .SetTheirIdentityKey(preKey.GetIdentityKey())
+                              .SetTheirSignedPreKey(theirSignedPreKey)
+                              .SetTheirRatchetKey(theirSignedPreKey)
+                              .SetTheirOneTimePreKey(theirOneTimePreKey);
 
-                if (!sessionRecord.isFresh()) sessionRecord.archiveCurrentState();
+                if (!sessionRecord.IsFresh()) sessionRecord.ArchiveCurrentState();
 
-                RatchetingSession.initializeSession(sessionRecord.getSessionState(), parameters.create());
+                RatchetingSession.InitializeSession(sessionRecord.GetSessionState(), parameters.Create());
 
-                sessionRecord.getSessionState().setUnacknowledgedPreKeyMessage(theirOneTimePreKeyId, preKey.getSignedPreKeyId(), ourBaseKey.getPublicKey());
-                sessionRecord.getSessionState().setLocalRegistrationId(identityKeyStore.GetLocalRegistrationId());
-                sessionRecord.getSessionState().setRemoteRegistrationId(preKey.getRegistrationId());
-                sessionRecord.getSessionState().setAliceBaseKey(ourBaseKey.getPublicKey().serialize());
+                sessionRecord.GetSessionState().SetUnacknowledgedPreKeyMessage(theirOneTimePreKeyId, preKey.GetSignedPreKeyId(), ourBaseKey.GetPublicKey());
+                sessionRecord.GetSessionState().SetLocalRegistrationId(_identityKeyStore.GetLocalRegistrationId());
+                sessionRecord.GetSessionState().SetRemoteRegistrationId(preKey.GetRegistrationId());
+                sessionRecord.GetSessionState().SetAliceBaseKey(ourBaseKey.GetPublicKey().Serialize());
 
-                identityKeyStore.SaveIdentity(remoteAddress, preKey.getIdentityKey());
+                _identityKeyStore.SaveIdentity(_remoteAddress, preKey.GetIdentityKey());
 
-                sessionStore.StoreSession(remoteAddress, sessionRecord);
+                _sessionStore.StoreSession(_remoteAddress, sessionRecord);
             }
         }
     }

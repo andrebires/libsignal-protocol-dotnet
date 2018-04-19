@@ -29,459 +29,459 @@ namespace libsignal_test
     [TestClass]
     public class SimultaneousInitiateTests
     {
-        private static readonly SignalProtocolAddress BOB_ADDRESS = new SignalProtocolAddress("+14151231234", 1);
-        private static readonly SignalProtocolAddress ALICE_ADDRESS = new SignalProtocolAddress("+14159998888", 1);
+        private static readonly SignalProtocolAddress BobAddress = new SignalProtocolAddress("+14151231234", 1);
+        private static readonly SignalProtocolAddress AliceAddress = new SignalProtocolAddress("+14159998888", 1);
 
-        private static readonly ECKeyPair aliceSignedPreKey = Curve.generateKeyPair();
-        private static readonly ECKeyPair bobSignedPreKey = Curve.generateKeyPair();
+        private static readonly EcKeyPair AliceSignedPreKey = Curve.GenerateKeyPair();
+        private static readonly EcKeyPair BobSignedPreKey = Curve.GenerateKeyPair();
 
-        private static readonly uint aliceSignedPreKeyId = (uint)new Random().Next((int)Medium.MAX_VALUE);
-        private static readonly uint bobSignedPreKeyId = (uint)new Random().Next((int)Medium.MAX_VALUE);
+        private static readonly uint AliceSignedPreKeyId = (uint)new Random().Next((int)Medium.MaxValue);
+        private static readonly uint BobSignedPreKeyId = (uint)new Random().Next((int)Medium.MaxValue);
 
         [TestMethod, TestCategory("libsignal")]
-        public void testBasicSimultaneousInitiate()
+        public void TestBasicSimultaneousInitiate()
         {
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
-            PreKeyBundle alicePreKeyBundle = createAlicePreKeyBundle(aliceStore);
-            PreKeyBundle bobPreKeyBundle = createBobPreKeyBundle(bobStore);
+            PreKeyBundle alicePreKeyBundle = CreateAlicePreKeyBundle(aliceStore);
+            PreKeyBundle bobPreKeyBundle = CreateBobPreKeyBundle(bobStore);
 
-            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BOB_ADDRESS);
-            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, ALICE_ADDRESS);
+            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BobAddress);
+            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, AliceAddress);
 
-            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BOB_ADDRESS);
-            SessionCipher bobSessionCipher = new SessionCipher(bobStore, ALICE_ADDRESS);
+            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BobAddress);
+            SessionCipher bobSessionCipher = new SessionCipher(bobStore, AliceAddress);
 
-            aliceSessionBuilder.process(bobPreKeyBundle);
-            bobSessionBuilder.process(alicePreKeyBundle);
+            aliceSessionBuilder.Process(bobPreKeyBundle);
+            bobSessionBuilder.Process(alicePreKeyBundle);
 
-            CiphertextMessage messageForBob = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-            CiphertextMessage messageForAlice = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+            CiphertextMessage messageForBob = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+            CiphertextMessage messageForAlice = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-            Assert.AreEqual(CiphertextMessage.PREKEY_TYPE, messageForBob.getType());
-            Assert.AreEqual(CiphertextMessage.PREKEY_TYPE, messageForAlice.getType());
+            Assert.AreEqual(CiphertextMessage.PrekeyType, messageForBob.GetMessageType());
+            Assert.AreEqual(CiphertextMessage.PrekeyType, messageForAlice.GetMessageType());
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            byte[] alicePlaintext = aliceSessionCipher.decrypt(new PreKeySignalMessage(messageForAlice.serialize()));
-            byte[] bobPlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(messageForBob.serialize()));
+            byte[] alicePlaintext = aliceSessionCipher.Decrypt(new PreKeySignalMessage(messageForAlice.Serialize()));
+            byte[] bobPlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(messageForBob.Serialize()));
 
             Assert.AreEqual("sample message", Encoding.UTF8.GetString(alicePlaintext));
             Assert.AreEqual("hey there", Encoding.UTF8.GetString(bobPlaintext));
 
-            Assert.AreEqual((uint)3, aliceStore.LoadSession(BOB_ADDRESS).getSessionState().getSessionVersion());
-            Assert.AreEqual((uint)3, bobStore.LoadSession(ALICE_ADDRESS).getSessionState().getSessionVersion());
+            Assert.AreEqual((uint)3, aliceStore.LoadSession(BobAddress).GetSessionState().GetSessionVersion());
+            Assert.AreEqual((uint)3, bobStore.LoadSession(AliceAddress).GetSessionState().GetSessionVersion());
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage aliceResponse = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("second message"));
+            CiphertextMessage aliceResponse = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("second message"));
 
-            Assert.AreEqual(CiphertextMessage.WHISPER_TYPE, aliceResponse.getType());
+            Assert.AreEqual(CiphertextMessage.WhisperType, aliceResponse.GetMessageType());
 
-            byte[] responsePlaintext = bobSessionCipher.decrypt(new SignalMessage(aliceResponse.serialize()));
+            byte[] responsePlaintext = bobSessionCipher.Decrypt(new SignalMessage(aliceResponse.Serialize()));
 
             Assert.AreEqual("second message", Encoding.UTF8.GetString(responsePlaintext));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage finalMessage = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("third message"));
+            CiphertextMessage finalMessage = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("third message"));
 
-            Assert.AreEqual(CiphertextMessage.WHISPER_TYPE, finalMessage.getType());
+            Assert.AreEqual(CiphertextMessage.WhisperType, finalMessage.GetMessageType());
 
-            byte[] finalPlaintext = aliceSessionCipher.decrypt(new SignalMessage(finalMessage.serialize()));
+            byte[] finalPlaintext = aliceSessionCipher.Decrypt(new SignalMessage(finalMessage.Serialize()));
 
             Assert.AreEqual("third message", Encoding.UTF8.GetString(finalPlaintext));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
         }
         [TestMethod]
-        public void testLostSimultaneousInitiate()
+        public void TestLostSimultaneousInitiate()
         {
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
-            PreKeyBundle alicePreKeyBundle = createAlicePreKeyBundle(aliceStore);
-            PreKeyBundle bobPreKeyBundle = createBobPreKeyBundle(bobStore);
+            PreKeyBundle alicePreKeyBundle = CreateAlicePreKeyBundle(aliceStore);
+            PreKeyBundle bobPreKeyBundle = CreateBobPreKeyBundle(bobStore);
 
-            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BOB_ADDRESS);
-            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, ALICE_ADDRESS);
+            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BobAddress);
+            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, AliceAddress);
 
-            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BOB_ADDRESS);
-            SessionCipher bobSessionCipher = new SessionCipher(bobStore, ALICE_ADDRESS);
+            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BobAddress);
+            SessionCipher bobSessionCipher = new SessionCipher(bobStore, AliceAddress);
 
-            aliceSessionBuilder.process(bobPreKeyBundle);
-            bobSessionBuilder.process(alicePreKeyBundle);
+            aliceSessionBuilder.Process(bobPreKeyBundle);
+            bobSessionBuilder.Process(alicePreKeyBundle);
 
-            CiphertextMessage messageForBob = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-            CiphertextMessage messageForAlice = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+            CiphertextMessage messageForBob = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+            CiphertextMessage messageForAlice = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-            Assert.AreEqual<uint>(messageForBob.getType(), CiphertextMessage.PREKEY_TYPE);
-            Assert.AreEqual<uint>(messageForAlice.getType(), CiphertextMessage.PREKEY_TYPE);
+            Assert.AreEqual<uint>(messageForBob.GetMessageType(), CiphertextMessage.PrekeyType);
+            Assert.AreEqual<uint>(messageForAlice.GetMessageType(), CiphertextMessage.PrekeyType);
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            byte[] bobPlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(messageForBob.serialize()));
+            byte[] bobPlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(messageForBob.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintext).Equals("hey there"));
-            Assert.IsTrue(bobStore.LoadSession(ALICE_ADDRESS).getSessionState().getSessionVersion() == 3);
+            Assert.IsTrue(bobStore.LoadSession(AliceAddress).GetSessionState().GetSessionVersion() == 3);
 
-            CiphertextMessage aliceResponse = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("second message"));
+            CiphertextMessage aliceResponse = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("second message"));
 
-            Assert.AreEqual<uint>(aliceResponse.getType(), CiphertextMessage.PREKEY_TYPE);
+            Assert.AreEqual<uint>(aliceResponse.GetMessageType(), CiphertextMessage.PrekeyType);
 
-            byte[] responsePlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(aliceResponse.serialize()));
+            byte[] responsePlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(aliceResponse.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(responsePlaintext).Equals("second message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage finalMessage = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("third message"));
+            CiphertextMessage finalMessage = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("third message"));
 
-            Assert.IsTrue(finalMessage.getType() == CiphertextMessage.WHISPER_TYPE);
+            Assert.IsTrue(finalMessage.GetMessageType() == CiphertextMessage.WhisperType);
 
-            byte[] finalPlaintext = aliceSessionCipher.decrypt(new SignalMessage(finalMessage.serialize()));
+            byte[] finalPlaintext = aliceSessionCipher.Decrypt(new SignalMessage(finalMessage.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(finalPlaintext).Equals("third message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
         }
         [TestMethod]
-        public void testSimultaneousInitiateLostMessage()
+        public void TestSimultaneousInitiateLostMessage()
         {
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
-            PreKeyBundle alicePreKeyBundle = createAlicePreKeyBundle(aliceStore);
-            PreKeyBundle bobPreKeyBundle = createBobPreKeyBundle(bobStore);
+            PreKeyBundle alicePreKeyBundle = CreateAlicePreKeyBundle(aliceStore);
+            PreKeyBundle bobPreKeyBundle = CreateBobPreKeyBundle(bobStore);
 
-            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BOB_ADDRESS);
-            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, ALICE_ADDRESS);
+            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BobAddress);
+            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, AliceAddress);
 
-            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BOB_ADDRESS);
-            SessionCipher bobSessionCipher = new SessionCipher(bobStore, ALICE_ADDRESS);
+            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BobAddress);
+            SessionCipher bobSessionCipher = new SessionCipher(bobStore, AliceAddress);
 
-            aliceSessionBuilder.process(bobPreKeyBundle);
-            bobSessionBuilder.process(alicePreKeyBundle);
+            aliceSessionBuilder.Process(bobPreKeyBundle);
+            bobSessionBuilder.Process(alicePreKeyBundle);
 
-            CiphertextMessage messageForBob = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-            CiphertextMessage messageForAlice = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+            CiphertextMessage messageForBob = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+            CiphertextMessage messageForAlice = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-            Assert.AreEqual<uint>(messageForBob.getType(), CiphertextMessage.PREKEY_TYPE);
-            Assert.AreEqual<uint>(messageForAlice.getType(), CiphertextMessage.PREKEY_TYPE);
+            Assert.AreEqual<uint>(messageForBob.GetMessageType(), CiphertextMessage.PrekeyType);
+            Assert.AreEqual<uint>(messageForAlice.GetMessageType(), CiphertextMessage.PrekeyType);
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            byte[] alicePlaintext = aliceSessionCipher.decrypt(new PreKeySignalMessage(messageForAlice.serialize()));
-            byte[] bobPlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(messageForBob.serialize()));
+            byte[] alicePlaintext = aliceSessionCipher.Decrypt(new PreKeySignalMessage(messageForAlice.Serialize()));
+            byte[] bobPlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(messageForBob.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(alicePlaintext).Equals("sample message"));
             Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintext).Equals("hey there"));
 
-            Assert.IsTrue(aliceStore.LoadSession(BOB_ADDRESS).getSessionState().getSessionVersion() == 3);
-            Assert.IsTrue(bobStore.LoadSession(ALICE_ADDRESS).getSessionState().getSessionVersion() == 3);
+            Assert.IsTrue(aliceStore.LoadSession(BobAddress).GetSessionState().GetSessionVersion() == 3);
+            Assert.IsTrue(bobStore.LoadSession(AliceAddress).GetSessionState().GetSessionVersion() == 3);
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage aliceResponse = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("second message"));
+            CiphertextMessage aliceResponse = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("second message"));
 
-            Assert.AreEqual<uint>(aliceResponse.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(aliceResponse.GetMessageType(), CiphertextMessage.WhisperType);
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage finalMessage = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("third message"));
+            CiphertextMessage finalMessage = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("third message"));
 
-            Assert.AreEqual<uint>(finalMessage.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(finalMessage.GetMessageType(), CiphertextMessage.WhisperType);
 
-            byte[] finalPlaintext = aliceSessionCipher.decrypt(new SignalMessage(finalMessage.serialize()));
+            byte[] finalPlaintext = aliceSessionCipher.Decrypt(new SignalMessage(finalMessage.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(finalPlaintext).Equals("third message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
         }
         [TestMethod]
-        public void testSimultaneousInitiateRepeatedMessages()
+        public void TestSimultaneousInitiateRepeatedMessages()
         {
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
-            PreKeyBundle alicePreKeyBundle = createAlicePreKeyBundle(aliceStore);
-            PreKeyBundle bobPreKeyBundle = createBobPreKeyBundle(bobStore);
+            PreKeyBundle alicePreKeyBundle = CreateAlicePreKeyBundle(aliceStore);
+            PreKeyBundle bobPreKeyBundle = CreateBobPreKeyBundle(bobStore);
 
-            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BOB_ADDRESS);
-            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, ALICE_ADDRESS);
+            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BobAddress);
+            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, AliceAddress);
 
-            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BOB_ADDRESS);
-            SessionCipher bobSessionCipher = new SessionCipher(bobStore, ALICE_ADDRESS);
+            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BobAddress);
+            SessionCipher bobSessionCipher = new SessionCipher(bobStore, AliceAddress);
 
-            aliceSessionBuilder.process(bobPreKeyBundle);
-            bobSessionBuilder.process(alicePreKeyBundle);
+            aliceSessionBuilder.Process(bobPreKeyBundle);
+            bobSessionBuilder.Process(alicePreKeyBundle);
 
-            CiphertextMessage messageForBob = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-            CiphertextMessage messageForAlice = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+            CiphertextMessage messageForBob = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+            CiphertextMessage messageForAlice = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-            Assert.AreEqual<uint>(messageForBob.getType(), CiphertextMessage.PREKEY_TYPE);
-            Assert.AreEqual<uint>(messageForAlice.getType(), CiphertextMessage.PREKEY_TYPE);
+            Assert.AreEqual<uint>(messageForBob.GetMessageType(), CiphertextMessage.PrekeyType);
+            Assert.AreEqual<uint>(messageForAlice.GetMessageType(), CiphertextMessage.PrekeyType);
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            byte[] alicePlaintext = aliceSessionCipher.decrypt(new PreKeySignalMessage(messageForAlice.serialize()));
-            byte[] bobPlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(messageForBob.serialize()));
+            byte[] alicePlaintext = aliceSessionCipher.Decrypt(new PreKeySignalMessage(messageForAlice.Serialize()));
+            byte[] bobPlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(messageForBob.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(alicePlaintext).Equals("sample message"));
             Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintext).Equals("hey there"));
 
-            Assert.IsTrue(aliceStore.LoadSession(BOB_ADDRESS).getSessionState().getSessionVersion() == 3);
-            Assert.IsTrue(bobStore.LoadSession(ALICE_ADDRESS).getSessionState().getSessionVersion() == 3);
+            Assert.IsTrue(aliceStore.LoadSession(BobAddress).GetSessionState().GetSessionVersion() == 3);
+            Assert.IsTrue(bobStore.LoadSession(AliceAddress).GetSessionState().GetSessionVersion() == 3);
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
             for (int i = 0; i < 50; i++)
             {
-                CiphertextMessage messageForBobRepeat = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-                CiphertextMessage messageForAliceRepeat = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+                CiphertextMessage messageForBobRepeat = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+                CiphertextMessage messageForAliceRepeat = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-                Assert.AreEqual<uint>(messageForBobRepeat.getType(), CiphertextMessage.WHISPER_TYPE);
-                Assert.AreEqual<uint>(messageForAliceRepeat.getType(), CiphertextMessage.WHISPER_TYPE);
+                Assert.AreEqual<uint>(messageForBobRepeat.GetMessageType(), CiphertextMessage.WhisperType);
+                Assert.AreEqual<uint>(messageForAliceRepeat.GetMessageType(), CiphertextMessage.WhisperType);
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-                byte[] alicePlaintextRepeat = aliceSessionCipher.decrypt(new SignalMessage(messageForAliceRepeat.serialize()));
-                byte[] bobPlaintextRepeat = bobSessionCipher.decrypt(new SignalMessage(messageForBobRepeat.serialize()));
+                byte[] alicePlaintextRepeat = aliceSessionCipher.Decrypt(new SignalMessage(messageForAliceRepeat.Serialize()));
+                byte[] bobPlaintextRepeat = bobSessionCipher.Decrypt(new SignalMessage(messageForBobRepeat.Serialize()));
 
                 Assert.IsTrue(Encoding.UTF8.GetString(alicePlaintextRepeat).Equals("sample message"));
                 Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintextRepeat).Equals("hey there"));
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
             }
 
-            CiphertextMessage aliceResponse = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("second message"));
+            CiphertextMessage aliceResponse = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("second message"));
 
-            Assert.AreEqual<uint>(aliceResponse.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(aliceResponse.GetMessageType(), CiphertextMessage.WhisperType);
 
-            byte[] responsePlaintext = bobSessionCipher.decrypt(new SignalMessage(aliceResponse.serialize()));
+            byte[] responsePlaintext = bobSessionCipher.Decrypt(new SignalMessage(aliceResponse.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(responsePlaintext).Equals("second message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage finalMessage = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("third message"));
+            CiphertextMessage finalMessage = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("third message"));
 
-            Assert.AreEqual<uint>(finalMessage.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(finalMessage.GetMessageType(), CiphertextMessage.WhisperType);
 
-            byte[] finalPlaintext = aliceSessionCipher.decrypt(new SignalMessage(finalMessage.serialize()));
+            byte[] finalPlaintext = aliceSessionCipher.Decrypt(new SignalMessage(finalMessage.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(finalPlaintext).Equals("third message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
         }
         [TestMethod]
-        public void testRepeatedSimultaneousInitiateRepeatedMessages()
+        public void TestRepeatedSimultaneousInitiateRepeatedMessages()
         {
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
 
-            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BOB_ADDRESS);
-            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, ALICE_ADDRESS);
+            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BobAddress);
+            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, AliceAddress);
 
-            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BOB_ADDRESS);
-            SessionCipher bobSessionCipher = new SessionCipher(bobStore, ALICE_ADDRESS);
+            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BobAddress);
+            SessionCipher bobSessionCipher = new SessionCipher(bobStore, AliceAddress);
 
             for (int i = 0; i < 15; i++)
             {
-                PreKeyBundle alicePreKeyBundle = createAlicePreKeyBundle(aliceStore);
-                PreKeyBundle bobPreKeyBundle = createBobPreKeyBundle(bobStore);
+                PreKeyBundle alicePreKeyBundle = CreateAlicePreKeyBundle(aliceStore);
+                PreKeyBundle bobPreKeyBundle = CreateBobPreKeyBundle(bobStore);
 
-                aliceSessionBuilder.process(bobPreKeyBundle);
-                bobSessionBuilder.process(alicePreKeyBundle);
+                aliceSessionBuilder.Process(bobPreKeyBundle);
+                bobSessionBuilder.Process(alicePreKeyBundle);
 
-                CiphertextMessage messageForBob = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-                CiphertextMessage messageForAlice = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+                CiphertextMessage messageForBob = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+                CiphertextMessage messageForAlice = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-                Assert.AreEqual<uint>(messageForBob.getType(), CiphertextMessage.PREKEY_TYPE);
-                Assert.AreEqual<uint>(messageForAlice.getType(), CiphertextMessage.PREKEY_TYPE);
+                Assert.AreEqual<uint>(messageForBob.GetMessageType(), CiphertextMessage.PrekeyType);
+                Assert.AreEqual<uint>(messageForAlice.GetMessageType(), CiphertextMessage.PrekeyType);
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-                byte[] alicePlaintext = aliceSessionCipher.decrypt(new PreKeySignalMessage(messageForAlice.serialize()));
-                byte[] bobPlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(messageForBob.serialize()));
+                byte[] alicePlaintext = aliceSessionCipher.Decrypt(new PreKeySignalMessage(messageForAlice.Serialize()));
+                byte[] bobPlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(messageForBob.Serialize()));
 
                 Assert.IsTrue(Encoding.UTF8.GetString(alicePlaintext).Equals("sample message"));
                 Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintext).Equals("hey there"));
 
-                Assert.IsTrue(aliceStore.LoadSession(BOB_ADDRESS).getSessionState().getSessionVersion() == 3);
-                Assert.IsTrue(bobStore.LoadSession(ALICE_ADDRESS).getSessionState().getSessionVersion() == 3);
+                Assert.IsTrue(aliceStore.LoadSession(BobAddress).GetSessionState().GetSessionVersion() == 3);
+                Assert.IsTrue(bobStore.LoadSession(AliceAddress).GetSessionState().GetSessionVersion() == 3);
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
             }
 
             for (int i = 0; i < 50; i++)
             {
-                CiphertextMessage messageForBobRepeat = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-                CiphertextMessage messageForAliceRepeat = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+                CiphertextMessage messageForBobRepeat = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+                CiphertextMessage messageForAliceRepeat = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-                Assert.AreEqual<uint>(messageForBobRepeat.getType(), CiphertextMessage.WHISPER_TYPE);
-                Assert.AreEqual<uint>(messageForAliceRepeat.getType(), CiphertextMessage.WHISPER_TYPE);
+                Assert.AreEqual<uint>(messageForBobRepeat.GetMessageType(), CiphertextMessage.WhisperType);
+                Assert.AreEqual<uint>(messageForAliceRepeat.GetMessageType(), CiphertextMessage.WhisperType);
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-                byte[] alicePlaintextRepeat = aliceSessionCipher.decrypt(new SignalMessage(messageForAliceRepeat.serialize()));
-                byte[] bobPlaintextRepeat = bobSessionCipher.decrypt(new SignalMessage(messageForBobRepeat.serialize()));
+                byte[] alicePlaintextRepeat = aliceSessionCipher.Decrypt(new SignalMessage(messageForAliceRepeat.Serialize()));
+                byte[] bobPlaintextRepeat = bobSessionCipher.Decrypt(new SignalMessage(messageForBobRepeat.Serialize()));
 
                 Assert.IsTrue(Encoding.UTF8.GetString(alicePlaintextRepeat).Equals("sample message"));
                 Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintextRepeat).Equals("hey there"));
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
             }
 
-            CiphertextMessage aliceResponse = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("second message"));
+            CiphertextMessage aliceResponse = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("second message"));
 
-            Assert.AreEqual<uint>(aliceResponse.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(aliceResponse.GetMessageType(), CiphertextMessage.WhisperType);
 
-            byte[] responsePlaintext = bobSessionCipher.decrypt(new SignalMessage(aliceResponse.serialize()));
+            byte[] responsePlaintext = bobSessionCipher.Decrypt(new SignalMessage(aliceResponse.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(responsePlaintext).Equals("second message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage finalMessage = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("third message"));
+            CiphertextMessage finalMessage = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("third message"));
 
-            Assert.AreEqual<uint>(finalMessage.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(finalMessage.GetMessageType(), CiphertextMessage.WhisperType);
 
-            byte[] finalPlaintext = aliceSessionCipher.decrypt(new SignalMessage(finalMessage.serialize()));
+            byte[] finalPlaintext = aliceSessionCipher.Decrypt(new SignalMessage(finalMessage.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(finalPlaintext).Equals("third message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
         }
         [TestMethod]
-        public void testRepeatedSimultaneousInitiateLostMessageRepeatedMessages()
+        public void TestRepeatedSimultaneousInitiateLostMessageRepeatedMessages()
         {
-            SignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
-            SignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore aliceStore = new TestInMemorySignalProtocolStore();
+            ISignalProtocolStore bobStore = new TestInMemorySignalProtocolStore();
 
 
-            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BOB_ADDRESS);
-            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, ALICE_ADDRESS);
+            SessionBuilder aliceSessionBuilder = new SessionBuilder(aliceStore, BobAddress);
+            SessionBuilder bobSessionBuilder = new SessionBuilder(bobStore, AliceAddress);
 
-            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BOB_ADDRESS);
-            SessionCipher bobSessionCipher = new SessionCipher(bobStore, ALICE_ADDRESS);
+            SessionCipher aliceSessionCipher = new SessionCipher(aliceStore, BobAddress);
+            SessionCipher bobSessionCipher = new SessionCipher(bobStore, AliceAddress);
 
             //    PreKeyBundle aliceLostPreKeyBundle = createAlicePreKeyBundle(aliceStore);
-            PreKeyBundle bobLostPreKeyBundle = createBobPreKeyBundle(bobStore);
+            PreKeyBundle bobLostPreKeyBundle = CreateBobPreKeyBundle(bobStore);
 
-            aliceSessionBuilder.process(bobLostPreKeyBundle);
+            aliceSessionBuilder.Process(bobLostPreKeyBundle);
             //    bobSessionBuilder.process(aliceLostPreKeyBundle);
 
-            CiphertextMessage lostMessageForBob = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
+            CiphertextMessage lostMessageForBob = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
             //    CiphertextMessage lostMessageForAlice = bobSessionCipher.encrypt("sample message".getBytes());
 
             for (int i = 0; i < 15; i++)
             {
-                PreKeyBundle alicePreKeyBundle = createAlicePreKeyBundle(aliceStore);
-                PreKeyBundle bobPreKeyBundle = createBobPreKeyBundle(bobStore);
+                PreKeyBundle alicePreKeyBundle = CreateAlicePreKeyBundle(aliceStore);
+                PreKeyBundle bobPreKeyBundle = CreateBobPreKeyBundle(bobStore);
 
-                aliceSessionBuilder.process(bobPreKeyBundle);
-                bobSessionBuilder.process(alicePreKeyBundle);
+                aliceSessionBuilder.Process(bobPreKeyBundle);
+                bobSessionBuilder.Process(alicePreKeyBundle);
 
-                CiphertextMessage messageForBob = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-                CiphertextMessage messageForAlice = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+                CiphertextMessage messageForBob = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+                CiphertextMessage messageForAlice = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-                Assert.AreEqual<uint>(messageForBob.getType(), CiphertextMessage.PREKEY_TYPE);
-                Assert.AreEqual<uint>(messageForAlice.getType(), CiphertextMessage.PREKEY_TYPE);
+                Assert.AreEqual<uint>(messageForBob.GetMessageType(), CiphertextMessage.PrekeyType);
+                Assert.AreEqual<uint>(messageForAlice.GetMessageType(), CiphertextMessage.PrekeyType);
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-                byte[] alicePlaintext = aliceSessionCipher.decrypt(new PreKeySignalMessage(messageForAlice.serialize()));
-                byte[] bobPlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(messageForBob.serialize()));
+                byte[] alicePlaintext = aliceSessionCipher.Decrypt(new PreKeySignalMessage(messageForAlice.Serialize()));
+                byte[] bobPlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(messageForBob.Serialize()));
 
                 Assert.IsTrue(Encoding.UTF8.GetString(alicePlaintext).Equals("sample message"));
                 Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintext).Equals("hey there"));
 
-                Assert.IsTrue(aliceStore.LoadSession(BOB_ADDRESS).getSessionState().getSessionVersion() == 3);
-                Assert.IsTrue(bobStore.LoadSession(ALICE_ADDRESS).getSessionState().getSessionVersion() == 3);
+                Assert.IsTrue(aliceStore.LoadSession(BobAddress).GetSessionState().GetSessionVersion() == 3);
+                Assert.IsTrue(bobStore.LoadSession(AliceAddress).GetSessionState().GetSessionVersion() == 3);
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
             }
 
             for (int i = 0; i < 50; i++)
             {
-                CiphertextMessage messageForBobRepeat = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("hey there"));
-                CiphertextMessage messageForAliceRepeat = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("sample message"));
+                CiphertextMessage messageForBobRepeat = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("hey there"));
+                CiphertextMessage messageForAliceRepeat = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("sample message"));
 
-                Assert.AreEqual<uint>(messageForBobRepeat.getType(), CiphertextMessage.WHISPER_TYPE);
-                Assert.AreEqual<uint>(messageForAliceRepeat.getType(), CiphertextMessage.WHISPER_TYPE);
+                Assert.AreEqual<uint>(messageForBobRepeat.GetMessageType(), CiphertextMessage.WhisperType);
+                Assert.AreEqual<uint>(messageForAliceRepeat.GetMessageType(), CiphertextMessage.WhisperType);
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-                byte[] alicePlaintextRepeat = aliceSessionCipher.decrypt(new SignalMessage(messageForAliceRepeat.serialize()));
-                byte[] bobPlaintextRepeat = bobSessionCipher.decrypt(new SignalMessage(messageForBobRepeat.serialize()));
+                byte[] alicePlaintextRepeat = aliceSessionCipher.Decrypt(new SignalMessage(messageForAliceRepeat.Serialize()));
+                byte[] bobPlaintextRepeat = bobSessionCipher.Decrypt(new SignalMessage(messageForBobRepeat.Serialize()));
 
                 Assert.IsTrue(Encoding.UTF8.GetString(alicePlaintextRepeat).Equals("sample message"));
                 Assert.IsTrue(Encoding.UTF8.GetString(bobPlaintextRepeat).Equals("hey there"));
 
-                Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+                Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
             }
 
-            CiphertextMessage aliceResponse = aliceSessionCipher.encrypt(Encoding.UTF8.GetBytes("second message"));
+            CiphertextMessage aliceResponse = aliceSessionCipher.Encrypt(Encoding.UTF8.GetBytes("second message"));
 
-            Assert.AreEqual<uint>(aliceResponse.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(aliceResponse.GetMessageType(), CiphertextMessage.WhisperType);
 
-            byte[] responsePlaintext = bobSessionCipher.decrypt(new SignalMessage(aliceResponse.serialize()));
+            byte[] responsePlaintext = bobSessionCipher.Decrypt(new SignalMessage(aliceResponse.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(responsePlaintext).Equals("second message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage finalMessage = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("third message"));
+            CiphertextMessage finalMessage = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("third message"));
 
-            Assert.AreEqual<uint>(finalMessage.getType(), CiphertextMessage.WHISPER_TYPE);
+            Assert.AreEqual<uint>(finalMessage.GetMessageType(), CiphertextMessage.WhisperType);
 
-            byte[] finalPlaintext = aliceSessionCipher.decrypt(new SignalMessage(finalMessage.serialize()));
+            byte[] finalPlaintext = aliceSessionCipher.Decrypt(new SignalMessage(finalMessage.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(finalPlaintext).Equals("third message"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
 
-            byte[] lostMessagePlaintext = bobSessionCipher.decrypt(new PreKeySignalMessage(lostMessageForBob.serialize()));
+            byte[] lostMessagePlaintext = bobSessionCipher.Decrypt(new PreKeySignalMessage(lostMessageForBob.Serialize()));
             Assert.IsTrue(Encoding.UTF8.GetString(lostMessagePlaintext).Equals("hey there"));
 
-            Assert.IsFalse(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsFalse(IsSessionIdEqual(aliceStore, bobStore));
 
-            CiphertextMessage blastFromThePast = bobSessionCipher.encrypt(Encoding.UTF8.GetBytes("unexpected!"));
-            byte[] blastFromThePastPlaintext = aliceSessionCipher.decrypt(new SignalMessage(blastFromThePast.serialize()));
+            CiphertextMessage blastFromThePast = bobSessionCipher.Encrypt(Encoding.UTF8.GetBytes("unexpected!"));
+            byte[] blastFromThePastPlaintext = aliceSessionCipher.Decrypt(new SignalMessage(blastFromThePast.Serialize()));
 
             Assert.IsTrue(Encoding.UTF8.GetString(blastFromThePastPlaintext).Equals("unexpected!"));
-            Assert.IsTrue(isSessionIdEqual(aliceStore, bobStore));
+            Assert.IsTrue(IsSessionIdEqual(aliceStore, bobStore));
         }
 
-        private bool isSessionIdEqual(SignalProtocolStore aliceStore, SignalProtocolStore bobStore)
+        private bool IsSessionIdEqual(ISignalProtocolStore aliceStore, ISignalProtocolStore bobStore)
         {
-            return ByteUtil.isEqual(aliceStore.LoadSession(BOB_ADDRESS).getSessionState().getAliceBaseKey(),
-                                 bobStore.LoadSession(ALICE_ADDRESS).getSessionState().getAliceBaseKey());
+            return ByteUtil.IsEqual(aliceStore.LoadSession(BobAddress).GetSessionState().GetAliceBaseKey(),
+                                 bobStore.LoadSession(AliceAddress).GetSessionState().GetAliceBaseKey());
         }
 
-        private PreKeyBundle createAlicePreKeyBundle(SignalProtocolStore aliceStore)
+        private PreKeyBundle CreateAlicePreKeyBundle(ISignalProtocolStore aliceStore)
         {
-            ECKeyPair aliceUnsignedPreKey = Curve.generateKeyPair();
-            int aliceUnsignedPreKeyId = new Random().Next((int)Medium.MAX_VALUE);
-            byte[] aliceSignature = Curve.calculateSignature(aliceStore.GetIdentityKeyPair().getPrivateKey(),
-                                                                       aliceSignedPreKey.getPublicKey().serialize());
+            EcKeyPair aliceUnsignedPreKey = Curve.GenerateKeyPair();
+            int aliceUnsignedPreKeyId = new Random().Next((int)Medium.MaxValue);
+            byte[] aliceSignature = Curve.CalculateSignature(aliceStore.GetIdentityKeyPair().GetPrivateKey(),
+                                                                       AliceSignedPreKey.GetPublicKey().Serialize());
 
             PreKeyBundle alicePreKeyBundle = new PreKeyBundle(1, 1,
-                                                              (uint)aliceUnsignedPreKeyId, aliceUnsignedPreKey.getPublicKey(),
-                                                              aliceSignedPreKeyId, aliceSignedPreKey.getPublicKey(),
-                                                              aliceSignature, aliceStore.GetIdentityKeyPair().getPublicKey());
+                                                              (uint)aliceUnsignedPreKeyId, aliceUnsignedPreKey.GetPublicKey(),
+                                                              AliceSignedPreKeyId, AliceSignedPreKey.GetPublicKey(),
+                                                              aliceSignature, aliceStore.GetIdentityKeyPair().GetPublicKey());
 
-            aliceStore.StoreSignedPreKey(aliceSignedPreKeyId, new SignedPreKeyRecord(aliceSignedPreKeyId, (ulong)DateTime.UtcNow.Ticks, aliceSignedPreKey, aliceSignature));
+            aliceStore.StoreSignedPreKey(AliceSignedPreKeyId, new SignedPreKeyRecord(AliceSignedPreKeyId, (ulong)DateTime.UtcNow.Ticks, AliceSignedPreKey, aliceSignature));
             aliceStore.StorePreKey((uint)aliceUnsignedPreKeyId, new PreKeyRecord((uint)aliceUnsignedPreKeyId, aliceUnsignedPreKey));
 
             return alicePreKeyBundle;
         }
 
-        private PreKeyBundle createBobPreKeyBundle(SignalProtocolStore bobStore)
+        private PreKeyBundle CreateBobPreKeyBundle(ISignalProtocolStore bobStore)
         {
-            ECKeyPair bobUnsignedPreKey = Curve.generateKeyPair();
-            int bobUnsignedPreKeyId = new Random().Next((int)Medium.MAX_VALUE);
-            byte[] bobSignature = Curve.calculateSignature(bobStore.GetIdentityKeyPair().getPrivateKey(),
-                                                                     bobSignedPreKey.getPublicKey().serialize());
+            EcKeyPair bobUnsignedPreKey = Curve.GenerateKeyPair();
+            int bobUnsignedPreKeyId = new Random().Next((int)Medium.MaxValue);
+            byte[] bobSignature = Curve.CalculateSignature(bobStore.GetIdentityKeyPair().GetPrivateKey(),
+                                                                     BobSignedPreKey.GetPublicKey().Serialize());
 
             PreKeyBundle bobPreKeyBundle = new PreKeyBundle(1, 1,
-                                                            (uint)bobUnsignedPreKeyId, bobUnsignedPreKey.getPublicKey(),
-                                                            bobSignedPreKeyId, bobSignedPreKey.getPublicKey(),
-                                                            bobSignature, bobStore.GetIdentityKeyPair().getPublicKey());
+                                                            (uint)bobUnsignedPreKeyId, bobUnsignedPreKey.GetPublicKey(),
+                                                            BobSignedPreKeyId, BobSignedPreKey.GetPublicKey(),
+                                                            bobSignature, bobStore.GetIdentityKeyPair().GetPublicKey());
 
-            bobStore.StoreSignedPreKey(bobSignedPreKeyId, new SignedPreKeyRecord(bobSignedPreKeyId, (ulong)DateTime.UtcNow.Ticks, bobSignedPreKey, bobSignature));
+            bobStore.StoreSignedPreKey(BobSignedPreKeyId, new SignedPreKeyRecord(BobSignedPreKeyId, (ulong)DateTime.UtcNow.Ticks, BobSignedPreKey, bobSignature));
             bobStore.StorePreKey((uint)bobUnsignedPreKeyId, new PreKeyRecord((uint)bobUnsignedPreKeyId, bobUnsignedPreKey));
 
             return bobPreKeyBundle;

@@ -28,7 +28,7 @@ namespace libsignal_test
     public class RatchetingSessionTest
     {
         [TestMethod, TestCategory("libsignal.ratchet")]
-        public void testRatchetingSessionAsBob()
+        public void TestRatchetingSessionAsBob()
         {
             byte[] bobPublic = {(byte) 0x05, (byte) 0x2c, (byte) 0xb4, (byte) 0x97,
                         (byte) 0x76, (byte) 0xb8, (byte) 0x77, (byte) 0x02,
@@ -123,38 +123,38 @@ namespace libsignal_test
                         (byte)0xb4, (byte)0x4d};
 
             IdentityKey bobIdentityKeyPublic = new IdentityKey(bobIdentityPublic, 0);
-            ECPrivateKey bobIdentityKeyPrivate = Curve.decodePrivatePoint(bobIdentityPrivate);
+            IEcPrivateKey bobIdentityKeyPrivate = Curve.DecodePrivatePoint(bobIdentityPrivate);
             IdentityKeyPair bobIdentityKey = new IdentityKeyPair(bobIdentityKeyPublic, bobIdentityKeyPrivate);
-            ECPublicKey bobEphemeralPublicKey = Curve.decodePoint(bobPublic, 0);
-            ECPrivateKey bobEphemeralPrivateKey = Curve.decodePrivatePoint(bobPrivate);
-            ECKeyPair bobEphemeralKey = new ECKeyPair(bobEphemeralPublicKey, bobEphemeralPrivateKey);
-            ECKeyPair bobBaseKey = bobEphemeralKey;
-            ECKeyPair bobSignedPreKey = new ECKeyPair(Curve.decodePoint(bobSignedPreKeyPublic, 0), Curve.decodePrivatePoint(bobSignedPreKeyPrivate));
+            IEcPublicKey bobEphemeralPublicKey = Curve.DecodePoint(bobPublic, 0);
+            IEcPrivateKey bobEphemeralPrivateKey = Curve.DecodePrivatePoint(bobPrivate);
+            EcKeyPair bobEphemeralKey = new EcKeyPair(bobEphemeralPublicKey, bobEphemeralPrivateKey);
+            EcKeyPair bobBaseKey = bobEphemeralKey;
+            EcKeyPair bobSignedPreKey = new EcKeyPair(Curve.DecodePoint(bobSignedPreKeyPublic, 0), Curve.DecodePrivatePoint(bobSignedPreKeyPrivate));
 
-            ECPublicKey aliceBasePublicKey = Curve.decodePoint(aliceBasePublic, 0);
-            ECPublicKey aliceEphemeralPublicKey = Curve.decodePoint(aliceEphemeralPublic, 0);
+            IEcPublicKey aliceBasePublicKey = Curve.DecodePoint(aliceBasePublic, 0);
+            IEcPublicKey aliceEphemeralPublicKey = Curve.DecodePoint(aliceEphemeralPublic, 0);
             IdentityKey aliceIdentityPublicKey = new IdentityKey(aliceIdentityPublic, 0);
 
-            BobSignalProtocolParameters parameters = BobSignalProtocolParameters.newBuilder()
-                                                                                .setOurIdentityKey(bobIdentityKey)
-                                                                                .setOurSignedPreKey(bobSignedPreKey)
-                                                                                .setOurRatchetKey(bobEphemeralKey)
-                                                                                .setOurOneTimePreKey(May<ECKeyPair>.NoValue)
-                                                                                .setTheirIdentityKey(aliceIdentityPublicKey)
-                                                                                .setTheirBaseKey(aliceBasePublicKey)
-                                                                                .create();
+            BobSignalProtocolParameters parameters = BobSignalProtocolParameters.NewBuilder()
+                                                                                .SetOurIdentityKey(bobIdentityKey)
+                                                                                .SetOurSignedPreKey(bobSignedPreKey)
+                                                                                .SetOurRatchetKey(bobEphemeralKey)
+                                                                                .SetOurOneTimePreKey(May<EcKeyPair>.NoValue)
+                                                                                .SetTheirIdentityKey(aliceIdentityPublicKey)
+                                                                                .SetTheirBaseKey(aliceBasePublicKey)
+                                                                                .Create();
 
             SessionState session = new SessionState();
 
-            RatchetingSession.initializeSession(session, parameters);
+            RatchetingSession.InitializeSession(session, parameters);
 
-            Assert.AreEqual<IdentityKey>(session.getLocalIdentityKey(), bobIdentityKey.getPublicKey());
-            Assert.AreEqual<IdentityKey>(session.getRemoteIdentityKey(), aliceIdentityPublicKey);
-            CollectionAssert.AreEqual(session.getSenderChainKey().getKey(), senderChain);
+            Assert.AreEqual<IdentityKey>(session.GetLocalIdentityKey(), bobIdentityKey.GetPublicKey());
+            Assert.AreEqual<IdentityKey>(session.GetRemoteIdentityKey(), aliceIdentityPublicKey);
+            CollectionAssert.AreEqual(session.GetSenderChainKey().GetKey(), senderChain);
         }
 
         [TestMethod, TestCategory("libsignal.ratchet")]
-        public void testRatchetingSessionAsAlice()
+        public void TestRatchetingSessionAsAlice()
         {
             byte[] bobPublic = {(byte) 0x05, (byte) 0x2c, (byte) 0xb4, (byte) 0x97, (byte) 0x76,
                         (byte) 0xb8, (byte) 0x77, (byte) 0x02, (byte) 0x05, (byte) 0x74,
@@ -237,35 +237,35 @@ namespace libsignal_test
                         (byte)0xb4, (byte)0x4d};
 
             IdentityKey bobIdentityKey = new IdentityKey(bobIdentityPublic, 0);
-            ECPublicKey bobEphemeralPublicKey = Curve.decodePoint(bobPublic, 0);
-            ECPublicKey bobSignedPreKey = Curve.decodePoint(bobSignedPreKeyPublic, 0);
-            ECPublicKey aliceBasePublicKey = Curve.decodePoint(aliceBasePublic, 0);
-            ECPrivateKey aliceBasePrivateKey = Curve.decodePrivatePoint(aliceBasePrivate);
-            ECKeyPair aliceBaseKey = new ECKeyPair(aliceBasePublicKey, aliceBasePrivateKey);
-            ECPublicKey aliceEphemeralPublicKey = Curve.decodePoint(aliceEphemeralPublic, 0);
-            ECPrivateKey aliceEphemeralPrivateKey = Curve.decodePrivatePoint(aliceEphemeralPrivate);
-            ECKeyPair aliceEphemeralKey = new ECKeyPair(aliceEphemeralPublicKey, aliceEphemeralPrivateKey);
+            IEcPublicKey bobEphemeralPublicKey = Curve.DecodePoint(bobPublic, 0);
+            IEcPublicKey bobSignedPreKey = Curve.DecodePoint(bobSignedPreKeyPublic, 0);
+            IEcPublicKey aliceBasePublicKey = Curve.DecodePoint(aliceBasePublic, 0);
+            IEcPrivateKey aliceBasePrivateKey = Curve.DecodePrivatePoint(aliceBasePrivate);
+            EcKeyPair aliceBaseKey = new EcKeyPair(aliceBasePublicKey, aliceBasePrivateKey);
+            IEcPublicKey aliceEphemeralPublicKey = Curve.DecodePoint(aliceEphemeralPublic, 0);
+            IEcPrivateKey aliceEphemeralPrivateKey = Curve.DecodePrivatePoint(aliceEphemeralPrivate);
+            EcKeyPair aliceEphemeralKey = new EcKeyPair(aliceEphemeralPublicKey, aliceEphemeralPrivateKey);
             IdentityKey aliceIdentityPublicKey = new IdentityKey(aliceIdentityPublic, 0);
-            ECPrivateKey aliceIdentityPrivateKey = Curve.decodePrivatePoint(aliceIdentityPrivate);
+            IEcPrivateKey aliceIdentityPrivateKey = Curve.DecodePrivatePoint(aliceIdentityPrivate);
             IdentityKeyPair aliceIdentityKey = new IdentityKeyPair(aliceIdentityPublicKey, aliceIdentityPrivateKey);
 
             SessionState session = new SessionState();
 
-            AliceSignalProtocolParameters parameters = AliceSignalProtocolParameters.newBuilder()
-                                                                                    .setOurBaseKey(aliceBaseKey)
-                                                                                    .setOurIdentityKey(aliceIdentityKey)
-                                                                                    .setTheirIdentityKey(bobIdentityKey)
-                                                                                    .setTheirSignedPreKey(bobSignedPreKey)
-                                                                                    .setTheirRatchetKey(bobEphemeralPublicKey)
-                                                                                    .setTheirOneTimePreKey(May<ECPublicKey>.NoValue)
-                                                                                    .create();
+            AliceSignalProtocolParameters parameters = AliceSignalProtocolParameters.NewBuilder()
+                                                                                    .SetOurBaseKey(aliceBaseKey)
+                                                                                    .SetOurIdentityKey(aliceIdentityKey)
+                                                                                    .SetTheirIdentityKey(bobIdentityKey)
+                                                                                    .SetTheirSignedPreKey(bobSignedPreKey)
+                                                                                    .SetTheirRatchetKey(bobEphemeralPublicKey)
+                                                                                    .SetTheirOneTimePreKey(May<IEcPublicKey>.NoValue)
+                                                                                    .Create();
 
-            RatchetingSession.initializeSession(session, parameters);
+            RatchetingSession.InitializeSession(session, parameters);
 
-            Assert.AreEqual<IdentityKey>(session.getLocalIdentityKey(), aliceIdentityKey.getPublicKey());
-            Assert.AreEqual<IdentityKey>(session.getRemoteIdentityKey(), bobIdentityKey);
+            Assert.AreEqual<IdentityKey>(session.GetLocalIdentityKey(), aliceIdentityKey.GetPublicKey());
+            Assert.AreEqual<IdentityKey>(session.GetRemoteIdentityKey(), bobIdentityKey);
             CollectionAssert.AreEqual(
-                session.getReceiverChainKey(bobEphemeralPublicKey).getKey(), receiverChain);
+                session.GetReceiverChainKey(bobEphemeralPublicKey).GetKey(), receiverChain);
         }
     }
 }

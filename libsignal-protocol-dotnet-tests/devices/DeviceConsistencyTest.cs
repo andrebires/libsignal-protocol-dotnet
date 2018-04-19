@@ -29,17 +29,17 @@ namespace signal_protocol_tests.devices
     public class DeviceConsistencyTest
     {
         [TestMethod]
-        public void testDeviceConsistency()
+        public void TestDeviceConsistency()
         {
-            IdentityKeyPair deviceOne = KeyHelper.generateIdentityKeyPair();
-            IdentityKeyPair deviceTwo = KeyHelper.generateIdentityKeyPair();
-            IdentityKeyPair deviceThree = KeyHelper.generateIdentityKeyPair();
+            IdentityKeyPair deviceOne = KeyHelper.GenerateIdentityKeyPair();
+            IdentityKeyPair deviceTwo = KeyHelper.GenerateIdentityKeyPair();
+            IdentityKeyPair deviceThree = KeyHelper.GenerateIdentityKeyPair();
 
             List<IdentityKey> keyList = new List<IdentityKey>(new[]
             {
-                deviceOne.getPublicKey(),
-                deviceTwo.getPublicKey(),
-                deviceThree.getPublicKey()
+                deviceOne.GetPublicKey(),
+                deviceTwo.GetPublicKey(),
+                deviceThree.GetPublicKey()
             });
 
             Random random = new Random();
@@ -53,38 +53,38 @@ namespace signal_protocol_tests.devices
             HelperMethods.Shuffle(keyList, random);
             DeviceConsistencyCommitment deviceThreeCommitment = new DeviceConsistencyCommitment(1, keyList);
 
-            CollectionAssert.AreEqual(deviceOneCommitment.toByteArray(), deviceTwoCommitment.toByteArray());
-            CollectionAssert.AreEqual(deviceTwoCommitment.toByteArray(), deviceThreeCommitment.toByteArray());
+            CollectionAssert.AreEqual(deviceOneCommitment.ToByteArray(), deviceTwoCommitment.ToByteArray());
+            CollectionAssert.AreEqual(deviceTwoCommitment.ToByteArray(), deviceThreeCommitment.ToByteArray());
 
             DeviceConsistencyMessage deviceOneMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceOne);
             DeviceConsistencyMessage deviceTwoMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceTwo);
             DeviceConsistencyMessage deviceThreeMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceThree);
 
-            DeviceConsistencyMessage receivedDeviceOneMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceOneMessage.getSerialized(), deviceOne.getPublicKey());
-            DeviceConsistencyMessage receivedDeviceTwoMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceTwoMessage.getSerialized(), deviceTwo.getPublicKey());
-            DeviceConsistencyMessage receivedDeviceThreeMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceThreeMessage.getSerialized(), deviceThree.getPublicKey());
+            DeviceConsistencyMessage receivedDeviceOneMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceOneMessage.GetSerialized(), deviceOne.GetPublicKey());
+            DeviceConsistencyMessage receivedDeviceTwoMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceTwoMessage.GetSerialized(), deviceTwo.GetPublicKey());
+            DeviceConsistencyMessage receivedDeviceThreeMessage = new DeviceConsistencyMessage(deviceOneCommitment, deviceThreeMessage.GetSerialized(), deviceThree.GetPublicKey());
 
-            CollectionAssert.AreEqual(deviceOneMessage.getSignature().getVrfOutput(), receivedDeviceOneMessage.getSignature().getVrfOutput());
-            CollectionAssert.AreEqual(deviceTwoMessage.getSignature().getVrfOutput(), receivedDeviceTwoMessage.getSignature().getVrfOutput());
-            CollectionAssert.AreEqual(deviceThreeMessage.getSignature().getVrfOutput(), receivedDeviceThreeMessage.getSignature().getVrfOutput());
+            CollectionAssert.AreEqual(deviceOneMessage.GetSignature().GetVrfOutput(), receivedDeviceOneMessage.GetSignature().GetVrfOutput());
+            CollectionAssert.AreEqual(deviceTwoMessage.GetSignature().GetVrfOutput(), receivedDeviceTwoMessage.GetSignature().GetVrfOutput());
+            CollectionAssert.AreEqual(deviceThreeMessage.GetSignature().GetVrfOutput(), receivedDeviceThreeMessage.GetSignature().GetVrfOutput());
 
-            string codeOne = generateCode(deviceOneCommitment, deviceOneMessage, receivedDeviceTwoMessage, receivedDeviceThreeMessage);
-            string codeTwo = generateCode(deviceTwoCommitment, deviceTwoMessage, receivedDeviceThreeMessage, receivedDeviceOneMessage);
-            string codeThree = generateCode(deviceThreeCommitment, deviceThreeMessage, receivedDeviceTwoMessage, receivedDeviceOneMessage);
+            string codeOne = GenerateCode(deviceOneCommitment, deviceOneMessage, receivedDeviceTwoMessage, receivedDeviceThreeMessage);
+            string codeTwo = GenerateCode(deviceTwoCommitment, deviceTwoMessage, receivedDeviceThreeMessage, receivedDeviceOneMessage);
+            string codeThree = GenerateCode(deviceThreeCommitment, deviceThreeMessage, receivedDeviceTwoMessage, receivedDeviceOneMessage);
 
             Assert.AreEqual(codeOne, codeTwo);
             Assert.AreEqual(codeTwo, codeThree);
         }
 
-        private string generateCode(DeviceConsistencyCommitment commitment, params DeviceConsistencyMessage[] messages)
+        private string GenerateCode(DeviceConsistencyCommitment commitment, params DeviceConsistencyMessage[] messages)
         {
             List<DeviceConsistencySignature> signatures = new List<DeviceConsistencySignature>();
             foreach (DeviceConsistencyMessage message in messages)
             {
-                signatures.Add(message.getSignature());
+                signatures.Add(message.GetSignature());
             }
 
-            return DeviceConsistencyCodeGenerator.generateFor(commitment, signatures);
+            return DeviceConsistencyCodeGenerator.GenerateFor(commitment, signatures);
         }
     }
 }
