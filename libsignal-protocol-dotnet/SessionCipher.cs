@@ -26,16 +26,13 @@ using Strilanc.Value;
 
 namespace Libsignal
 {
-
-    /**
-     * The main entry point for Signal Protocol encrypt/decrypt operations.
-     *
-     * Once a session has been established with {@link SessionBuilder},
-     * this class can be used for all encrypt/decrypt operations within
-     * that session.
-     *
-     * @author Moxie Marlinspike
-     */
+    /// <summary>        
+    /// The main entry point for Signal Protocol encrypt/decrypt operations.    
+    /// Once a session has been established with <see cref="SessionBuilder"/>,
+    /// this class can be used for all encrypt/decrypt operations within
+    /// that session.        
+    /// </summary>
+    /// <author>Moxie Marlinspike</author>
     public class SessionCipher
     {
 

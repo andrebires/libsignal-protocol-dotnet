@@ -24,22 +24,21 @@ using Strilanc.Value;
 
 namespace Libsignal
 {
-    /**
- * SessionBuilder is responsible for setting up encrypted sessions.
- * Once a session has been established, {@link org.whispersystems.libsignal.SessionCipher}
- * can be used to encrypt/decrypt messages in that session.
- * <p>
- * Sessions are built from one of three different possible vectors:
- * <ol>
- *   <li>A {@link org.whispersystems.libsignal.state.PreKeyBundle} retrieved from a server.</li>
- *   <li>A {@link PreKeySignalMessage} received from a client.</li>
- * </ol>
- *
- * Sessions are constructed per recipientId + deviceId tuple.  Remote logical users are identified
- * by their recipientId, and each logical recipientId can have multiple physical devices.
- *
- * @author Moxie Marlinspike
- */
+
+    /// <summary>
+    ///  SessionBuilder is responsible for setting up encrypted sessions.
+    ///  Once a session has been established, {@link org.whispersystems.libsignal.SessionCipher}
+    ///  can be used to encrypt/decrypt messages in that session.
+    /// 
+    ///  Sessions are built from one of three different possible vectors:
+    ///  - A <see cref="PreKeyBundle"/> retrieved from a server.
+    ///  - A <see cref="PreKeySignalMessage"/> received from a client.
+    ///  
+    ///  Sessions are constructed per recipientId + deviceId tuple.  Remote logical users are identified
+    ///  by their recipientId, and each logical recipientId can have multiple physical devices.
+    ///  
+    ///  @author Moxie Marlinspike       
+    /// </summary>
     public class SessionBuilder
     {
 
@@ -95,7 +94,7 @@ namespace Libsignal
          * @throws org.whispersystems.libsignal.UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
          */
         /*package*/
-        internal May<uint>  Process(SessionRecord sessionRecord, PreKeySignalMessage message)
+        internal May<uint> Process(SessionRecord sessionRecord, PreKeySignalMessage message)
         {
             uint messageVersion = message.GetMessageVersion();
             IdentityKey theirIdentityKey = message.GetIdentityKey();
