@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.util;
 using System;
 using System.IO;
+using Libsignal.Util;
 
-namespace libsignal.kdf
+namespace Libsignal.Kdf2
 {
     public abstract class Hkdf
     {

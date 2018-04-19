@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.kdf;
-using libsignal.ratchet;
+using Libsignal.Kdf2;
+using Libsignal.Ratchet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace libsignal_test

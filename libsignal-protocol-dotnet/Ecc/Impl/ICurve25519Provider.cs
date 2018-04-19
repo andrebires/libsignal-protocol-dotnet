@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
- namespace libsignal.ecc.impl
+ namespace Libsignal.Ecc.Impl
 {
 	/// <summary>
 	/// If you want to expose an implementation of Curve25519 to this class library,

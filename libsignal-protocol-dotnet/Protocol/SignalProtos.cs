@@ -4,10 +4,9 @@
 #region Designer generated code
 
 using pb = global::Google.Protobuf;
-using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
-using scg = global::System.Collections.Generic;
-namespace libsignal.protocol
+
+namespace Libsignal.Protocol
 {
 
     /// <summary>Holder for reflection information generated from WhisperTextProtocol.proto</summary>
@@ -56,12 +55,12 @@ namespace libsignal.protocol
             descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
                 new pbr::FileDescriptor[] { },
                 new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.protocol.SignalMessage), global::libsignal.protocol.SignalMessage.Parser, new[]{ "RatchetKey", "Counter", "PreviousCounter", "Ciphertext" }, new[]{ "RatchedKeyOneof", "CounterOneof", "PreviousCounterOneof", "CiphertextOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.protocol.PreKeySignalMessage), global::libsignal.protocol.PreKeySignalMessage.Parser, new[]{ "RegistrationId", "PreKeyId", "SignedPreKeyId", "BaseKey", "IdentityKey", "Message" }, new[]{ "RegistrationIdOneof", "PreKeyIdOneof", "SignedPreKeyIdOneof", "BaseKeyOneof", "IdentityKeyOneof", "MessageOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.protocol.KeyExchangeMessage), global::libsignal.protocol.KeyExchangeMessage.Parser, new[]{ "Id", "BaseKey", "RatchetKey", "IdentityKey", "BaseKeySignature" }, new[]{ "IdOneof", "BaseKeyOneof", "RatchetKeyOneof", "IdentityKeyOneof", "BaseKeySignatureOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.protocol.SenderKeyMessage), global::libsignal.protocol.SenderKeyMessage.Parser, new[]{ "Id", "Iteration", "Ciphertext" }, new[]{ "IdOneof", "IterationOneof", "CiphertextOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.protocol.SenderKeyDistributionMessage), global::libsignal.protocol.SenderKeyDistributionMessage.Parser, new[]{ "Id", "Iteration", "ChainKey", "SigningKey" }, new[]{ "IdOneof", "IterationOneof", "ChainKeyOneof", "SigningKeyOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.protocol.DeviceConsistencyCodeMessage), global::libsignal.protocol.DeviceConsistencyCodeMessage.Parser, new[]{ "Generation", "Signature" }, new[]{ "GenerationOneof", "SignatureOneof" }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Protocol.SignalMessage), global::Libsignal.Protocol.SignalMessage.Parser, new[]{ "RatchetKey", "Counter", "PreviousCounter", "Ciphertext" }, new[]{ "RatchedKeyOneof", "CounterOneof", "PreviousCounterOneof", "CiphertextOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Protocol.PreKeySignalMessage), global::Libsignal.Protocol.PreKeySignalMessage.Parser, new[]{ "RegistrationId", "PreKeyId", "SignedPreKeyId", "BaseKey", "IdentityKey", "Message" }, new[]{ "RegistrationIdOneof", "PreKeyIdOneof", "SignedPreKeyIdOneof", "BaseKeyOneof", "IdentityKeyOneof", "MessageOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Protocol.KeyExchangeMessage), global::Libsignal.Protocol.KeyExchangeMessage.Parser, new[]{ "Id", "BaseKey", "RatchetKey", "IdentityKey", "BaseKeySignature" }, new[]{ "IdOneof", "BaseKeyOneof", "RatchetKeyOneof", "IdentityKeyOneof", "BaseKeySignatureOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Protocol.SenderKeyMessage), global::Libsignal.Protocol.SenderKeyMessage.Parser, new[]{ "Id", "Iteration", "Ciphertext" }, new[]{ "IdOneof", "IterationOneof", "CiphertextOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Protocol.SenderKeyDistributionMessage), global::Libsignal.Protocol.SenderKeyDistributionMessage.Parser, new[]{ "Id", "Iteration", "ChainKey", "SigningKey" }, new[]{ "IdOneof", "IterationOneof", "ChainKeyOneof", "SigningKeyOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Protocol.DeviceConsistencyCodeMessage), global::Libsignal.Protocol.DeviceConsistencyCodeMessage.Parser, new[]{ "Generation", "Signature" }, new[]{ "GenerationOneof", "SignatureOneof" }, null, null)
                 }));
         }
         #endregion
@@ -77,7 +76,7 @@ namespace libsignal.protocol
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[0]; }
+            get { return global::Libsignal.Protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -449,7 +448,7 @@ namespace libsignal.protocol
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[1]; }
+            get { return global::Libsignal.Protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -953,7 +952,7 @@ namespace libsignal.protocol
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[2]; }
+            get { return global::Libsignal.Protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[2]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1391,7 +1390,7 @@ namespace libsignal.protocol
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[3]; }
+            get { return global::Libsignal.Protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1697,7 +1696,7 @@ namespace libsignal.protocol
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[4]; }
+            get { return global::Libsignal.Protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[4]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2069,7 +2068,7 @@ namespace libsignal.protocol
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[5]; }
+            get { return global::Libsignal.Protocol.WhisperTextProtocolReflection.Descriptor.MessageTypes[5]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

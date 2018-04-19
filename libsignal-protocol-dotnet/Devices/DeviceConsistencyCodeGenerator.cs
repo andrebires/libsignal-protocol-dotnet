@@ -18,10 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using libsignal.util;
 using System.Security.Cryptography;
+using Libsignal.Util;
 
-namespace libsignal.devices
+namespace Libsignal.Devices
 {
     public class DeviceConsistencyCodeGenerator
     {

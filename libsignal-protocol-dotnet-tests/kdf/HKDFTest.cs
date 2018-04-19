@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.kdf;
+using Libsignal.Kdf2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace libsignal_test

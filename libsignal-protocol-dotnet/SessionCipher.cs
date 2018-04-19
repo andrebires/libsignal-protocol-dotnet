@@ -15,17 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
-using libsignal.exceptions;
-using libsignal.protocol;
-using libsignal.ratchet;
-using libsignal.state;
-using libsignal.util;
-using Strilanc.Value;
 using System;
 using System.Collections.Generic;
+using Libsignal.Ecc;
+using Libsignal.Protocol;
+using Libsignal.Ratchet;
+using Libsignal.State;
+using Libsignal.Util;
+using Strilanc.Value;
 
-namespace libsignal
+namespace Libsignal
 {
 
     /**
@@ -414,12 +413,12 @@ namespace libsignal
 
         private byte[] GetCiphertext(MessageKeys messageKeys, byte[] plaintext)
         {
-            return util.Encrypt.AesCbcPkcs5(plaintext, messageKeys.GetCipherKey(), messageKeys.GetIv());
+            return Util.Encrypt.AesCbcPkcs5(plaintext, messageKeys.GetCipherKey(), messageKeys.GetIv());
         }
 
         private byte[] GetPlaintext(MessageKeys messageKeys, byte[] cipherText)
         {
-            return util.Decrypt.AesCbcPkcs5(cipherText, messageKeys.GetCipherKey(), messageKeys.GetIv());
+            return Util.Decrypt.AesCbcPkcs5(cipherText, messageKeys.GetCipherKey(), messageKeys.GetIv());
         }
 
         private class NullDecryptionCallback : IDecryptionCallback

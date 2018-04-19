@@ -17,7 +17,7 @@
 
 using System.Collections.Generic;
 
-namespace libsignal.util
+namespace Libsignal.Util
 {
     public class IdentityKeyComparator : ByteArrayComparator, IComparer<IdentityKey>
     {

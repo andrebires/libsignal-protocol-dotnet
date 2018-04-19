@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal;
-using libsignal.ecc;
+using Libsignal;
+using Libsignal.Ecc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace libsignal_test

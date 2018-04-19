@@ -17,7 +17,7 @@
 
 using System;
 
-namespace libsignal.util
+namespace Libsignal.Util
 {
     public class Pair<T1, T2>
     {

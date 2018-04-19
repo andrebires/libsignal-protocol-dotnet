@@ -15,14 +15,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using libsignal;
-using libsignal.util;
+using Libsignal.Util;
 
-namespace org.whispersystems.libsignal.fingerprint
+namespace Libsignal.Fingerprint
 {
     public class DisplayableFingerprint
     {

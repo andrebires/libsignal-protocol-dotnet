@@ -17,7 +17,7 @@
 
 using System;
 
-namespace libsignal.kdf
+namespace Libsignal.Kdf2
 {
     [Obsolete("Use HKDFv3 over v2 for new work.")]
     public class HkdFv2 : Hkdf

@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.kdf;
-using libsignal.util;
 using System;
 using System.Text;
+using Libsignal.Kdf2;
+using Libsignal.Util;
 
-namespace libsignal.ratchet
+namespace Libsignal.Ratchet
 {
     public class ChainKey
     {

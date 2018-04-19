@@ -15,13 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.groups.ratchet;
-using libsignal.groups.state;
-using libsignal.protocol;
-using libsignal.util;
 using System;
+using Libsignal.Groups.Ratchet;
+using Libsignal.Groups.State;
+using Libsignal.Protocol;
 
-namespace libsignal.groups
+namespace Libsignal.Groups
 {
     /**
      * The main entry point for Signal Protocol group encrypt/decrypt operations.
@@ -190,7 +189,7 @@ namespace libsignal.groups
 
                 cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), ivParameterSpec);*/
 
-                return util.Decrypt.AesCbcPkcs5(ciphertext, key, iv);
+                return Util.Decrypt.AesCbcPkcs5(ciphertext, key, iv);
             }
             catch (Exception e)
             {
@@ -207,7 +206,7 @@ namespace libsignal.groups
 
                 cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), ivParameterSpec);*/
 
-                return util.Encrypt.AesCbcPkcs5(plaintext, key, iv);
+                return Util.Encrypt.AesCbcPkcs5(plaintext, key, iv);
             }
             catch (Exception e)
     {

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
- namespace org.whispersystems.libsignal.fingerprint
+ namespace Libsignal.Fingerprint
 {
     public class Fingerprint
     {

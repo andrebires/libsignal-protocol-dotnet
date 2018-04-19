@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Text;
-using libsignal;
-using libsignal.ecc;
-using libsignal.protocol;
-using libsignal.state;
-using libsignal.state.impl;
-using libsignal.util;
+using Libsignal.Ecc;
+using Libsignal.Protocol;
+using Libsignal.State;
+using Libsignal.State.Impl;
+using Libsignal.Util;
 
 namespace Libsignal.Sample
 {

@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
-using Strilanc.Value;
 using System;
+using Libsignal.Ecc;
+using Strilanc.Value;
 
-namespace libsignal.ratchet
+namespace Libsignal.Ratchet
 {
     public class AliceSignalProtocolParameters
     {

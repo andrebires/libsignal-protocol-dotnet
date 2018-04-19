@@ -1,6 +1,7 @@
-﻿
-
+﻿using System.Collections.Generic;
 using Google.Protobuf;
+using Libsignal.Ecc;
+using Libsignal.State;
 /** 
 * Copyright (C) 2016 smndtrl, langboost
 * 
@@ -17,12 +18,8 @@ using Google.Protobuf;
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using libsignal.ecc;
-using libsignal.groups.state;
-using libsignal.state;
-using System.Collections.Generic;
 
-namespace libsignal.groups
+namespace Libsignal.Groups.State
 {
     /**
      * A durable representation of a set of SenderKeyStates for a specific

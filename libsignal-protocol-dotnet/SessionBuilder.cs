@@ -15,17 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
-using libsignal.exceptions;
-using libsignal.protocol;
-using libsignal.ratchet;
-using libsignal.state;
-using libsignal.util;
-using Strilanc.Value;
-using System;
 using System.Diagnostics;
+using Libsignal.Ecc;
+using Libsignal.Protocol;
+using Libsignal.Ratchet;
+using Libsignal.State;
+using Strilanc.Value;
 
-namespace libsignal
+namespace Libsignal
 {
     /**
  * SessionBuilder is responsible for setting up encrypted sessions.

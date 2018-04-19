@@ -17,7 +17,7 @@
 
 using System;
 
-namespace libsignal
+namespace Libsignal
 {
     public class StaleKeyExchangeException : Exception
     {

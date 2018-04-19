@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
-using libsignal.state;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Libsignal.Ecc;
+using Libsignal.State;
 
-namespace libsignal.util
+namespace Libsignal.Util
 {
     /**
      * Helper class for generating keys of different types.

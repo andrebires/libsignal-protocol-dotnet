@@ -18,11 +18,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using libsignal.util;
 using System.Security.Cryptography;
+using System.Text;
+using Libsignal.Util;
 
-namespace libsignal.devices
+namespace Libsignal.Devices
 {
     public class DeviceConsistencyCommitment
     {

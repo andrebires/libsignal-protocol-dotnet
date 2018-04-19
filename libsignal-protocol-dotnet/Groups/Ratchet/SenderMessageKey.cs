@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.kdf;
-using libsignal.util;
 using System.Text;
+using Libsignal.Kdf2;
+using Libsignal.Util;
 
-namespace libsignal.groups.ratchet
+namespace Libsignal.Groups.Ratchet
 {
     /**
      * The final symmetric material (IV and Cipher Key) used for encrypting

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace libsignal.kdf
+namespace Libsignal.Kdf2
 {
     public class HkdFv3 : Hkdf
     {

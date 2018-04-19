@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
+using Libsignal.Ecc;
 
-namespace libsignal.state
+namespace Libsignal.State
 {
     /**
  * A class that contains a remote PreKey and collection

@@ -1,8 +1,8 @@
-﻿using Google.Protobuf;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Google.Protobuf;
 
-namespace libsignal.state
+namespace Libsignal.State
 {
     /// <summary>
     /// A SessionRecord encapsulates the state of an ongoing session.</summary>

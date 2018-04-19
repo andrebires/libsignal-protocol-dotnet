@@ -17,10 +17,10 @@
 
 using System;
 using System.Collections.Generic;
-using libsignal;
-using libsignal.devices;
-using libsignal.protocol;
-using libsignal.util;
+using Libsignal;
+using Libsignal.Devices;
+using Libsignal.Protocol;
+using Libsignal.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace signal_protocol_tests.devices

@@ -1,5 +1,9 @@
-﻿
+﻿using System;
+using System.IO;
+using System.Linq;
 using Google.Protobuf;
+using Libsignal.Ecc;
+using Libsignal.Util;
 /** 
 * Copyright (C) 2016 smndtrl, langboost
 * 
@@ -16,13 +20,8 @@ using Google.Protobuf;
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using libsignal.ecc;
-using libsignal.util;
-using System;
-using System.IO;
-using System.Linq;
 
-namespace libsignal.protocol
+namespace Libsignal.Protocol
 {
     public partial class SignalMessage : CiphertextMessage
     {

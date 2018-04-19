@@ -15,17 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
-using libsignal.kdf;
-using libsignal.protocol;
-using libsignal.state;
-using libsignal.util;
-using Strilanc.Value;
 using System;
 using System.IO;
 using System.Text;
+using Libsignal.Ecc;
+using Libsignal.Kdf2;
+using Libsignal.Protocol;
+using Libsignal.State;
+using Libsignal.Util;
+using Strilanc.Value;
 
-namespace libsignal.ratchet
+namespace Libsignal.Ratchet
 {
     public class RatchetingSession
     {

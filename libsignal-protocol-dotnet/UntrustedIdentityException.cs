@@ -17,7 +17,7 @@
 
 using System;
 
-namespace libsignal.exceptions
+namespace Libsignal
 {
     public class UntrustedIdentityException : Exception
     {

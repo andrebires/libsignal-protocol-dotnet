@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
-using libsignal.kdf;
-using libsignal.ratchet;
-using libsignal.util;
+using Libsignal.Ecc;
+using Libsignal.Kdf2;
+using Libsignal.Ratchet;
+using Libsignal.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace libsignal_test

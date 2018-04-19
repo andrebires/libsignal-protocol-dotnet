@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal;
-using libsignal.ecc;
-using libsignal.state.impl;
-using libsignal.util;
+using Libsignal;
+using Libsignal.Ecc;
+using Libsignal.State.Impl;
+using Libsignal.Util;
 
 namespace libsignal_test
 {

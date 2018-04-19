@@ -1,5 +1,8 @@
-﻿
+﻿using System;
 using Google.Protobuf;
+using Libsignal.Ecc;
+using Libsignal.Util;
+using Strilanc.Value;
 /** 
 * Copyright (C) 2016 smndtrl, langboost
 * 
@@ -16,12 +19,8 @@ using Google.Protobuf;
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using libsignal.ecc;
-using libsignal.util;
-using Strilanc.Value;
-using System;
 
-namespace libsignal.protocol
+namespace Libsignal.Protocol
 {
     public partial class PreKeySignalMessage : CiphertextMessage
     {

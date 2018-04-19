@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal;
-using libsignal.groups;
-using libsignal.protocol;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using Libsignal;
+using Libsignal.Groups;
+using Libsignal.Protocol;
 
 namespace libsignal_test.groups
 {

@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.groups;
-using libsignal.groups.state;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Libsignal.Groups;
+using Libsignal.Groups.State;
 
 namespace libsignal_test.groups
 {

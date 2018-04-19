@@ -15,17 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal;
-using libsignal.ecc;
-using libsignal.protocol;
-using libsignal.ratchet;
-using libsignal.state;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Strilanc.Value;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Libsignal;
+using Libsignal.Ecc;
+using Libsignal.Protocol;
+using Libsignal.Ratchet;
+using Libsignal.State;
+using Libsignal.Util;
 using signal_protocol_tests;
 
 namespace libsignal_test
@@ -121,7 +122,7 @@ namespace libsignal_test
             for (int i = 0; i < aliceCiphertextMessages.Count / 2; i++)
             {
                 byte[] receivedPlaintext = bobCipher.Decrypt(new SignalMessage(aliceCiphertextMessages[i].Serialize()));
-                Assert.IsTrue(libsignal.util.ByteUtil.IsEqual(receivedPlaintext, alicePlaintextMessages[i]));
+                Assert.IsTrue(ByteUtil.IsEqual(receivedPlaintext, alicePlaintextMessages[i]));
             }
 
             List<CiphertextMessage> bobCiphertextMessages = new List<CiphertextMessage>();

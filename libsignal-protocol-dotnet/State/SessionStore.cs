@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace libsignal.state
+namespace Libsignal.State
 {
     /**
      * The interface to the durable store of session state information

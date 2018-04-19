@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal;
-using libsignal.ecc;
-using libsignal.ratchet;
-using libsignal.state;
+using Libsignal;
+using Libsignal.Ecc;
+using Libsignal.Ratchet;
+using Libsignal.State;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Strilanc.Value;
 

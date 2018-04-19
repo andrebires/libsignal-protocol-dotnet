@@ -16,14 +16,10 @@
  */
 
 
-using libsignal;
-using libsignal.util;
-using System;
-using System.Diagnostics;
-using libsignal.fingerprint;
 using Google.Protobuf;
+using Libsignal.Util;
 
-namespace org.whispersystems.libsignal.fingerprint
+namespace Libsignal.Fingerprint
 {
 
     public class ScannableFingerprint

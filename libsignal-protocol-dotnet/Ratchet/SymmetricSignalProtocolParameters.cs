@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
 using System;
+using Libsignal.Ecc;
 
-namespace libsignal.ratchet
+namespace Libsignal.Ratchet
 {
     public class SymmetricSignalProtocolParameters
     {

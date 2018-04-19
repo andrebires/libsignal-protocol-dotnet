@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace libsignal.state
+namespace Libsignal.State
 {
     /**
      * An interface describing the local storage of {@link PreKeyRecord}s.

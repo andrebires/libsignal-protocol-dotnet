@@ -18,7 +18,7 @@
 using System;
 using System.IO;
 
-namespace libsignal.util
+namespace Libsignal.Util
 {
     public class ByteUtil
     {

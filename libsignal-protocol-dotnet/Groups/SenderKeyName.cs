@@ -17,7 +17,7 @@
 
 using System;
 
-namespace libsignal.groups
+namespace Libsignal.Groups
 {
     /**
      * A representation of a (groupId + senderId + deviceId) tuple.

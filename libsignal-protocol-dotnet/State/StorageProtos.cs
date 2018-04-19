@@ -6,8 +6,8 @@
 using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
-using scg = global::System.Collections.Generic;
-namespace libsignal.state
+
+namespace Libsignal.State
 {
 
     /// <summary>Holder for reflection information generated from LocalStorageProtocol.proto</summary>
@@ -103,18 +103,18 @@ namespace libsignal.state
             descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
                 new pbr::FileDescriptor[] { },
                 new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SessionStructure), global::libsignal.state.SessionStructure.Parser, new[]{ "SessionVersion", "LocalIdentityPublic", "RemoteIdentityPublic", "RootKey", "PreviousCounter", "SenderChain", "ReceiverChains", "PendingKeyExchange", "PendingPreKey", "RemoteRegistrationId", "LocalRegistrationId", "NeedsRefresh", "AliceBaseKey" }, new[]{ "SessionVersionOneof", "LocalIdentityPublicOneof", "RemoteIdentityPublicOneof", "RootKeyOneof", "PreviousCounterOneof", "SenderChainOneof", "PendingKeyExchangeOneof", "PendingPreKeyOneof", "RemoteRegistrationIdOneof", "LocalRegistrationIdOneof", "NeedsRefreshOneof", "AliceBaseKeyOneof" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SessionStructure.Types.Chain), global::libsignal.state.SessionStructure.Types.Chain.Parser, new[]{ "SenderRatchetKey", "SenderRatchetKeyPrivate", "ChainKey", "MessageKeys" }, new[]{ "SenderRatchetKeyOneof", "SenderRatchetKeyPrivateOneof", "ChainKeyOneof" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SessionStructure.Types.Chain.Types.ChainKey), global::libsignal.state.SessionStructure.Types.Chain.Types.ChainKey.Parser, new[]{ "Index", "Key" }, new[]{ "IndexOneof", "KeyOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SessionStructure.Types.Chain.Types.MessageKey), global::libsignal.state.SessionStructure.Types.Chain.Types.MessageKey.Parser, new[]{ "Index", "CipherKey", "MacKey", "Iv" }, new[]{ "IndexOneof", "CipherKeyOneof", "MacKeyOneof", "IvOneof" }, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SessionStructure.Types.PendingKeyExchange), global::libsignal.state.SessionStructure.Types.PendingKeyExchange.Parser, new[]{ "Sequence", "LocalBaseKey", "LocalBaseKeyPrivate", "LocalRatchetKey", "LocalRatchetKeyPrivate", "LocalIdentityKey", "LocalIdentityKeyPrivate" }, new[]{ "SequenceOneof", "LocalBaseKeyOneof", "LocalBaseKeyPrivateOneof", "LocalRatchetKeyOneof", "LocalRatchetKeyPrivateOneof", "LocalIdentityKeyOneof", "LocalIdentityKeyPrivateOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SessionStructure.Types.PendingPreKey), global::libsignal.state.SessionStructure.Types.PendingPreKey.Parser, new[]{ "PreKeyId", "SignedPreKeyId", "BaseKey" }, new[]{ "PreKeyIdOneof", "SignedPreKeyIdOneof", "BaseKeyOneof" }, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.RecordStructure), global::libsignal.state.RecordStructure.Parser, new[]{ "CurrentSession", "PreviousSessions" }, new[]{ "SequenceOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.PreKeyRecordStructure), global::libsignal.state.PreKeyRecordStructure.Parser, new[]{ "Id", "PublicKey", "PrivateKey" }, new[]{ "IdOneof", "PublicKeyOneof", "PrivateKeyOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SignedPreKeyRecordStructure), global::libsignal.state.SignedPreKeyRecordStructure.Parser, new[]{ "Id", "PublicKey", "PrivateKey", "Signature", "Timestamp" }, new[]{ "IdOneof", "PublicKeyOneof", "PrivateKeyOneof", "SignatureOneof", "TimestampOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.IdentityKeyPairStructure), global::libsignal.state.IdentityKeyPairStructure.Parser, new[]{ "PublicKey", "PrivateKey" }, new[]{ "PublicKeyOneof", "PrivateKeyOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SenderKeyStateStructure), global::libsignal.state.SenderKeyStateStructure.Parser, new[]{ "SenderKeyId", "SenderChainKey", "SenderSigningKey", "SenderMessageKeys" }, new[]{ "SenderKeyIdOneof", "SenderChainKeyOneof", "SenderSigningKeyOneof" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SenderKeyStateStructure.Types.SenderChainKey), global::libsignal.state.SenderKeyStateStructure.Types.SenderChainKey.Parser, new[]{ "Iteration", "Seed" }, new[]{ "IterationOneof", "SeedOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SenderKeyStateStructure.Types.SenderMessageKey), global::libsignal.state.SenderKeyStateStructure.Types.SenderMessageKey.Parser, new[]{ "Iteration", "Seed" }, new[]{ "IterationOneof", "SeedOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SenderKeyStateStructure.Types.SenderSigningKey), global::libsignal.state.SenderKeyStateStructure.Types.SenderSigningKey.Parser, new[]{ "Public", "Private" }, new[]{ "PublicOneof", "PrivateOneof" }, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.state.SenderKeyRecordStructure), global::libsignal.state.SenderKeyRecordStructure.Parser, new[]{ "SenderKeyStates" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SessionStructure), global::Libsignal.State.SessionStructure.Parser, new[]{ "SessionVersion", "LocalIdentityPublic", "RemoteIdentityPublic", "RootKey", "PreviousCounter", "SenderChain", "ReceiverChains", "PendingKeyExchange", "PendingPreKey", "RemoteRegistrationId", "LocalRegistrationId", "NeedsRefresh", "AliceBaseKey" }, new[]{ "SessionVersionOneof", "LocalIdentityPublicOneof", "RemoteIdentityPublicOneof", "RootKeyOneof", "PreviousCounterOneof", "SenderChainOneof", "PendingKeyExchangeOneof", "PendingPreKeyOneof", "RemoteRegistrationIdOneof", "LocalRegistrationIdOneof", "NeedsRefreshOneof", "AliceBaseKeyOneof" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SessionStructure.Types.Chain), global::Libsignal.State.SessionStructure.Types.Chain.Parser, new[]{ "SenderRatchetKey", "SenderRatchetKeyPrivate", "ChainKey", "MessageKeys" }, new[]{ "SenderRatchetKeyOneof", "SenderRatchetKeyPrivateOneof", "ChainKeyOneof" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SessionStructure.Types.Chain.Types.ChainKey), global::Libsignal.State.SessionStructure.Types.Chain.Types.ChainKey.Parser, new[]{ "Index", "Key" }, new[]{ "IndexOneof", "KeyOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SessionStructure.Types.Chain.Types.MessageKey), global::Libsignal.State.SessionStructure.Types.Chain.Types.MessageKey.Parser, new[]{ "Index", "CipherKey", "MacKey", "Iv" }, new[]{ "IndexOneof", "CipherKeyOneof", "MacKeyOneof", "IvOneof" }, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SessionStructure.Types.PendingKeyExchange), global::Libsignal.State.SessionStructure.Types.PendingKeyExchange.Parser, new[]{ "Sequence", "LocalBaseKey", "LocalBaseKeyPrivate", "LocalRatchetKey", "LocalRatchetKeyPrivate", "LocalIdentityKey", "LocalIdentityKeyPrivate" }, new[]{ "SequenceOneof", "LocalBaseKeyOneof", "LocalBaseKeyPrivateOneof", "LocalRatchetKeyOneof", "LocalRatchetKeyPrivateOneof", "LocalIdentityKeyOneof", "LocalIdentityKeyPrivateOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SessionStructure.Types.PendingPreKey), global::Libsignal.State.SessionStructure.Types.PendingPreKey.Parser, new[]{ "PreKeyId", "SignedPreKeyId", "BaseKey" }, new[]{ "PreKeyIdOneof", "SignedPreKeyIdOneof", "BaseKeyOneof" }, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.RecordStructure), global::Libsignal.State.RecordStructure.Parser, new[]{ "CurrentSession", "PreviousSessions" }, new[]{ "SequenceOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.PreKeyRecordStructure), global::Libsignal.State.PreKeyRecordStructure.Parser, new[]{ "Id", "PublicKey", "PrivateKey" }, new[]{ "IdOneof", "PublicKeyOneof", "PrivateKeyOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SignedPreKeyRecordStructure), global::Libsignal.State.SignedPreKeyRecordStructure.Parser, new[]{ "Id", "PublicKey", "PrivateKey", "Signature", "Timestamp" }, new[]{ "IdOneof", "PublicKeyOneof", "PrivateKeyOneof", "SignatureOneof", "TimestampOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.IdentityKeyPairStructure), global::Libsignal.State.IdentityKeyPairStructure.Parser, new[]{ "PublicKey", "PrivateKey" }, new[]{ "PublicKeyOneof", "PrivateKeyOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SenderKeyStateStructure), global::Libsignal.State.SenderKeyStateStructure.Parser, new[]{ "SenderKeyId", "SenderChainKey", "SenderSigningKey", "SenderMessageKeys" }, new[]{ "SenderKeyIdOneof", "SenderChainKeyOneof", "SenderSigningKeyOneof" }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SenderKeyStateStructure.Types.SenderChainKey), global::Libsignal.State.SenderKeyStateStructure.Types.SenderChainKey.Parser, new[]{ "Iteration", "Seed" }, new[]{ "IterationOneof", "SeedOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SenderKeyStateStructure.Types.SenderMessageKey), global::Libsignal.State.SenderKeyStateStructure.Types.SenderMessageKey.Parser, new[]{ "Iteration", "Seed" }, new[]{ "IterationOneof", "SeedOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SenderKeyStateStructure.Types.SenderSigningKey), global::Libsignal.State.SenderKeyStateStructure.Types.SenderSigningKey.Parser, new[]{ "Public", "Private" }, new[]{ "PublicOneof", "PrivateOneof" }, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.State.SenderKeyRecordStructure), global::Libsignal.State.SenderKeyRecordStructure.Parser, new[]{ "SenderKeyStates" }, null, null, null)
                 }));
         }
         #endregion
@@ -130,7 +130,7 @@ namespace libsignal.state
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.state.LocalStorageProtocolReflection.Descriptor.MessageTypes[0]; }
+            get { return global::Libsignal.State.LocalStorageProtocolReflection.Descriptor.MessageTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -311,9 +311,9 @@ namespace libsignal.state
         /// <summary>Field number for the "senderChain" field.</summary>
         public const int SenderChainFieldNumber = 6;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.state.SessionStructure.Types.Chain SenderChain
+        public global::Libsignal.State.SessionStructure.Types.Chain SenderChain
         {
-            get { return senderChainOneofCase_ == SenderChainOneofOneofCase.SenderChain ? (global::libsignal.state.SessionStructure.Types.Chain)senderChainOneof_ : null; }
+            get { return senderChainOneofCase_ == SenderChainOneofOneofCase.SenderChain ? (global::Libsignal.State.SessionStructure.Types.Chain)senderChainOneof_ : null; }
             set
             {
                 senderChainOneof_ = value;
@@ -323,11 +323,11 @@ namespace libsignal.state
 
         /// <summary>Field number for the "receiverChains" field.</summary>
         public const int ReceiverChainsFieldNumber = 7;
-        private static readonly pb::FieldCodec<global::libsignal.state.SessionStructure.Types.Chain> _repeated_receiverChains_codec
-            = pb::FieldCodec.ForMessage(58, global::libsignal.state.SessionStructure.Types.Chain.Parser);
-        private readonly pbc::RepeatedField<global::libsignal.state.SessionStructure.Types.Chain> receiverChains_ = new pbc::RepeatedField<global::libsignal.state.SessionStructure.Types.Chain>();
+        private static readonly pb::FieldCodec<global::Libsignal.State.SessionStructure.Types.Chain> _repeated_receiverChains_codec
+            = pb::FieldCodec.ForMessage(58, global::Libsignal.State.SessionStructure.Types.Chain.Parser);
+        private readonly pbc::RepeatedField<global::Libsignal.State.SessionStructure.Types.Chain> receiverChains_ = new pbc::RepeatedField<global::Libsignal.State.SessionStructure.Types.Chain>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public pbc::RepeatedField<global::libsignal.state.SessionStructure.Types.Chain> ReceiverChains
+        public pbc::RepeatedField<global::Libsignal.State.SessionStructure.Types.Chain> ReceiverChains
         {
             get { return receiverChains_; }
         }
@@ -335,9 +335,9 @@ namespace libsignal.state
         /// <summary>Field number for the "pendingKeyExchange" field.</summary>
         public const int PendingKeyExchangeFieldNumber = 8;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.state.SessionStructure.Types.PendingKeyExchange PendingKeyExchange
+        public global::Libsignal.State.SessionStructure.Types.PendingKeyExchange PendingKeyExchange
         {
-            get { return pendingKeyExchangeOneofCase_ == PendingKeyExchangeOneofOneofCase.PendingKeyExchange ? (global::libsignal.state.SessionStructure.Types.PendingKeyExchange)pendingKeyExchangeOneof_ : null; }
+            get { return pendingKeyExchangeOneofCase_ == PendingKeyExchangeOneofOneofCase.PendingKeyExchange ? (global::Libsignal.State.SessionStructure.Types.PendingKeyExchange)pendingKeyExchangeOneof_ : null; }
             set
             {
                 pendingKeyExchangeOneof_ = value;
@@ -348,9 +348,9 @@ namespace libsignal.state
         /// <summary>Field number for the "pendingPreKey" field.</summary>
         public const int PendingPreKeyFieldNumber = 9;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.state.SessionStructure.Types.PendingPreKey PendingPreKey
+        public global::Libsignal.State.SessionStructure.Types.PendingPreKey PendingPreKey
         {
-            get { return pendingPreKeyOneofCase_ == PendingPreKeyOneofOneofCase.PendingPreKey ? (global::libsignal.state.SessionStructure.Types.PendingPreKey)pendingPreKeyOneof_ : null; }
+            get { return pendingPreKeyOneofCase_ == PendingPreKeyOneofOneofCase.PendingPreKey ? (global::Libsignal.State.SessionStructure.Types.PendingPreKey)pendingPreKeyOneof_ : null; }
             set
             {
                 pendingPreKeyOneof_ = value;
@@ -999,7 +999,7 @@ namespace libsignal.state
                         }
                     case 50:
                         {
-                            global::libsignal.state.SessionStructure.Types.Chain subBuilder = new global::libsignal.state.SessionStructure.Types.Chain();
+                            global::Libsignal.State.SessionStructure.Types.Chain subBuilder = new global::Libsignal.State.SessionStructure.Types.Chain();
                             if (senderChainOneofCase_ == SenderChainOneofOneofCase.SenderChain)
                             {
                                 subBuilder.MergeFrom(SenderChain);
@@ -1015,7 +1015,7 @@ namespace libsignal.state
                         }
                     case 66:
                         {
-                            global::libsignal.state.SessionStructure.Types.PendingKeyExchange subBuilder = new global::libsignal.state.SessionStructure.Types.PendingKeyExchange();
+                            global::Libsignal.State.SessionStructure.Types.PendingKeyExchange subBuilder = new global::Libsignal.State.SessionStructure.Types.PendingKeyExchange();
                             if (pendingKeyExchangeOneofCase_ == PendingKeyExchangeOneofOneofCase.PendingKeyExchange)
                             {
                                 subBuilder.MergeFrom(PendingKeyExchange);
@@ -1026,7 +1026,7 @@ namespace libsignal.state
                         }
                     case 74:
                         {
-                            global::libsignal.state.SessionStructure.Types.PendingPreKey subBuilder = new global::libsignal.state.SessionStructure.Types.PendingPreKey();
+                            global::Libsignal.State.SessionStructure.Types.PendingPreKey subBuilder = new global::Libsignal.State.SessionStructure.Types.PendingPreKey();
                             if (pendingPreKeyOneofCase_ == PendingPreKeyOneofOneofCase.PendingPreKey)
                             {
                                 subBuilder.MergeFrom(PendingPreKey);
@@ -1073,7 +1073,7 @@ namespace libsignal.state
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public static pbr::MessageDescriptor Descriptor
                 {
-                    get { return global::libsignal.state.SessionStructure.Descriptor.NestedTypes[0]; }
+                    get { return global::Libsignal.State.SessionStructure.Descriptor.NestedTypes[0]; }
                 }
 
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1152,9 +1152,9 @@ namespace libsignal.state
                 /// <summary>Field number for the "chainKey" field.</summary>
                 public const int ChainKeyFieldNumber = 3;
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-                public global::libsignal.state.SessionStructure.Types.Chain.Types.ChainKey ChainKey
+                public global::Libsignal.State.SessionStructure.Types.Chain.Types.ChainKey ChainKey
                 {
-                    get { return chainKeyOneofCase_ == ChainKeyOneofOneofCase.ChainKey ? (global::libsignal.state.SessionStructure.Types.Chain.Types.ChainKey)chainKeyOneof_ : null; }
+                    get { return chainKeyOneofCase_ == ChainKeyOneofOneofCase.ChainKey ? (global::Libsignal.State.SessionStructure.Types.Chain.Types.ChainKey)chainKeyOneof_ : null; }
                     set
                     {
                         chainKeyOneof_ = value;
@@ -1164,11 +1164,11 @@ namespace libsignal.state
 
                 /// <summary>Field number for the "messageKeys" field.</summary>
                 public const int MessageKeysFieldNumber = 4;
-                private static readonly pb::FieldCodec<global::libsignal.state.SessionStructure.Types.Chain.Types.MessageKey> _repeated_messageKeys_codec
-                    = pb::FieldCodec.ForMessage(34, global::libsignal.state.SessionStructure.Types.Chain.Types.MessageKey.Parser);
-                private readonly pbc::RepeatedField<global::libsignal.state.SessionStructure.Types.Chain.Types.MessageKey> messageKeys_ = new pbc::RepeatedField<global::libsignal.state.SessionStructure.Types.Chain.Types.MessageKey>();
+                private static readonly pb::FieldCodec<global::Libsignal.State.SessionStructure.Types.Chain.Types.MessageKey> _repeated_messageKeys_codec
+                    = pb::FieldCodec.ForMessage(34, global::Libsignal.State.SessionStructure.Types.Chain.Types.MessageKey.Parser);
+                private readonly pbc::RepeatedField<global::Libsignal.State.SessionStructure.Types.Chain.Types.MessageKey> messageKeys_ = new pbc::RepeatedField<global::Libsignal.State.SessionStructure.Types.Chain.Types.MessageKey>();
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-                public pbc::RepeatedField<global::libsignal.state.SessionStructure.Types.Chain.Types.MessageKey> MessageKeys
+                public pbc::RepeatedField<global::Libsignal.State.SessionStructure.Types.Chain.Types.MessageKey> MessageKeys
                 {
                     get { return messageKeys_; }
                 }
@@ -1378,7 +1378,7 @@ namespace libsignal.state
                                 }
                             case 26:
                                 {
-                                    global::libsignal.state.SessionStructure.Types.Chain.Types.ChainKey subBuilder = new global::libsignal.state.SessionStructure.Types.Chain.Types.ChainKey();
+                                    global::Libsignal.State.SessionStructure.Types.Chain.Types.ChainKey subBuilder = new global::Libsignal.State.SessionStructure.Types.Chain.Types.ChainKey();
                                     if (chainKeyOneofCase_ == ChainKeyOneofOneofCase.ChainKey)
                                     {
                                         subBuilder.MergeFrom(ChainKey);
@@ -1410,7 +1410,7 @@ namespace libsignal.state
                         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                         public static pbr::MessageDescriptor Descriptor
                         {
-                            get { return global::libsignal.state.SessionStructure.Types.Chain.Descriptor.NestedTypes[0]; }
+                            get { return global::Libsignal.State.SessionStructure.Types.Chain.Descriptor.NestedTypes[0]; }
                         }
 
                         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1650,7 +1650,7 @@ namespace libsignal.state
                         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                         public static pbr::MessageDescriptor Descriptor
                         {
-                            get { return global::libsignal.state.SessionStructure.Types.Chain.Descriptor.NestedTypes[1]; }
+                            get { return global::Libsignal.State.SessionStructure.Types.Chain.Descriptor.NestedTypes[1]; }
                         }
 
                         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2027,7 +2027,7 @@ namespace libsignal.state
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public static pbr::MessageDescriptor Descriptor
                 {
-                    get { return global::libsignal.state.SessionStructure.Descriptor.NestedTypes[1]; }
+                    get { return global::Libsignal.State.SessionStructure.Descriptor.NestedTypes[1]; }
                 }
 
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2597,7 +2597,7 @@ namespace libsignal.state
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public static pbr::MessageDescriptor Descriptor
                 {
-                    get { return global::libsignal.state.SessionStructure.Descriptor.NestedTypes[2]; }
+                    get { return global::Libsignal.State.SessionStructure.Descriptor.NestedTypes[2]; }
                 }
 
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2908,7 +2908,7 @@ namespace libsignal.state
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.state.LocalStorageProtocolReflection.Descriptor.MessageTypes[1]; }
+            get { return global::Libsignal.State.LocalStorageProtocolReflection.Descriptor.MessageTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2947,9 +2947,9 @@ namespace libsignal.state
         /// <summary>Field number for the "currentSession" field.</summary>
         public const int CurrentSessionFieldNumber = 1;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.state.SessionStructure CurrentSession
+        public global::Libsignal.State.SessionStructure CurrentSession
         {
-            get { return sequenceOneofCase_ == SequenceOneofOneofCase.CurrentSession ? (global::libsignal.state.SessionStructure)sequenceOneof_ : null; }
+            get { return sequenceOneofCase_ == SequenceOneofOneofCase.CurrentSession ? (global::Libsignal.State.SessionStructure)sequenceOneof_ : null; }
             set
             {
                 sequenceOneof_ = value;
@@ -2959,11 +2959,11 @@ namespace libsignal.state
 
         /// <summary>Field number for the "previousSessions" field.</summary>
         public const int PreviousSessionsFieldNumber = 2;
-        private static readonly pb::FieldCodec<global::libsignal.state.SessionStructure> _repeated_previousSessions_codec
-            = pb::FieldCodec.ForMessage(18, global::libsignal.state.SessionStructure.Parser);
-        private readonly pbc::RepeatedField<global::libsignal.state.SessionStructure> previousSessions_ = new pbc::RepeatedField<global::libsignal.state.SessionStructure>();
+        private static readonly pb::FieldCodec<global::Libsignal.State.SessionStructure> _repeated_previousSessions_codec
+            = pb::FieldCodec.ForMessage(18, global::Libsignal.State.SessionStructure.Parser);
+        private readonly pbc::RepeatedField<global::Libsignal.State.SessionStructure> previousSessions_ = new pbc::RepeatedField<global::Libsignal.State.SessionStructure>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public pbc::RepeatedField<global::libsignal.state.SessionStructure> PreviousSessions
+        public pbc::RepeatedField<global::Libsignal.State.SessionStructure> PreviousSessions
         {
             get { return previousSessions_; }
         }
@@ -3081,7 +3081,7 @@ namespace libsignal.state
                         break;
                     case 10:
                         {
-                            global::libsignal.state.SessionStructure subBuilder = new global::libsignal.state.SessionStructure();
+                            global::Libsignal.State.SessionStructure subBuilder = new global::Libsignal.State.SessionStructure();
                             if (sequenceOneofCase_ == SequenceOneofOneofCase.CurrentSession)
                             {
                                 subBuilder.MergeFrom(CurrentSession);
@@ -3110,7 +3110,7 @@ namespace libsignal.state
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.state.LocalStorageProtocolReflection.Descriptor.MessageTypes[2]; }
+            get { return global::Libsignal.State.LocalStorageProtocolReflection.Descriptor.MessageTypes[2]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3416,7 +3416,7 @@ namespace libsignal.state
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.state.LocalStorageProtocolReflection.Descriptor.MessageTypes[3]; }
+            get { return global::Libsignal.State.LocalStorageProtocolReflection.Descriptor.MessageTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3854,7 +3854,7 @@ namespace libsignal.state
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.state.LocalStorageProtocolReflection.Descriptor.MessageTypes[4]; }
+            get { return global::Libsignal.State.LocalStorageProtocolReflection.Descriptor.MessageTypes[4]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4094,7 +4094,7 @@ namespace libsignal.state
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.state.LocalStorageProtocolReflection.Descriptor.MessageTypes[5]; }
+            get { return global::Libsignal.State.LocalStorageProtocolReflection.Descriptor.MessageTypes[5]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4160,9 +4160,9 @@ namespace libsignal.state
         /// <summary>Field number for the "senderChainKey" field.</summary>
         public const int SenderChainKeyFieldNumber = 2;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.state.SenderKeyStateStructure.Types.SenderChainKey SenderChainKey
+        public global::Libsignal.State.SenderKeyStateStructure.Types.SenderChainKey SenderChainKey
         {
-            get { return senderChainKeyOneofCase_ == SenderChainKeyOneofOneofCase.SenderChainKey ? (global::libsignal.state.SenderKeyStateStructure.Types.SenderChainKey)senderChainKeyOneof_ : null; }
+            get { return senderChainKeyOneofCase_ == SenderChainKeyOneofOneofCase.SenderChainKey ? (global::Libsignal.State.SenderKeyStateStructure.Types.SenderChainKey)senderChainKeyOneof_ : null; }
             set
             {
                 senderChainKeyOneof_ = value;
@@ -4173,9 +4173,9 @@ namespace libsignal.state
         /// <summary>Field number for the "senderSigningKey" field.</summary>
         public const int SenderSigningKeyFieldNumber = 3;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.state.SenderKeyStateStructure.Types.SenderSigningKey SenderSigningKey
+        public global::Libsignal.State.SenderKeyStateStructure.Types.SenderSigningKey SenderSigningKey
         {
-            get { return senderSigningKeyOneofCase_ == SenderSigningKeyOneofOneofCase.SenderSigningKey ? (global::libsignal.state.SenderKeyStateStructure.Types.SenderSigningKey)senderSigningKeyOneof_ : null; }
+            get { return senderSigningKeyOneofCase_ == SenderSigningKeyOneofOneofCase.SenderSigningKey ? (global::Libsignal.State.SenderKeyStateStructure.Types.SenderSigningKey)senderSigningKeyOneof_ : null; }
             set
             {
                 senderSigningKeyOneof_ = value;
@@ -4185,11 +4185,11 @@ namespace libsignal.state
 
         /// <summary>Field number for the "senderMessageKeys" field.</summary>
         public const int SenderMessageKeysFieldNumber = 4;
-        private static readonly pb::FieldCodec<global::libsignal.state.SenderKeyStateStructure.Types.SenderMessageKey> _repeated_senderMessageKeys_codec
-            = pb::FieldCodec.ForMessage(34, global::libsignal.state.SenderKeyStateStructure.Types.SenderMessageKey.Parser);
-        private readonly pbc::RepeatedField<global::libsignal.state.SenderKeyStateStructure.Types.SenderMessageKey> senderMessageKeys_ = new pbc::RepeatedField<global::libsignal.state.SenderKeyStateStructure.Types.SenderMessageKey>();
+        private static readonly pb::FieldCodec<global::Libsignal.State.SenderKeyStateStructure.Types.SenderMessageKey> _repeated_senderMessageKeys_codec
+            = pb::FieldCodec.ForMessage(34, global::Libsignal.State.SenderKeyStateStructure.Types.SenderMessageKey.Parser);
+        private readonly pbc::RepeatedField<global::Libsignal.State.SenderKeyStateStructure.Types.SenderMessageKey> senderMessageKeys_ = new pbc::RepeatedField<global::Libsignal.State.SenderKeyStateStructure.Types.SenderMessageKey>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public pbc::RepeatedField<global::libsignal.state.SenderKeyStateStructure.Types.SenderMessageKey> SenderMessageKeys
+        public pbc::RepeatedField<global::Libsignal.State.SenderKeyStateStructure.Types.SenderMessageKey> SenderMessageKeys
         {
             get { return senderMessageKeys_; }
         }
@@ -4394,7 +4394,7 @@ namespace libsignal.state
                         }
                     case 18:
                         {
-                            global::libsignal.state.SenderKeyStateStructure.Types.SenderChainKey subBuilder = new global::libsignal.state.SenderKeyStateStructure.Types.SenderChainKey();
+                            global::Libsignal.State.SenderKeyStateStructure.Types.SenderChainKey subBuilder = new global::Libsignal.State.SenderKeyStateStructure.Types.SenderChainKey();
                             if (senderChainKeyOneofCase_ == SenderChainKeyOneofOneofCase.SenderChainKey)
                             {
                                 subBuilder.MergeFrom(SenderChainKey);
@@ -4405,7 +4405,7 @@ namespace libsignal.state
                         }
                     case 26:
                         {
-                            global::libsignal.state.SenderKeyStateStructure.Types.SenderSigningKey subBuilder = new global::libsignal.state.SenderKeyStateStructure.Types.SenderSigningKey();
+                            global::Libsignal.State.SenderKeyStateStructure.Types.SenderSigningKey subBuilder = new global::Libsignal.State.SenderKeyStateStructure.Types.SenderSigningKey();
                             if (senderSigningKeyOneofCase_ == SenderSigningKeyOneofOneofCase.SenderSigningKey)
                             {
                                 subBuilder.MergeFrom(SenderSigningKey);
@@ -4437,7 +4437,7 @@ namespace libsignal.state
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public static pbr::MessageDescriptor Descriptor
                 {
-                    get { return global::libsignal.state.SenderKeyStateStructure.Descriptor.NestedTypes[0]; }
+                    get { return global::Libsignal.State.SenderKeyStateStructure.Descriptor.NestedTypes[0]; }
                 }
 
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4677,7 +4677,7 @@ namespace libsignal.state
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public static pbr::MessageDescriptor Descriptor
                 {
-                    get { return global::libsignal.state.SenderKeyStateStructure.Descriptor.NestedTypes[1]; }
+                    get { return global::Libsignal.State.SenderKeyStateStructure.Descriptor.NestedTypes[1]; }
                 }
 
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4917,7 +4917,7 @@ namespace libsignal.state
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
                 public static pbr::MessageDescriptor Descriptor
                 {
-                    get { return global::libsignal.state.SenderKeyStateStructure.Descriptor.NestedTypes[2]; }
+                    get { return global::Libsignal.State.SenderKeyStateStructure.Descriptor.NestedTypes[2]; }
                 }
 
                 [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5162,7 +5162,7 @@ namespace libsignal.state
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.state.LocalStorageProtocolReflection.Descriptor.MessageTypes[6]; }
+            get { return global::Libsignal.State.LocalStorageProtocolReflection.Descriptor.MessageTypes[6]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5193,11 +5193,11 @@ namespace libsignal.state
 
         /// <summary>Field number for the "senderKeyStates" field.</summary>
         public const int SenderKeyStatesFieldNumber = 1;
-        private static readonly pb::FieldCodec<global::libsignal.state.SenderKeyStateStructure> _repeated_senderKeyStates_codec
-            = pb::FieldCodec.ForMessage(10, global::libsignal.state.SenderKeyStateStructure.Parser);
-        private readonly pbc::RepeatedField<global::libsignal.state.SenderKeyStateStructure> senderKeyStates_ = new pbc::RepeatedField<global::libsignal.state.SenderKeyStateStructure>();
+        private static readonly pb::FieldCodec<global::Libsignal.State.SenderKeyStateStructure> _repeated_senderKeyStates_codec
+            = pb::FieldCodec.ForMessage(10, global::Libsignal.State.SenderKeyStateStructure.Parser);
+        private readonly pbc::RepeatedField<global::Libsignal.State.SenderKeyStateStructure> senderKeyStates_ = new pbc::RepeatedField<global::Libsignal.State.SenderKeyStateStructure>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public pbc::RepeatedField<global::libsignal.state.SenderKeyStateStructure> SenderKeyStates
+        public pbc::RepeatedField<global::Libsignal.State.SenderKeyStateStructure> SenderKeyStates
         {
             get { return senderKeyStates_; }
         }

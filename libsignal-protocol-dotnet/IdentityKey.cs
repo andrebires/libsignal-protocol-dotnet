@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.ecc;
 using System;
+using Libsignal.Ecc;
 
-namespace libsignal
+namespace Libsignal
 {
     /**
      * A class for representing an identity key.

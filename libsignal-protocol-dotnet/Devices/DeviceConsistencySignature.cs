@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace libsignal.devices
+namespace Libsignal.Devices
 {
     public class DeviceConsistencySignature
     {

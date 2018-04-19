@@ -16,10 +16,10 @@
  */
 
 using System;
+using Libsignal;
+using Libsignal.Ecc;
+using Libsignal.Fingerprint;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using libsignal.ecc;
-using libsignal;
-using libsignal.fingerprint;
 
 namespace org.whispersystems.libsignal.fingerprint
 {

@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.groups.state;
-using libsignal.protocol;
-using libsignal.util;
 using System;
+using Libsignal.Groups.State;
+using Libsignal.Protocol;
+using Libsignal.Util;
 
-namespace libsignal.groups
+namespace Libsignal.Groups
 {
     /**
      * GroupSessionBuilder is responsible for setting up group SenderKey encrypted sessions.

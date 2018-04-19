@@ -17,7 +17,7 @@
 
 using System;
 
-namespace TextSecure.libsignal
+namespace Libsignal
 {
     class InvalidMacException : Exception
     {

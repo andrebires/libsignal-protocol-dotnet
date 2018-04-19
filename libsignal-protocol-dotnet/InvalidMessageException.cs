@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace libsignal
+namespace Libsignal
 {
     public class InvalidMessageException : Exception
     {

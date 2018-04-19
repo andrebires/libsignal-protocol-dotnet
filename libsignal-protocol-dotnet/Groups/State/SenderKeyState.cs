@@ -1,6 +1,9 @@
-﻿
-
+﻿using System.Collections.Generic;
 using Google.Protobuf;
+using Libsignal.Ecc;
+using Libsignal.Groups.Ratchet;
+using Libsignal.State;
+using Strilanc.Value;
 /** 
 * Copyright (C) 2016 smndtrl, langboost
 * 
@@ -17,13 +20,8 @@ using Google.Protobuf;
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using libsignal.ecc;
-using libsignal.groups.ratchet;
-using libsignal.state;
-using Strilanc.Value;
-using System.Collections.Generic;
 
-namespace libsignal.groups.state
+namespace Libsignal.Groups.State
 {
     /**
      * Represents the state of an individual SenderKey ratchet.

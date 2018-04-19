@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace libsignal.ecc.impl
+namespace Libsignal.Ecc.Impl
 {
     class Curve25519ManagedProvider : ICurve25519Provider
     {

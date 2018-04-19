@@ -4,10 +4,9 @@
 #region Designer generated code
 
 using pb = global::Google.Protobuf;
-using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
-using scg = global::System.Collections.Generic;
-namespace libsignal.fingerprint
+
+namespace Libsignal.Fingerprint
 {
 
     /// <summary>Holder for reflection information generated from FingerprintProtocol.proto</summary>
@@ -37,8 +36,8 @@ namespace libsignal.fingerprint
             descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
                 new pbr::FileDescriptor[] { },
                 new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.fingerprint.LogicalFingerprint), global::libsignal.fingerprint.LogicalFingerprint.Parser, new[]{ "Content" }, new[]{ "ContentOneof" }, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::libsignal.fingerprint.CombinedFingerprints), global::libsignal.fingerprint.CombinedFingerprints.Parser, new[]{ "Version", "LocalFingerprint", "RemoteFingerprint" }, new[]{ "VersionOneof", "LocalFingerprintOneof", "RemoteFingerprintOneof" }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Fingerprint.LogicalFingerprint), global::Libsignal.Fingerprint.LogicalFingerprint.Parser, new[]{ "Content" }, new[]{ "ContentOneof" }, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Libsignal.Fingerprint.CombinedFingerprints), global::Libsignal.Fingerprint.CombinedFingerprints.Parser, new[]{ "Version", "LocalFingerprint", "RemoteFingerprint" }, new[]{ "VersionOneof", "LocalFingerprintOneof", "RemoteFingerprintOneof" }, null, null)
                 }));
         }
         #endregion
@@ -54,7 +53,7 @@ namespace libsignal.fingerprint
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.fingerprint.FingerprintProtocolReflection.Descriptor.MessageTypes[0]; }
+            get { return global::Libsignal.Fingerprint.FingerprintProtocolReflection.Descriptor.MessageTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -228,7 +227,7 @@ namespace libsignal.fingerprint
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor
         {
-            get { return global::libsignal.fingerprint.FingerprintProtocolReflection.Descriptor.MessageTypes[1]; }
+            get { return global::Libsignal.Fingerprint.FingerprintProtocolReflection.Descriptor.MessageTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -293,9 +292,9 @@ namespace libsignal.fingerprint
         /// <summary>Field number for the "localFingerprint" field.</summary>
         public const int LocalFingerprintFieldNumber = 2;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.fingerprint.LogicalFingerprint LocalFingerprint
+        public global::Libsignal.Fingerprint.LogicalFingerprint LocalFingerprint
         {
-            get { return localFingerprintOneofCase_ == LocalFingerprintOneofOneofCase.LocalFingerprint ? (global::libsignal.fingerprint.LogicalFingerprint)localFingerprintOneof_ : null; }
+            get { return localFingerprintOneofCase_ == LocalFingerprintOneofOneofCase.LocalFingerprint ? (global::Libsignal.Fingerprint.LogicalFingerprint)localFingerprintOneof_ : null; }
             set
             {
                 localFingerprintOneof_ = value;
@@ -306,9 +305,9 @@ namespace libsignal.fingerprint
         /// <summary>Field number for the "remoteFingerprint" field.</summary>
         public const int RemoteFingerprintFieldNumber = 3;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public global::libsignal.fingerprint.LogicalFingerprint RemoteFingerprint
+        public global::Libsignal.Fingerprint.LogicalFingerprint RemoteFingerprint
         {
-            get { return remoteFingerprintOneofCase_ == RemoteFingerprintOneofOneofCase.RemoteFingerprint ? (global::libsignal.fingerprint.LogicalFingerprint)remoteFingerprintOneof_ : null; }
+            get { return remoteFingerprintOneofCase_ == RemoteFingerprintOneofOneofCase.RemoteFingerprint ? (global::Libsignal.Fingerprint.LogicalFingerprint)remoteFingerprintOneof_ : null; }
             set
             {
                 remoteFingerprintOneof_ = value;
@@ -511,7 +510,7 @@ namespace libsignal.fingerprint
                         }
                     case 18:
                         {
-                            global::libsignal.fingerprint.LogicalFingerprint subBuilder = new global::libsignal.fingerprint.LogicalFingerprint();
+                            global::Libsignal.Fingerprint.LogicalFingerprint subBuilder = new global::Libsignal.Fingerprint.LogicalFingerprint();
                             if (localFingerprintOneofCase_ == LocalFingerprintOneofOneofCase.LocalFingerprint)
                             {
                                 subBuilder.MergeFrom(LocalFingerprint);
@@ -522,7 +521,7 @@ namespace libsignal.fingerprint
                         }
                     case 26:
                         {
-                            global::libsignal.fingerprint.LogicalFingerprint subBuilder = new global::libsignal.fingerprint.LogicalFingerprint();
+                            global::Libsignal.Fingerprint.LogicalFingerprint subBuilder = new global::Libsignal.Fingerprint.LogicalFingerprint();
                             if (remoteFingerprintOneofCase_ == RemoteFingerprintOneofOneofCase.RemoteFingerprint)
                             {
                                 subBuilder.MergeFrom(RemoteFingerprint);

@@ -1,16 +1,14 @@
-using libsignal.ecc;
-using libsignal.kdf;
-using libsignal.ratchet;
-using libsignal.util;
-using Strilanc.Value;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Google.Protobuf;
-using static libsignal.state.SessionStructure;
-using static libsignal.state.SessionStructure.Types;
+using Libsignal.Ecc;
+using Libsignal.Kdf2;
+using Libsignal.Ratchet;
+using Libsignal.Util;
+using Strilanc.Value;
 
-namespace libsignal.state
+namespace Libsignal.State
 {
     public class SessionState
 	{
@@ -75,7 +73,7 @@ namespace libsignal.state
 		{
 			try
 			{
-				if (this._sessionStructure.RemoteIdentityPublicOneofCase == RemoteIdentityPublicOneofOneofCase.None)
+				if (this._sessionStructure.RemoteIdentityPublicOneofCase == SessionStructure.RemoteIdentityPublicOneofOneofCase.None)
 				{
 					return null;
 				}
@@ -151,15 +149,15 @@ namespace libsignal.state
 
 		public bool HasSenderChain()
 		{
-			return _sessionStructure.SenderChainOneofCase == SenderChainOneofOneofCase.SenderChain;
+			return _sessionStructure.SenderChainOneofCase == SessionStructure.SenderChainOneofOneofCase.SenderChain;
 		}
 
-		private Pair<Chain, uint> GetReceiverChain(IEcPublicKey senderEphemeral)
+		private Pair<SessionStructure.Types.Chain, uint> GetReceiverChain(IEcPublicKey senderEphemeral)
 		{
-			IList<Chain> receiverChains = _sessionStructure.ReceiverChains;
+			IList<SessionStructure.Types.Chain> receiverChains = _sessionStructure.ReceiverChains;
 			uint index = 0;
 
-			foreach (Chain receiverChain in receiverChains)
+			foreach (SessionStructure.Types.Chain receiverChain in receiverChains)
 			{
 				try
 				{
@@ -167,7 +165,7 @@ namespace libsignal.state
 
 					if (chainSenderRatchetKey.Equals(senderEphemeral))
 					{
-						return new Pair<Chain, uint>(receiverChain, index);
+						return new Pair<SessionStructure.Types.Chain, uint>(receiverChain, index);
 					}
 				}
 				catch (InvalidKeyException e)
@@ -183,8 +181,8 @@ namespace libsignal.state
 
 		public ChainKey GetReceiverChainKey(IEcPublicKey senderEphemeral)
 		{
-			Pair<Chain, uint> receiverChainAndIndex = GetReceiverChain(senderEphemeral);
-			Chain receiverChain = receiverChainAndIndex.First();
+			Pair<SessionStructure.Types.Chain, uint> receiverChainAndIndex = GetReceiverChain(senderEphemeral);
+			SessionStructure.Types.Chain receiverChain = receiverChainAndIndex.First();
 
 			if (receiverChain == null)
 			{
@@ -200,13 +198,13 @@ namespace libsignal.state
 
 		public void AddReceiverChain(IEcPublicKey senderRatchetKey, ChainKey chainKey)
 		{
-            Chain.Types.ChainKey chainKeyStructure = new Chain.Types.ChainKey
+            SessionStructure.Types.Chain.Types.ChainKey chainKeyStructure = new SessionStructure.Types.Chain.Types.ChainKey
             {
                 Key = ByteString.CopyFrom(chainKey.GetKey()),
                 Index = chainKey.GetIndex()
             };
 
-            Chain chain = new Chain
+            SessionStructure.Types.Chain chain = new SessionStructure.Types.Chain
             {
                 ChainKey = chainKeyStructure,
                 SenderRatchetKey = ByteString.CopyFrom(senderRatchetKey.Serialize())
@@ -221,13 +219,13 @@ namespace libsignal.state
 
 		public void SetSenderChain(EcKeyPair senderRatchetKeyPair, ChainKey chainKey)
 		{
-            Chain.Types.ChainKey chainKeyStructure = new Chain.Types.ChainKey
+            SessionStructure.Types.Chain.Types.ChainKey chainKeyStructure = new SessionStructure.Types.Chain.Types.ChainKey
             {
                 Key = ByteString.CopyFrom(chainKey.GetKey()),
                 Index = chainKey.GetIndex()
             };
 
-            Chain senderChain = new Chain
+            SessionStructure.Types.Chain senderChain = new SessionStructure.Types.Chain
             {
                 SenderRatchetKey = ByteString.CopyFrom(senderRatchetKeyPair.GetPublicKey().Serialize()),
                 SenderRatchetKeyPrivate = ByteString.CopyFrom(senderRatchetKeyPair.GetPrivateKey().Serialize()),
@@ -239,7 +237,7 @@ namespace libsignal.state
 
 		public ChainKey GetSenderChainKey()
 		{
-			Chain.Types.ChainKey chainKeyStructure = _sessionStructure.SenderChain.ChainKey;
+			SessionStructure.Types.Chain.Types.ChainKey chainKeyStructure = _sessionStructure.SenderChain.ChainKey;
 			return new ChainKey(Hkdf.CreateFor(GetSessionVersion()),
 								chainKeyStructure.Key.ToByteArray(), chainKeyStructure.Index);
 		}
@@ -247,7 +245,7 @@ namespace libsignal.state
 
 		public void SetSenderChainKey(ChainKey nextChainKey)
 		{
-            Chain.Types.ChainKey chainKey = new Chain.Types.ChainKey
+            SessionStructure.Types.Chain.Types.ChainKey chainKey = new SessionStructure.Types.Chain.Types.ChainKey
             {
                 Key = ByteString.CopyFrom(nextChainKey.GetKey()),
                 Index = nextChainKey.GetIndex()
@@ -258,17 +256,17 @@ namespace libsignal.state
 
 		public bool HasMessageKeys(IEcPublicKey senderEphemeral, uint counter)
 		{
-			Pair<Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
-			Chain chain = chainAndIndex.First();
+			Pair<SessionStructure.Types.Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
+			SessionStructure.Types.Chain chain = chainAndIndex.First();
 
 			if (chain == null)
 			{
 				return false;
 			}
 
-			IList<Chain.Types.MessageKey> messageKeyList = chain.MessageKeys;
+			IList<SessionStructure.Types.Chain.Types.MessageKey> messageKeyList = chain.MessageKeys;
 
-			foreach (Chain.Types.MessageKey messageKey in messageKeyList)
+			foreach (SessionStructure.Types.Chain.Types.MessageKey messageKey in messageKeyList)
 			{
 				if (messageKey.Index == counter)
 				{
@@ -281,21 +279,21 @@ namespace libsignal.state
 
 		public MessageKeys RemoveMessageKeys(IEcPublicKey senderEphemeral, uint counter)
 		{
-			Pair<Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
-			Chain chain = chainAndIndex.First();
+			Pair<SessionStructure.Types.Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
+			SessionStructure.Types.Chain chain = chainAndIndex.First();
 
 			if (chain == null)
 			{
 				return null;
 			}
 
-			List<Chain.Types.MessageKey> messageKeyList = new List<Chain.Types.MessageKey>(chain.MessageKeys);
-			IEnumerator<Chain.Types.MessageKey> messageKeyIterator = messageKeyList.GetEnumerator();
+			List<SessionStructure.Types.Chain.Types.MessageKey> messageKeyList = new List<SessionStructure.Types.Chain.Types.MessageKey>(chain.MessageKeys);
+			IEnumerator<SessionStructure.Types.Chain.Types.MessageKey> messageKeyIterator = messageKeyList.GetEnumerator();
 			MessageKeys result = null;
 
 			while (messageKeyIterator.MoveNext()) //hasNext()
 			{
-				Chain.Types.MessageKey messageKey = messageKeyIterator.Current; // next()
+				SessionStructure.Types.Chain.Types.MessageKey messageKey = messageKeyIterator.Current; // next()
 
 				if (messageKey.Index == counter)
 				{
@@ -318,9 +316,9 @@ namespace libsignal.state
 
 		public void SetMessageKeys(IEcPublicKey senderEphemeral, MessageKeys messageKeys)
 		{
-			Pair<Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
-			Chain chain = chainAndIndex.First();
-            Chain.Types.MessageKey messageKeyStructure = new Chain.Types.MessageKey
+			Pair<SessionStructure.Types.Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
+			SessionStructure.Types.Chain chain = chainAndIndex.First();
+            SessionStructure.Types.Chain.Types.MessageKey messageKeyStructure = new SessionStructure.Types.Chain.Types.MessageKey
             {
                 CipherKey = ByteString.CopyFrom(messageKeys.GetCipherKey()),
                 MacKey = ByteString.CopyFrom(messageKeys.GetMacKey()),
@@ -339,10 +337,10 @@ namespace libsignal.state
 
 		public void SetReceiverChainKey(IEcPublicKey senderEphemeral, ChainKey chainKey)
 		{
-			Pair<Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
-			Chain chain = chainAndIndex.First();
+			Pair<SessionStructure.Types.Chain, uint> chainAndIndex = GetReceiverChain(senderEphemeral);
+			SessionStructure.Types.Chain chain = chainAndIndex.First();
 
-            Chain.Types.ChainKey chainKeyStructure = new Chain.Types.ChainKey
+            SessionStructure.Types.Chain.Types.ChainKey chainKeyStructure = new SessionStructure.Types.Chain.Types.ChainKey
             {
                 Key = ByteString.CopyFrom(chainKey.GetKey()),
                 Index = chainKey.GetIndex()
@@ -358,7 +356,7 @@ namespace libsignal.state
 										  EcKeyPair ourRatchetKey,
 										  IdentityKeyPair ourIdentityKey)
 		{
-            PendingKeyExchange structure = new PendingKeyExchange
+            SessionStructure.Types.PendingKeyExchange structure = new SessionStructure.Types.PendingKeyExchange
             {
                 LocalBaseKey = ByteString.CopyFrom(ourBaseKey.GetPublicKey().Serialize()),
                 LocalBaseKeyPrivate = ByteString.CopyFrom(ourBaseKey.GetPrivateKey().Serialize()),
@@ -414,12 +412,12 @@ namespace libsignal.state
 
 		public bool HasPendingKeyExchange()
 		{
-			return _sessionStructure.PendingKeyExchangeOneofCase == PendingKeyExchangeOneofOneofCase.PendingKeyExchange;
+			return _sessionStructure.PendingKeyExchangeOneofCase == SessionStructure.PendingKeyExchangeOneofOneofCase.PendingKeyExchange;
 		}
 
 		public void SetUnacknowledgedPreKeyMessage(May<uint> preKeyId, uint signedPreKeyId, IEcPublicKey baseKey)
 		{
-            PendingPreKey pending = new PendingPreKey
+            SessionStructure.Types.PendingPreKey pending = new SessionStructure.Types.PendingPreKey
             {
                 SignedPreKeyId = (int) signedPreKeyId,
                 BaseKey = ByteString.CopyFrom(baseKey.Serialize())
@@ -435,7 +433,7 @@ namespace libsignal.state
 
 		public bool HasUnacknowledgedPreKeyMessage()
 		{
-			return this._sessionStructure.PendingPreKeyOneofCase == PendingPreKeyOneofOneofCase.PendingPreKey;
+			return this._sessionStructure.PendingPreKeyOneofCase == SessionStructure.PendingPreKeyOneofOneofCase.PendingPreKey;
 		}
 
 		public UnacknowledgedPreKeyMessageItems GetUnacknowledgedPreKeyMessageItems()
@@ -444,7 +442,7 @@ namespace libsignal.state
 			{
 				May<uint> preKeyId;
 
-				if (_sessionStructure.PendingPreKey.PreKeyIdOneofCase != PendingPreKey.PreKeyIdOneofOneofCase.None)
+				if (_sessionStructure.PendingPreKey.PreKeyIdOneofCase != SessionStructure.Types.PendingPreKey.PreKeyIdOneofOneofCase.None)
 				{
 					preKeyId = new May<uint>(_sessionStructure.PendingPreKey.PreKeyId);
 				}

@@ -18,7 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-namespace libsignal.util
+
+namespace Libsignal.Util
 {
     public class Sign
     {

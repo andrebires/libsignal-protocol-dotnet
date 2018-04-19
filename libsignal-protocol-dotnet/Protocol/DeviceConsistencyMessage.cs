@@ -16,12 +16,12 @@
  */
 
 using System.Diagnostics;
-using libsignal.devices;
-using libsignal.ecc;
-using org.whispersystems.curve25519;
 using Google.Protobuf;
+using Libsignal.Devices;
+using Libsignal.Ecc;
+using org.whispersystems.curve25519;
 
-namespace libsignal.protocol
+namespace Libsignal.Protocol
 {
     public class DeviceConsistencyMessage
     {

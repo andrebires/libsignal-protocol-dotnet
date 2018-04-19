@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using libsignal.util;
+using Libsignal.Util;
 
-namespace libsignal.groups.ratchet
+namespace Libsignal.Groups.Ratchet
 {
     /**
      * Each SenderKey is a "chain" of keys, each derived from the previous.

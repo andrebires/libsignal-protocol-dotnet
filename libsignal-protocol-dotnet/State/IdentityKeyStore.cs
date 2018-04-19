@@ -15,9 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using System;
-
-namespace libsignal.state
+namespace Libsignal.State
 {
     public enum Direction
     {

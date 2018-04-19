@@ -17,7 +17,7 @@
 
 using System;
 
-namespace libsignal.ecc
+namespace Libsignal.Ecc
 {
     public interface IEcPublicKey : IComparable
     {
