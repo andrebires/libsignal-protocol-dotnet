@@ -16,20 +16,20 @@ namespace Libsignal.State
 
         public SessionRecord()
         {
-            this._fresh = true;
+            _fresh = true;
         }
 
         public SessionRecord(SessionState sessionState)
         {
-            this._sessionState = sessionState;
-            this._fresh = false;
+            _sessionState = sessionState;
+            _fresh = false;
         }
 
         public SessionRecord(byte[] serialized)
         {
             RecordStructure record = RecordStructure.Parser.ParseFrom(serialized);
-            this._sessionState = new SessionState(record.CurrentSession);
-            this._fresh = false;
+            _sessionState = new SessionState(record.CurrentSession);
+            _fresh = false;
 
             foreach (SessionStructure previousStructure in record.PreviousSessions)
             {
@@ -85,8 +85,8 @@ namespace Libsignal.State
 
         public void PromoteState(SessionState promotedState)
         {
-            this._previousStates.AddFirst(_sessionState);
-            this._sessionState = promotedState;
+            _previousStates.AddFirst(_sessionState);
+            _sessionState = promotedState;
             if (_previousStates.Count > _archivedStatesMaxLength)
             {
                 _previousStates.RemoveLast();
@@ -95,7 +95,7 @@ namespace Libsignal.State
 
         public void SetState(SessionState sessionState)
         {
-            this._sessionState = sessionState;
+            _sessionState = sessionState;
         }
 
         /// <returns>

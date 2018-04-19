@@ -26,8 +26,8 @@
         public Fingerprint(DisplayableFingerprint displayableFingerprint,
                            ScannableFingerprint scannableFingerprint)
         {
-            this._displayableFingerprint = displayableFingerprint;
-            this._scannableFingerprint = scannableFingerprint;
+            _displayableFingerprint = displayableFingerprint;
+            _scannableFingerprint = scannableFingerprint;
         }
 
         /**

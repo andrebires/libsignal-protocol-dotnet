@@ -42,11 +42,11 @@ namespace Libsignal.Protocol
 
             }.ToByteArray();
 
-            this._id = id;
-            this._iteration = iteration;
-            this._chainKey = chainKey;
-            this._signatureKey = signatureKey;
-            this._serialized = ByteUtil.Combine(version, protobuf);
+            _id = id;
+            _iteration = iteration;
+            _chainKey = chainKey;
+            _signatureKey = signatureKey;
+            _serialized = ByteUtil.Combine(version, protobuf);
         }
 
         public SenderKeyDistributionMessage(byte[] serialized)
@@ -57,7 +57,7 @@ namespace Libsignal.Protocol
                 byte version = messageParts[0][0];
                 byte[] message = messageParts[1];
 
-                if (ByteUtil.HighBitsToInt(version) < CiphertextMessage.CurrentVersion)
+                if (ByteUtil.HighBitsToInt(version) < CurrentVersion)
                 {
                     throw new LegacyMessageException("Legacy message: " + ByteUtil.HighBitsToInt(version));
                 }
@@ -67,7 +67,7 @@ namespace Libsignal.Protocol
                     throw new InvalidMessageException("Unknown version: " + ByteUtil.HighBitsToInt(version));
                 }
 
-                SenderKeyDistributionMessage distributionMessage = SenderKeyDistributionMessage.Parser.ParseFrom(message);
+                SenderKeyDistributionMessage distributionMessage = Parser.ParseFrom(message);
 
                 if (distributionMessage.IdOneofCase == IdOneofOneofCase.None ||
                     distributionMessage.IterationOneofCase == IterationOneofOneofCase.None ||
@@ -77,11 +77,11 @@ namespace Libsignal.Protocol
                     throw new InvalidMessageException("Incomplete message.");
                 }
 
-                this._serialized = serialized;
-                this._id = distributionMessage.Id;
-                this._iteration = distributionMessage.Iteration;
-                this._chainKey = distributionMessage.ChainKey.ToByteArray();
-                this._signatureKey = Curve.DecodePoint(distributionMessage.SigningKey.ToByteArray(), 0);
+                _serialized = serialized;
+                _id = distributionMessage.Id;
+                _iteration = distributionMessage.Iteration;
+                _chainKey = distributionMessage.ChainKey.ToByteArray();
+                _signatureKey = Curve.DecodePoint(distributionMessage.SigningKey.ToByteArray(), 0);
             }
             catch (Exception e)
             {

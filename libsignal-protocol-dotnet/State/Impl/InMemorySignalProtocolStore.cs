@@ -31,7 +31,7 @@ namespace Libsignal.State.Impl
 
         public InMemorySignalProtocolStore(IdentityKeyPair identityKeyPair, uint registrationId)
         {
-            this._identityKeyStore = new InMemoryIdentityKeyStore(identityKeyPair, registrationId);
+            _identityKeyStore = new InMemoryIdentityKeyStore(identityKeyPair, registrationId);
         }
 
 

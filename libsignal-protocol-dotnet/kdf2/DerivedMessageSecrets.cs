@@ -37,9 +37,9 @@ namespace Libsignal.Kdf2
             //{
             byte[][] keys = ByteUtil.Split(okm, CipherKeyLength, MacKeyLength, IvLength);
 
-            this._cipherKey = keys[0];
-            this._macKey = keys[1];
-            this._iv = keys[2];
+            _cipherKey = keys[0];
+            _macKey = keys[1];
+            _iv = keys[2];
             /*}
             catch (ParseException e)
             {

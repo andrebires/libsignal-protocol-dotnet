@@ -36,9 +36,9 @@ namespace Libsignal.Protocol
                 byte[] signatureBytes = Curve.CalculateVrfSignature(identityKeyPair.GetPrivateKey(), commitment.ToByteArray());
                 byte[] vrfOutputBytes = Curve.VerifyVrfSignature(identityKeyPair.GetPublicKey().GetPublicKey(), commitment.ToByteArray(), signatureBytes);
 
-                this._generation = commitment.GetGeneration();
-                this._signature = new DeviceConsistencySignature(signatureBytes, vrfOutputBytes);
-                this._serialized = new DeviceConsistencyCodeMessage
+                _generation = commitment.GetGeneration();
+                _signature = new DeviceConsistencySignature(signatureBytes, vrfOutputBytes);
+                _serialized = new DeviceConsistencyCodeMessage
                 {
                     Generation = (uint) commitment.GetGeneration(),
                     Signature = ByteString.CopyFrom(_signature.GetSignature())
@@ -63,9 +63,9 @@ namespace Libsignal.Protocol
                 DeviceConsistencyCodeMessage message = DeviceConsistencyCodeMessage.Parser.ParseFrom(serialized);
                 byte[] vrfOutputBytes = Curve.VerifyVrfSignature(identityKey.GetPublicKey(), commitment.ToByteArray(), message.Signature.ToByteArray());
 
-                this._generation = (int)message.Generation;
-                this._signature = new DeviceConsistencySignature(message.Signature.ToByteArray(), vrfOutputBytes);
-                this._serialized = serialized;
+                _generation = (int)message.Generation;
+                _signature = new DeviceConsistencySignature(message.Signature.ToByteArray(), vrfOutputBytes);
+                _serialized = serialized;
             }
             catch (InvalidProtocolBufferException e)
             {

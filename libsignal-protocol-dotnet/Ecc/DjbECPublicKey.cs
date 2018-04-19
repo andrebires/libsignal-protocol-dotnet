@@ -27,7 +27,7 @@ namespace Libsignal.Ecc
 
         public DjbEcPublicKey(byte[] publicKey)
         {
-            this._publicKey = publicKey;
+            _publicKey = publicKey;
         }
 
 
@@ -50,7 +50,7 @@ namespace Libsignal.Ecc
             if (!(other is DjbEcPublicKey)) return false;
 
             DjbEcPublicKey that = (DjbEcPublicKey)other;
-            return Enumerable.SequenceEqual(this._publicKey, that._publicKey);
+            return Enumerable.SequenceEqual(_publicKey, that._publicKey);
         }
 
 

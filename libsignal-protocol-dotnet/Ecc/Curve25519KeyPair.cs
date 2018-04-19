@@ -16,8 +16,8 @@
         /// <param name="privateKey">32 byte private key</param>
         public Curve25519KeyPair(byte[] publicKey, byte[] privateKey)
         {
-            this._publicKey = publicKey;
-            this._privateKey = privateKey;
+            _publicKey = publicKey;
+            _privateKey = privateKey;
         }
 
         /// <summary>

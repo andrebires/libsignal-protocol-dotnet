@@ -42,8 +42,8 @@ namespace Libsignal.Groups
 
         public GroupCipher(ISenderKeyStore senderKeyStore, SenderKeyName senderKeyId)
         {
-            this._senderKeyStore = senderKeyStore;
-            this._senderKeyId = senderKeyId;
+            _senderKeyStore = senderKeyStore;
+            _senderKeyId = senderKeyId;
         }
 
         /**

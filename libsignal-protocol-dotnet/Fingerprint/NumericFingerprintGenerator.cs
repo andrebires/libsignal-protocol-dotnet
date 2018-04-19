@@ -47,7 +47,7 @@ namespace Libsignal.Fingerprint
          */
         public NumericFingerprintGenerator(int iterations)
         {
-            this._iterations = iterations;
+            _iterations = iterations;
         }
 
         public object MessageDigest { get; private set; }

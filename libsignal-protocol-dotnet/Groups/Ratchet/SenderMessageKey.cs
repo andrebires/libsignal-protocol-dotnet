@@ -40,10 +40,10 @@ namespace Libsignal.Groups.Ratchet
             byte[] derivative = new HkdFv3().DeriveSecrets(seed, Encoding.UTF8.GetBytes("WhisperGroup"), 48);
             byte[][] parts = ByteUtil.Split(derivative, 16, 32);
 
-            this._iteration = iteration;
-            this._seed = seed;
-            this._iv = parts[0];
-            this._cipherKey = parts[1];
+            _iteration = iteration;
+            _seed = seed;
+            _iv = parts[0];
+            _cipherKey = parts[1];
         }
 
         public uint GetIteration()

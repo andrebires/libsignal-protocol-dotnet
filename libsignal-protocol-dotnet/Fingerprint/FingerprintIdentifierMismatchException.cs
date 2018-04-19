@@ -30,10 +30,10 @@ namespace Libsignal.Fingerprint
         public FingerprintIdentifierMismatchException(string localIdentifier, string remoteIdentifier,
                                                       string scannedLocalIdentifier, string scannedRemoteIdentifier)
         {
-            this._localIdentifier = localIdentifier;
-            this._remoteIdentifier = remoteIdentifier;
-            this._scannedLocalIdentifier = scannedLocalIdentifier;
-            this._scannedRemoteIdentifier = scannedRemoteIdentifier;
+            _localIdentifier = localIdentifier;
+            _remoteIdentifier = remoteIdentifier;
+            _scannedLocalIdentifier = scannedLocalIdentifier;
+            _scannedRemoteIdentifier = scannedRemoteIdentifier;
         }
 
         public string GetScannedRemoteIdentifier()

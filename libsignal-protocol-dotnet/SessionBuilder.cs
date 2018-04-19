@@ -63,11 +63,11 @@ namespace Libsignal
                               IDentityKeyStore identityKeyStore,
                               SignalProtocolAddress remoteAddress)
         {
-            this._sessionStore = sessionStore;
-            this._preKeyStore = preKeyStore;
-            this._signedPreKeyStore = signedPreKeyStore;
-            this._identityKeyStore = identityKeyStore;
-            this._remoteAddress = remoteAddress;
+            _sessionStore = sessionStore;
+            _preKeyStore = preKeyStore;
+            _signedPreKeyStore = signedPreKeyStore;
+            _identityKeyStore = identityKeyStore;
+            _remoteAddress = remoteAddress;
         }
 
         /**

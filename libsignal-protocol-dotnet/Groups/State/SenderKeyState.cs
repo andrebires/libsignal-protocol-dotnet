@@ -64,7 +64,7 @@ namespace Libsignal.Groups.State
 				signingKeyStructure.Private = ByteString.CopyFrom(signatureKeyPrivate.ForceGetValue().Serialize());
 			}
 
-            this._senderKeyStateStructure = new SenderKeyStateStructure
+            _senderKeyStateStructure = new SenderKeyStateStructure
             {
                 SenderKeyId = id,
                 SenderChainKey = senderChainKeyStructure,
@@ -74,7 +74,7 @@ namespace Libsignal.Groups.State
 
 		public SenderKeyState(SenderKeyStateStructure senderKeyStateStructure)
 		{
-			this._senderKeyStateStructure = senderKeyStateStructure;
+			_senderKeyStateStructure = senderKeyStateStructure;
 		}
 
 		public uint GetKeyId()
@@ -96,7 +96,7 @@ namespace Libsignal.Groups.State
                 Seed = ByteString.CopyFrom(chainKey.GetSeed())
             };
 
-            this._senderKeyStateStructure.SenderChainKey = senderChainKeyStructure;
+            _senderKeyStateStructure.SenderChainKey = senderChainKeyStructure;
 		}
 
 		public IEcPublicKey GetSigningKeyPublic()
@@ -126,7 +126,7 @@ namespace Libsignal.Groups.State
                 Iteration = senderMessageKey.GetIteration(),
                 Seed = ByteString.CopyFrom(senderMessageKey.GetSeed())
             };
-            this._senderKeyStateStructure.SenderMessageKeys.Add(senderMessageKeyStructure);
+            _senderKeyStateStructure.SenderMessageKeys.Add(senderMessageKeyStructure);
 
 			if (_senderKeyStateStructure.SenderMessageKeys.Count > MaxMessageKeys)
 			{
@@ -153,8 +153,8 @@ namespace Libsignal.Groups.State
 				}
 			}
 
-            this._senderKeyStateStructure.SenderMessageKeys.Clear();
-            this._senderKeyStateStructure.SenderMessageKeys.AddRange(keys);
+            _senderKeyStateStructure.SenderMessageKeys.Clear();
+            _senderKeyStateStructure.SenderMessageKeys.AddRange(keys);
 
 			if (result != null)
 			{

@@ -51,7 +51,7 @@ namespace Libsignal.Protocol
                     throw new InvalidMessageException("Unknown version: " + ByteUtil.HighBitsToInt(version));
                 }
 
-                SenderKeyMessage senderKeyMessage = SenderKeyMessage.Parser.ParseFrom(message);
+                SenderKeyMessage senderKeyMessage = Parser.ParseFrom(message);
 
                 if (senderKeyMessage.IdOneofCase == IdOneofOneofCase.None ||
                     senderKeyMessage.IterationOneofCase == IterationOneofOneofCase.None ||
@@ -60,11 +60,11 @@ namespace Libsignal.Protocol
                     throw new InvalidMessageException("Incomplete message.");
                 }
 
-                this._serialized = serialized;
-                this._messageVersion = (uint)ByteUtil.HighBitsToInt(version);
-                this._keyId = senderKeyMessage.Id;
-                this._iteration = senderKeyMessage.Iteration;
-                this._ciphertext = senderKeyMessage.Ciphertext.ToByteArray();
+                _serialized = serialized;
+                _messageVersion = (uint)ByteUtil.HighBitsToInt(version);
+                _keyId = senderKeyMessage.Id;
+                _iteration = senderKeyMessage.Iteration;
+                _ciphertext = senderKeyMessage.Ciphertext.ToByteArray();
             }
             catch (/*InvalidProtocolBufferException | Parse*/Exception e)
             {
@@ -84,11 +84,11 @@ namespace Libsignal.Protocol
 
             byte[] signature = GetSignature(signatureKey, ByteUtil.Combine(version, message));
 
-            this._serialized = ByteUtil.Combine(version, message, signature);
-            this._messageVersion = CurrentVersion;
-            this._keyId = keyId;
-            this._iteration = iteration;
-            this._ciphertext = ciphertext;
+            _serialized = ByteUtil.Combine(version, message, signature);
+            _messageVersion = CurrentVersion;
+            _keyId = keyId;
+            _iteration = iteration;
+            _ciphertext = ciphertext;
         }
 
         public uint GetKeyId()
@@ -144,7 +144,7 @@ namespace Libsignal.Protocol
 
         public override uint GetMessageType()
         {
-            return CiphertextMessage.SenderkeyType;
+            return SenderkeyType;
         }
     }
 }

@@ -26,8 +26,8 @@ namespace Libsignal.Fingerprint
 
         public FingerprintVersionMismatchException(int theirVersion, int ourVersion) : base()
         {
-            this._theirVersion = theirVersion;
-            this._ourVersion = ourVersion;
+            _theirVersion = theirVersion;
+            _ourVersion = ourVersion;
         }
 
         public int GetTheirVersion()

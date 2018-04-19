@@ -54,7 +54,7 @@ namespace Libsignal.Devices
                         }));
                 }
 
-                this._generation = generation;
+                _generation = generation;
             }
             catch (Exception e)
             {

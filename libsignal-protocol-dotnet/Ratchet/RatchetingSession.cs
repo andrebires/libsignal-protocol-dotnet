@@ -44,7 +44,7 @@ namespace Libsignal.Ratchet
                                .SetTheirSignedPreKey(parameters.GetTheirBaseKey())
                                .SetTheirOneTimePreKey(May<IEcPublicKey>.NoValue);
 
-                RatchetingSession.InitializeSession(sessionState, aliceParameters.Create());
+                InitializeSession(sessionState, aliceParameters.Create());
             }
             else
             {
@@ -57,7 +57,7 @@ namespace Libsignal.Ratchet
                              .SetTheirBaseKey(parameters.GetTheirBaseKey())
                              .SetTheirIdentityKey(parameters.GetTheirIdentityKey());
 
-                RatchetingSession.InitializeSession(sessionState, bobParameters.Create());
+                InitializeSession(sessionState, bobParameters.Create());
             }
         }
 
@@ -184,8 +184,8 @@ namespace Libsignal.Ratchet
 
             internal DerivedKeys(RootKey rootKey, ChainKey chainKey)
             {
-                this._rootKey = rootKey;
-                this._chainKey = chainKey;
+                _rootKey = rootKey;
+                _chainKey = chainKey;
             }
 
             public RootKey GetRootKey()

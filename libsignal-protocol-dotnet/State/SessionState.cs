@@ -18,17 +18,17 @@ namespace Libsignal.State
 
 		public SessionState()
 		{
-            this._sessionStructure = new SessionStructure { };
+            _sessionStructure = new SessionStructure { };
 		}
 
 		public SessionState(SessionStructure sessionStructure)
 		{
-			this._sessionStructure = sessionStructure;
+			_sessionStructure = sessionStructure;
 		}
 
 		public SessionState(SessionState copy)
 		{
-            this._sessionStructure = new SessionStructure(copy._sessionStructure);
+            _sessionStructure = new SessionStructure(copy._sessionStructure);
 		}
 
 		public SessionStructure GetStructure()
@@ -38,22 +38,22 @@ namespace Libsignal.State
 
 		public byte[] GetAliceBaseKey()
 		{
-			return this._sessionStructure.AliceBaseKey.ToByteArray();
+			return _sessionStructure.AliceBaseKey.ToByteArray();
 		}
 
 		public void SetAliceBaseKey(byte[] aliceBaseKey)
 		{
-            this._sessionStructure.AliceBaseKey = ByteString.CopyFrom(aliceBaseKey);									 
+            _sessionStructure.AliceBaseKey = ByteString.CopyFrom(aliceBaseKey);									 
 		}
 
 		public void SetSessionVersion(uint version)
 		{
-            this._sessionStructure.SessionVersion = version;
+            _sessionStructure.SessionVersion = version;
 		}
 
 		public uint GetSessionVersion()
 		{
-			uint sessionVersion = this._sessionStructure.SessionVersion;
+			uint sessionVersion = _sessionStructure.SessionVersion;
 
 			if (sessionVersion == 0) return 2;
 			else return sessionVersion;
@@ -61,24 +61,24 @@ namespace Libsignal.State
 
 		public void SetRemoteIdentityKey(IdentityKey identityKey)
 		{
-            this._sessionStructure.RemoteIdentityPublic = ByteString.CopyFrom(identityKey.Serialize());
+            _sessionStructure.RemoteIdentityPublic = ByteString.CopyFrom(identityKey.Serialize());
 		}
 
 		public void SetLocalIdentityKey(IdentityKey identityKey)
 		{
-			this._sessionStructure.LocalIdentityPublic = ByteString.CopyFrom(identityKey.Serialize());
+			_sessionStructure.LocalIdentityPublic = ByteString.CopyFrom(identityKey.Serialize());
 		}
 
 		public IdentityKey GetRemoteIdentityKey()
 		{
 			try
 			{
-				if (this._sessionStructure.RemoteIdentityPublicOneofCase == SessionStructure.RemoteIdentityPublicOneofOneofCase.None)
+				if (_sessionStructure.RemoteIdentityPublicOneofCase == SessionStructure.RemoteIdentityPublicOneofOneofCase.None)
 				{
 					return null;
 				}
 
-				return new IdentityKey(this._sessionStructure.RemoteIdentityPublic.ToByteArray(), 0);
+				return new IdentityKey(_sessionStructure.RemoteIdentityPublic.ToByteArray(), 0);
 			}
 			catch (InvalidKeyException e)
 			{
@@ -91,7 +91,7 @@ namespace Libsignal.State
 		{
 			try
 			{
-				return new IdentityKey(this._sessionStructure.LocalIdentityPublic.ToByteArray(), 0);
+				return new IdentityKey(_sessionStructure.LocalIdentityPublic.ToByteArray(), 0);
 			}
 			catch (InvalidKeyException e)
 			{
@@ -106,18 +106,18 @@ namespace Libsignal.State
 
 		public void SetPreviousCounter(uint previousCounter)
 		{
-			this._sessionStructure.PreviousCounter = previousCounter;
+			_sessionStructure.PreviousCounter = previousCounter;
 		}
 
 		public RootKey GetRootKey()
 		{
 			return new RootKey(Hkdf.CreateFor(GetSessionVersion()),
-							   this._sessionStructure.RootKey.ToByteArray());
+							   _sessionStructure.RootKey.ToByteArray());
 		}
 
 		public void SetRootKey(RootKey rootKey)
 		{
-            this._sessionStructure.RootKey = ByteString.CopyFrom(rootKey.GetKeyBytes());
+            _sessionStructure.RootKey = ByteString.CopyFrom(rootKey.GetKeyBytes());
 		}
 
 		public IEcPublicKey GetSenderRatchetKey()
@@ -209,11 +209,11 @@ namespace Libsignal.State
                 ChainKey = chainKeyStructure,
                 SenderRatchetKey = ByteString.CopyFrom(senderRatchetKey.Serialize())
             };
-            this._sessionStructure.ReceiverChains.Add(chain);
+            _sessionStructure.ReceiverChains.Add(chain);
 
-			while (this._sessionStructure.ReceiverChains.Count > 5)
+			while (_sessionStructure.ReceiverChains.Count > 5)
 			{
-                this._sessionStructure.ReceiverChains.RemoveAt(0); //TODO why was here a TODO?
+                _sessionStructure.ReceiverChains.RemoveAt(0); //TODO why was here a TODO?
 			}
 		}
 
@@ -232,7 +232,7 @@ namespace Libsignal.State
                 ChainKey = chainKeyStructure
             };
 
-            this._sessionStructure.SenderChain = senderChain;
+            _sessionStructure.SenderChain = senderChain;
 		}
 
 		public ChainKey GetSenderChainKey()
@@ -366,7 +366,7 @@ namespace Libsignal.State
                 LocalIdentityKeyPrivate = ByteString.CopyFrom(ourIdentityKey.GetPrivateKey().Serialize())
             };
 
-            this._sessionStructure.PendingKeyExchange = structure;
+            _sessionStructure.PendingKeyExchange = structure;
 		}
 
 		public uint GetPendingKeyExchangeSequence()
@@ -428,12 +428,12 @@ namespace Libsignal.State
                 pending.PreKeyId = preKeyId.ForceGetValue();
 			}
 
-            this._sessionStructure.PendingPreKey = pending;
+            _sessionStructure.PendingPreKey = pending;
 		}
 
 		public bool HasUnacknowledgedPreKeyMessage()
 		{
-			return this._sessionStructure.PendingPreKeyOneofCase == SessionStructure.PendingPreKeyOneofOneofCase.PendingPreKey;
+			return _sessionStructure.PendingPreKeyOneofCase == SessionStructure.PendingPreKeyOneofOneofCase.PendingPreKey;
 		}
 
 		public UnacknowledgedPreKeyMessageItems GetUnacknowledgedPreKeyMessageItems()
@@ -466,27 +466,27 @@ namespace Libsignal.State
 
 		public void ClearUnacknowledgedPreKeyMessage()
 		{
-            this._sessionStructure.PendingPreKey = null;
+            _sessionStructure.PendingPreKey = null;
 		}
 
 		public void SetRemoteRegistrationId(uint registrationId)
 		{
-            this._sessionStructure.RemoteRegistrationId = registrationId;
+            _sessionStructure.RemoteRegistrationId = registrationId;
 		}
 
 		public uint GetRemoteRegistrationId()
 		{
-			return this._sessionStructure.RemoteRegistrationId;
+			return _sessionStructure.RemoteRegistrationId;
 		}
 
 		public void SetLocalRegistrationId(uint registrationId)
 		{
-            this._sessionStructure.LocalRegistrationId = registrationId;
+            _sessionStructure.LocalRegistrationId = registrationId;
 		}
 
 		public uint GetLocalRegistrationId()
 		{
-			return this._sessionStructure.LocalRegistrationId;
+			return _sessionStructure.LocalRegistrationId;
 		}
 
 		public byte[] Serialize()
@@ -504,9 +504,9 @@ namespace Libsignal.State
 													uint signedPreKeyId,
 													IEcPublicKey baseKey)
 			{
-				this._preKeyId = preKeyId;
-				this._signedPreKeyId = signedPreKeyId;
-				this._baseKey = baseKey;
+				_preKeyId = preKeyId;
+				_signedPreKeyId = signedPreKeyId;
+				_baseKey = baseKey;
 			}
 
 

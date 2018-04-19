@@ -24,7 +24,7 @@ namespace Libsignal.Ecc
 
         public DjbEcPrivateKey(byte[] privateKey)
         {
-            this._privateKey = privateKey;
+            _privateKey = privateKey;
         }
 
 

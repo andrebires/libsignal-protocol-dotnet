@@ -34,9 +34,9 @@ namespace Libsignal.Ratchet
 
         public ChainKey(Hkdf kdf, byte[] key, uint index)
         {
-            this._kdf = kdf;
-            this._key = key;
-            this._index = index;
+            _kdf = kdf;
+            _key = key;
+            _index = index;
         }
 
         public byte[] GetKey()

@@ -33,8 +33,8 @@ namespace Libsignal
 
         public IdentityKeyPair(IdentityKey publicKey, IEcPrivateKey privateKey)
         {
-            this._publicKey = publicKey;
-            this._privateKey = privateKey;
+            _publicKey = publicKey;
+            _privateKey = privateKey;
         }
 
         public IdentityKeyPair(byte[] serialized)
@@ -42,8 +42,8 @@ namespace Libsignal
             try
             {
                 IdentityKeyPairStructure structure = IdentityKeyPairStructure.Parser.ParseFrom(serialized);
-                this._publicKey = new IdentityKey(structure.PublicKey.ToByteArray(), 0);
-                this._privateKey = Curve.DecodePrivatePoint(structure.PrivateKey.ToByteArray());
+                _publicKey = new IdentityKey(structure.PublicKey.ToByteArray(), 0);
+                _privateKey = Curve.DecodePrivatePoint(structure.PrivateKey.ToByteArray());
             }
             catch (InvalidProtocolBufferException e)
             {

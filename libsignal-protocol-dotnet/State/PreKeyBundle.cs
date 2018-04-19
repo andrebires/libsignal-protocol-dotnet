@@ -19,45 +19,39 @@ using Libsignal.Ecc;
 
 namespace Libsignal.State
 {
-    /**
- * A class that contains a remote PreKey and collection
- * of associated items.
- *
- * @author Moxie Marlinspike
- */
+    /// <summary>    
+    /// A class that contains a remote PreKey and collection  of associated items.  
+    /// </summary>
+    /// <author>Moxie Marlinspike</author>
     public class PreKeyBundle
     {
-
         private uint _registrationId;
-
         private uint _deviceId;
-
         private uint _preKeyId;
         private IEcPublicKey _preKeyPublic;
-
         private uint _signedPreKeyId;
         private IEcPublicKey _signedPreKeyPublic;
         private byte[] _signedPreKeySignature;
-
         private IdentityKey _identityKey;
 
         public PreKeyBundle(uint registrationId, uint deviceId, uint preKeyId, IEcPublicKey preKeyPublic,
                             uint signedPreKeyId, IEcPublicKey signedPreKeyPublic, byte[] signedPreKeySignature,
                             IdentityKey identityKey)
         {
-            this._registrationId = registrationId;
-            this._deviceId = deviceId;
-            this._preKeyId = preKeyId;
-            this._preKeyPublic = preKeyPublic;
-            this._signedPreKeyId = signedPreKeyId;
-            this._signedPreKeyPublic = signedPreKeyPublic;
-            this._signedPreKeySignature = signedPreKeySignature;
-            this._identityKey = identityKey;
+            _registrationId = registrationId;
+            _deviceId = deviceId;
+            _preKeyId = preKeyId;
+            _preKeyPublic = preKeyPublic;
+            _signedPreKeyId = signedPreKeyId;
+            _signedPreKeyPublic = signedPreKeyPublic;
+            _signedPreKeySignature = signedPreKeySignature;
+            _identityKey = identityKey;
         }
 
-        /**
-         * @return the device ID this PreKey belongs to.
-         */
+        /// <summary>
+        /// The device ID this PreKey belongs to.
+        /// </summary>
+        /// <returns></returns>
         public uint GetDeviceId()
         {
             return _deviceId;

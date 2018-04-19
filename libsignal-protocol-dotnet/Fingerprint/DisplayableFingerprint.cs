@@ -26,8 +26,8 @@ namespace Libsignal.Fingerprint
 
         internal DisplayableFingerprint(byte[] localFingerprint, byte[] remoteFingerprint)
         {
-            this._localFingerprintNumbers = GetDisplayStringFor(localFingerprint);
-            this._remoteFingerprintNumbers = GetDisplayStringFor(remoteFingerprint);
+            _localFingerprintNumbers = GetDisplayStringFor(localFingerprint);
+            _remoteFingerprintNumbers = GetDisplayStringFor(remoteFingerprint);
         }
 
         public string GetDisplayText()

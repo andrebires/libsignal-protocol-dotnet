@@ -40,7 +40,7 @@ namespace Libsignal.Fingerprint
                 Content = ByteString.CopyFrom(ByteUtil.Trim(remoteFingerprintData, 32))
             };
 
-            this._fingerprints = new CombinedFingerprints
+            _fingerprints = new CombinedFingerprints
             {
                 Version = (uint)Version,
                 LocalFingerprint = localFingerprint,

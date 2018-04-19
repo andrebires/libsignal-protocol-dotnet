@@ -41,7 +41,7 @@ namespace Libsignal.Groups.State
 
             foreach (SenderKeyStateStructure structure in senderKeyRecordStructure.SenderKeyStates)
             {
-                this._senderKeyStates.AddFirst(new SenderKeyState(structure));
+                _senderKeyStates.AddFirst(new SenderKeyState(structure));
             }
         }
 

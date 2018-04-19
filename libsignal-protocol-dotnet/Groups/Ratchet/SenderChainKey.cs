@@ -40,8 +40,8 @@ namespace Libsignal.Groups.Ratchet
 
         public SenderChainKey(uint iteration, byte[] chainKey)
         {
-            this._iteration = iteration;
-            this._chainKey = chainKey;
+            _iteration = iteration;
+            _chainKey = chainKey;
         }
 
         public uint GetIteration()

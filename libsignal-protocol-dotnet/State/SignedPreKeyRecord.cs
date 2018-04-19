@@ -27,7 +27,7 @@ namespace Libsignal.State
 
         public SignedPreKeyRecord(uint id, ulong timestamp, EcKeyPair keyPair, byte[] signature)
         {
-            this._structure = new SignedPreKeyRecordStructure
+            _structure = new SignedPreKeyRecordStructure
             {
                 Id = id,
                 PublicKey = ByteString.CopyFrom(keyPair.GetPublicKey().Serialize()),
@@ -39,25 +39,25 @@ namespace Libsignal.State
 
         public SignedPreKeyRecord(byte[] serialized)
         {
-            this._structure = SignedPreKeyRecordStructure.Parser.ParseFrom(serialized);
+            _structure = SignedPreKeyRecordStructure.Parser.ParseFrom(serialized);
         }
 
         public uint GetId()
         {
-            return this._structure.Id;
+            return _structure.Id;
         }
 
         public ulong GetTimestamp()
         {
-            return this._structure.Timestamp;
+            return _structure.Timestamp;
         }
 
         public EcKeyPair GetKeyPair()
         {
             try
             {
-                IEcPublicKey publicKey = Curve.DecodePoint(this._structure.PublicKey.ToByteArray(), 0);
-                IEcPrivateKey privateKey = Curve.DecodePrivatePoint(this._structure.PrivateKey.ToByteArray());
+                IEcPublicKey publicKey = Curve.DecodePoint(_structure.PublicKey.ToByteArray(), 0);
+                IEcPrivateKey privateKey = Curve.DecodePrivatePoint(_structure.PrivateKey.ToByteArray());
 
                 return new EcKeyPair(publicKey, privateKey);
             }
@@ -69,12 +69,12 @@ namespace Libsignal.State
 
         public byte[] GetSignature()
         {
-            return this._structure.Signature.ToByteArray();
+            return _structure.Signature.ToByteArray();
         }
 
         public byte[] Serialize()
         {
-            return this._structure.ToByteArray();
+            return _structure.ToByteArray();
         }
     }
 }

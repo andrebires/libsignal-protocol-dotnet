@@ -40,7 +40,7 @@ namespace Libsignal.Ecc
 
             switch (type)
             {
-                case Curve.DjbType:
+                case DjbType:
                     byte[] keyBytes = new byte[32];
                     System.Buffer.BlockCopy(bytes, offset + 1, keyBytes, 0, keyBytes.Length);
                     return new DjbEcPublicKey(keyBytes);

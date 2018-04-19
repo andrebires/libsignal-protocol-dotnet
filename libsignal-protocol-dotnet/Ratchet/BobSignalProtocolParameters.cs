@@ -36,12 +36,12 @@ namespace Libsignal.Ratchet
                              EcKeyPair ourRatchetKey, May<EcKeyPair> ourOneTimePreKey,
                              IdentityKey theirIdentityKey, IEcPublicKey theirBaseKey)
         {
-            this._ourIdentityKey = ourIdentityKey;
-            this._ourSignedPreKey = ourSignedPreKey;
-            this._ourRatchetKey = ourRatchetKey;
-            this._ourOneTimePreKey = ourOneTimePreKey;
-            this._theirIdentityKey = theirIdentityKey;
-            this._theirBaseKey = theirBaseKey;
+            _ourIdentityKey = ourIdentityKey;
+            _ourSignedPreKey = ourSignedPreKey;
+            _ourRatchetKey = ourRatchetKey;
+            _ourOneTimePreKey = ourOneTimePreKey;
+            _theirIdentityKey = theirIdentityKey;
+            _theirBaseKey = theirBaseKey;
 
             if (ourIdentityKey == null || ourSignedPreKey == null || ourRatchetKey == null ||
                 ourOneTimePreKey == null || theirIdentityKey == null || theirBaseKey == null)
@@ -97,37 +97,37 @@ namespace Libsignal.Ratchet
 
             public Builder SetOurIdentityKey(IdentityKeyPair ourIdentityKey)
             {
-                this._ourIdentityKey = ourIdentityKey;
+                _ourIdentityKey = ourIdentityKey;
                 return this;
             }
 
             public Builder SetOurSignedPreKey(EcKeyPair ourSignedPreKey)
             {
-                this._ourSignedPreKey = ourSignedPreKey;
+                _ourSignedPreKey = ourSignedPreKey;
                 return this;
             }
 
             public Builder SetOurOneTimePreKey(May<EcKeyPair> ourOneTimePreKey)
             {
-                this._ourOneTimePreKey = ourOneTimePreKey;
+                _ourOneTimePreKey = ourOneTimePreKey;
                 return this;
             }
 
             public Builder SetTheirIdentityKey(IdentityKey theirIdentityKey)
             {
-                this._theirIdentityKey = theirIdentityKey;
+                _theirIdentityKey = theirIdentityKey;
                 return this;
             }
 
             public Builder SetTheirBaseKey(IEcPublicKey theirBaseKey)
             {
-                this._theirBaseKey = theirBaseKey;
+                _theirBaseKey = theirBaseKey;
                 return this;
             }
 
             public Builder SetOurRatchetKey(EcKeyPair ourRatchetKey)
             {
-                this._ourRatchetKey = ourRatchetKey;
+                _ourRatchetKey = ourRatchetKey;
                 return this;
             }
 

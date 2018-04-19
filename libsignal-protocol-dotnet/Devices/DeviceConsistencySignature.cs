@@ -24,8 +24,8 @@ namespace Libsignal.Devices
 
         public DeviceConsistencySignature(byte[] signature, byte[] vrfOutput)
         {
-            this._signature = signature;
-            this._vrfOutput = vrfOutput;
+            _signature = signature;
+            _vrfOutput = vrfOutput;
         }
 
         public byte[] GetVrfOutput()

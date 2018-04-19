@@ -27,10 +27,10 @@ namespace Libsignal.Ratchet
 
         public MessageKeys(byte[] cipherKey, byte[] macKey, byte[] iv, uint counter)
         {
-            this._cipherKey = cipherKey;
-            this._macKey = macKey;
-            this._iv = iv;
-            this._counter = counter;
+            _cipherKey = cipherKey;
+            _macKey = macKey;
+            _iv = iv;
+            _counter = counter;
         }
 
         public byte[] GetCipherKey()

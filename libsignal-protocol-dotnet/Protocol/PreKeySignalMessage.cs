@@ -38,17 +38,17 @@ namespace Libsignal.Protocol
         {
             try
             {
-                this._version = (uint)ByteUtil.HighBitsToInt(serialized[0]);
+                _version = (uint)ByteUtil.HighBitsToInt(serialized[0]);
 
-                if (this._version > CiphertextMessage.CurrentVersion)
+                if (_version > CurrentVersion)
                 {
-                    throw new InvalidVersionException("Unknown version: " + this._version);
+                    throw new InvalidVersionException("Unknown version: " + _version);
                 }
 
-                if (this._version < CiphertextMessage.CurrentVersion) {
-                throw new LegacyMessageException("Legacy version: " + this._version);
+                if (_version < CurrentVersion) {
+                throw new LegacyMessageException("Legacy version: " + _version);
                 }
-                PreKeySignalMessage preKeySignalMessage = PreKeySignalMessage.Parser.ParseFrom(ByteString.CopyFrom(serialized, 1, serialized.Length - 1));
+                PreKeySignalMessage preKeySignalMessage = Parser.ParseFrom(ByteString.CopyFrom(serialized, 1, serialized.Length - 1));
 
                 if (
                     preKeySignalMessage.SignedPreKeyIdOneofCase == SignedPreKeyIdOneofOneofCase.None ||
@@ -59,13 +59,13 @@ namespace Libsignal.Protocol
                     throw new InvalidMessageException("Incomplete message.");
                 }
 
-                this._serialized = serialized;
-                this._registrationId = preKeySignalMessage.RegistrationId;
-                this._preKeyId = preKeySignalMessage.PreKeyIdOneofCase == PreKeyIdOneofOneofCase.PreKeyId ? new May<uint>(preKeySignalMessage.PreKeyId) : May<uint>.NoValue;
-                this._signedPreKeyId = preKeySignalMessage.SignedPreKeyIdOneofCase == SignedPreKeyIdOneofOneofCase.SignedPreKeyId ? preKeySignalMessage.SignedPreKeyId : uint.MaxValue; // -1
-                this._baseKey = Curve.DecodePoint(preKeySignalMessage.BaseKey.ToByteArray(), 0);
-                this._identityKey = new IdentityKey(Curve.DecodePoint(preKeySignalMessage.IdentityKey.ToByteArray(), 0));
-                this._message = new SignalMessage(preKeySignalMessage.Message.ToByteArray());
+                _serialized = serialized;
+                _registrationId = preKeySignalMessage.RegistrationId;
+                _preKeyId = preKeySignalMessage.PreKeyIdOneofCase == PreKeyIdOneofOneofCase.PreKeyId ? new May<uint>(preKeySignalMessage.PreKeyId) : May<uint>.NoValue;
+                _signedPreKeyId = preKeySignalMessage.SignedPreKeyIdOneofCase == SignedPreKeyIdOneofOneofCase.SignedPreKeyId ? preKeySignalMessage.SignedPreKeyId : uint.MaxValue; // -1
+                _baseKey = Curve.DecodePoint(preKeySignalMessage.BaseKey.ToByteArray(), 0);
+                _identityKey = new IdentityKey(Curve.DecodePoint(preKeySignalMessage.IdentityKey.ToByteArray(), 0));
+                _message = new SignalMessage(preKeySignalMessage.Message.ToByteArray());
             }
             catch (Exception e)
             {
@@ -78,13 +78,13 @@ namespace Libsignal.Protocol
                                     uint signedPreKeyId, IEcPublicKey baseKey, IdentityKey identityKey,
                                     SignalMessage message)
         {
-            this._version = messageVersion;
-            this._registrationId = registrationId;
-            this._preKeyId = preKeyId;
-            this._signedPreKeyId = signedPreKeyId;
-            this._baseKey = baseKey;
-            this._identityKey = identityKey;
-            this._message = message;
+            _version = messageVersion;
+            _registrationId = registrationId;
+            _preKeyId = preKeyId;
+            _signedPreKeyId = signedPreKeyId;
+            _baseKey = baseKey;
+            _identityKey = identityKey;
+            _message = message;
 
             PreKeySignalMessage preKeySignalMessage = new PreKeySignalMessage
             {
@@ -100,10 +100,10 @@ namespace Libsignal.Protocol
                 preKeySignalMessage.PreKeyId = preKeyId.ForceGetValue(); // get()
             }
 
-            byte[] versionBytes = { ByteUtil.IntsToByteHighAndLow((int)this._version, (int)CurrentVersion) };
+            byte[] versionBytes = { ByteUtil.IntsToByteHighAndLow((int)_version, (int)CurrentVersion) };
             byte[] messageBytes = preKeySignalMessage.ToByteArray();
 
-            this._serialized = ByteUtil.Combine(versionBytes, messageBytes);
+            _serialized = ByteUtil.Combine(versionBytes, messageBytes);
         }
 
         public uint GetMessageVersion()
@@ -150,7 +150,7 @@ namespace Libsignal.Protocol
 
         public override uint GetMessageType()
         {
-            return CiphertextMessage.PrekeyType;
+            return PrekeyType;
         }
 
     }

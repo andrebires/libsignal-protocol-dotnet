@@ -26,8 +26,8 @@ namespace Libsignal
 
         public SignalProtocolAddress(String name, uint deviceId)
         {
-            this.Name = name;
-            this.DeviceId = deviceId;
+            Name = name;
+            DeviceId = deviceId;
         }
 
         public override String ToString()
@@ -41,12 +41,12 @@ namespace Libsignal
             if (!(other is SignalProtocolAddress)) return false;
 
             SignalProtocolAddress that = (SignalProtocolAddress)other;
-            return this.Name.Equals(that.Name) && this.DeviceId == that.DeviceId;
+            return Name.Equals(that.Name) && DeviceId == that.DeviceId;
         }
 
         public override int GetHashCode()
         {
-            return this.Name.GetHashCode() ^ (int)this.DeviceId;
+            return Name.GetHashCode() ^ (int)DeviceId;
         }
     }
 }

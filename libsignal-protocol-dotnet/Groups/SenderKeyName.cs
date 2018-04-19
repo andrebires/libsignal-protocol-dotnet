@@ -30,8 +30,8 @@ namespace Libsignal.Groups
 
         public SenderKeyName(String groupId, SignalProtocolAddress sender)
         {
-            this._groupId = groupId;
-            this._sender = sender;
+            _groupId = groupId;
+            _sender = sender;
         }
 
         public String GetGroupId()
@@ -58,13 +58,13 @@ namespace Libsignal.Groups
             SenderKeyName that = (SenderKeyName)other;
 
             return
-                this._groupId.Equals(that._groupId) &&
-                this._sender.Equals(that._sender);
+                _groupId.Equals(that._groupId) &&
+                _sender.Equals(that._sender);
         }
 
         public override int GetHashCode()
         {
-            return this._groupId.GetHashCode() ^ this._sender.GetHashCode();
+            return _groupId.GetHashCode() ^ _sender.GetHashCode();
         }
 
     }

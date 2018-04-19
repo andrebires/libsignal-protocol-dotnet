@@ -33,12 +33,12 @@ namespace Libsignal
 
         public IdentityKey(IEcPublicKey publicKey)
         {
-            this._publicKey = publicKey;
+            _publicKey = publicKey;
         }
 
         public IdentityKey(byte[] bytes, int offset)
         {
-            this._publicKey = Curve.DecodePoint(bytes, offset);
+            _publicKey = Curve.DecodePoint(bytes, offset);
         }
 
         public IEcPublicKey GetPublicKey()

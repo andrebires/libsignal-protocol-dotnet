@@ -45,7 +45,7 @@ namespace Libsignal.Groups
 
         public GroupSessionBuilder(ISenderKeyStore senderKeyStore)
         {
-            this._senderKeyStore = senderKeyStore;
+            _senderKeyStore = senderKeyStore;
         }
 
         /**

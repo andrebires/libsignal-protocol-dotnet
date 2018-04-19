@@ -25,8 +25,8 @@ namespace Libsignal.Ecc
 
         public EcKeyPair(IEcPublicKey publicKey, IEcPrivateKey privateKey)
         {
-            this._publicKey = publicKey;
-            this._privateKey = privateKey;
+            _publicKey = publicKey;
+            _privateKey = privateKey;
         }
 
         public IEcPublicKey GetPublicKey()

@@ -29,8 +29,8 @@ namespace Libsignal.Kdf2
         public DerivedRootSecrets(byte[] okm)
         {
             byte[][] keys = ByteUtil.Split(okm, 32, 32);
-            this._rootKey = keys[0];
-            this._chainKey = keys[1];
+            _rootKey = keys[0];
+            _chainKey = keys[1];
         }
 
         public byte[] GetRootKey()

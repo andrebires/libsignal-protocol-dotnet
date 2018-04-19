@@ -27,7 +27,7 @@ namespace Libsignal.State
 
         public PreKeyRecord(uint id, EcKeyPair keyPair)
         {
-            this._structure = new PreKeyRecordStructure
+            _structure = new PreKeyRecordStructure
             {
                 Id = id,
                 PublicKey = ByteString.CopyFrom(keyPair.GetPublicKey().Serialize()),
@@ -37,22 +37,22 @@ namespace Libsignal.State
 
         public PreKeyRecord(byte[] serialized)
         {
-            this._structure = PreKeyRecordStructure.Parser.ParseFrom(serialized);
+            _structure = PreKeyRecordStructure.Parser.ParseFrom(serialized);
         }
 
 
 
         public uint GetId()
         {
-            return this._structure.Id;
+            return _structure.Id;
         }
 
         public EcKeyPair GetKeyPair()
         {
             try
             {
-                IEcPublicKey publicKey = Curve.DecodePoint(this._structure.PublicKey.ToByteArray(), 0);
-                IEcPrivateKey privateKey = Curve.DecodePrivatePoint(this._structure.PrivateKey.ToByteArray());
+                IEcPublicKey publicKey = Curve.DecodePoint(_structure.PublicKey.ToByteArray(), 0);
+                IEcPrivateKey privateKey = Curve.DecodePrivatePoint(_structure.PrivateKey.ToByteArray());
 
                 return new EcKeyPair(publicKey, privateKey);
             }
@@ -64,7 +64,7 @@ namespace Libsignal.State
 
         public byte[] Serialize()
         {
-            return this._structure.ToByteArray();
+            return _structure.ToByteArray();
         }
     }
 }

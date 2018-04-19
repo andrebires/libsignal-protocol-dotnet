@@ -35,12 +35,12 @@ namespace Libsignal.Ratchet
                              IdentityKeyPair ourIdentityKey, IEcPublicKey theirBaseKey,
                              IEcPublicKey theirRatchetKey, IdentityKey theirIdentityKey)
         {
-            this._ourBaseKey = ourBaseKey;
-            this._ourRatchetKey = ourRatchetKey;
-            this._ourIdentityKey = ourIdentityKey;
-            this._theirBaseKey = theirBaseKey;
-            this._theirRatchetKey = theirRatchetKey;
-            this._theirIdentityKey = theirIdentityKey;
+            _ourBaseKey = ourBaseKey;
+            _ourRatchetKey = ourRatchetKey;
+            _ourIdentityKey = ourIdentityKey;
+            _theirBaseKey = theirBaseKey;
+            _theirRatchetKey = theirRatchetKey;
+            _theirIdentityKey = theirIdentityKey;
 
             if (ourBaseKey == null || ourRatchetKey == null || ourIdentityKey == null ||
                 theirBaseKey == null || theirRatchetKey == null || theirIdentityKey == null)
@@ -96,37 +96,37 @@ namespace Libsignal.Ratchet
 
             public Builder SetOurBaseKey(EcKeyPair ourBaseKey)
             {
-                this._ourBaseKey = ourBaseKey;
+                _ourBaseKey = ourBaseKey;
                 return this;
             }
 
             public Builder SetOurRatchetKey(EcKeyPair ourRatchetKey)
             {
-                this._ourRatchetKey = ourRatchetKey;
+                _ourRatchetKey = ourRatchetKey;
                 return this;
             }
 
             public Builder SetOurIdentityKey(IdentityKeyPair ourIdentityKey)
             {
-                this._ourIdentityKey = ourIdentityKey;
+                _ourIdentityKey = ourIdentityKey;
                 return this;
             }
 
             public Builder SetTheirBaseKey(IEcPublicKey theirBaseKey)
             {
-                this._theirBaseKey = theirBaseKey;
+                _theirBaseKey = theirBaseKey;
                 return this;
             }
 
             public Builder SetTheirRatchetKey(IEcPublicKey theirRatchetKey)
             {
-                this._theirRatchetKey = theirRatchetKey;
+                _theirRatchetKey = theirRatchetKey;
                 return this;
             }
 
             public Builder SetTheirIdentityKey(IdentityKey theirIdentityKey)
             {
-                this._theirIdentityKey = theirIdentityKey;
+                _theirIdentityKey = theirIdentityKey;
                 return this;
             }
 

@@ -35,8 +35,8 @@ namespace Libsignal.State.Impl
         /// </summary>
         public InMemoryIdentityKeyStore(IdentityKeyPair identityKeyPair, uint localRegistrationId)
         {
-            this._identityKeyPair = identityKeyPair;
-            this._localRegistrationId = localRegistrationId;
+            _identityKeyPair = identityKeyPair;
+            _localRegistrationId = localRegistrationId;
         }
 
         public IdentityKeyPair GetIdentityKeyPair()

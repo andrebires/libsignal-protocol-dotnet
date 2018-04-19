@@ -54,7 +54,7 @@ namespace Libsignal.Protocol
                     throw new InvalidMessageException("Unknown version: " + ByteUtil.HighBitsToInt(version));
                 }
 
-                SignalMessage signalMessage = SignalMessage.Parser.ParseFrom(message);
+                SignalMessage signalMessage = Parser.ParseFrom(message);
 
 
 
@@ -68,12 +68,12 @@ namespace Libsignal.Protocol
                     throw new InvalidMessageException("Incomplete message.");
                 }
 
-                this._serialized = serialized;
-                this._senderRatchetKey = Curve.DecodePoint(signalMessage.RatchetKey.ToByteArray(), 0);
-                this._messageVersion = (uint)ByteUtil.HighBitsToInt(version);
-                this._counter = signalMessage.Counter;
-                this._previousCounter = signalMessage.PreviousCounter;
-                this._ciphertext = signalMessage.Ciphertext.ToByteArray();
+                _serialized = serialized;
+                _senderRatchetKey = Curve.DecodePoint(signalMessage.RatchetKey.ToByteArray(), 0);
+                _messageVersion = (uint)ByteUtil.HighBitsToInt(version);
+                _counter = signalMessage.Counter;
+                _previousCounter = signalMessage.PreviousCounter;
+                _ciphertext = signalMessage.Ciphertext.ToByteArray();
             }
             catch (/*InvalidProtocolBufferException | InvalidKeyException | Parse*/Exception e)
             {
@@ -101,12 +101,12 @@ namespace Libsignal.Protocol
 
             byte[] mac = GetMac(senderIdentityKey, receiverIdentityKey, macKey, ByteUtil.Combine(version, message));
 
-            this._serialized = ByteUtil.Combine(version, message, mac);
-            this._senderRatchetKey = senderRatchetKey;
-            this._counter = counter;
-            this._previousCounter = previousCounter;
-            this._ciphertext = ciphertext;
-            this._messageVersion = messageVersion;
+            _serialized = ByteUtil.Combine(version, message, mac);
+            _senderRatchetKey = senderRatchetKey;
+            _counter = counter;
+            _previousCounter = previousCounter;
+            _ciphertext = ciphertext;
+            _messageVersion = messageVersion;
         }
 
         public IEcPublicKey GetSenderRatchetKey()
@@ -171,7 +171,7 @@ namespace Libsignal.Protocol
 
         public override uint GetMessageType()
         {
-            return CiphertextMessage.WhisperType;
+            return WhisperType;
         }
 
         public static bool IsLegacy(byte[] message)

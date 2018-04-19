@@ -26,8 +26,8 @@ namespace Libsignal
 
         public UntrustedIdentityException(String name, IdentityKey key)
         {
-            this._name = name;
-            this._key = key;
+            _name = name;
+            _key = key;
         }
 
         public IdentityKey GetUntrustedIdentity()

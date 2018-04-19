@@ -36,12 +36,12 @@ namespace Libsignal.Ratchet
                                        IdentityKey theirIdentityKey, IEcPublicKey theirSignedPreKey,
                                        IEcPublicKey theirRatchetKey, May<IEcPublicKey> theirOneTimePreKey)
         {
-            this._ourIdentityKey = ourIdentityKey;
-            this._ourBaseKey = ourBaseKey;
-            this._theirIdentityKey = theirIdentityKey;
-            this._theirSignedPreKey = theirSignedPreKey;
-            this._theirRatchetKey = theirRatchetKey;
-            this._theirOneTimePreKey = theirOneTimePreKey;
+            _ourIdentityKey = ourIdentityKey;
+            _ourBaseKey = ourBaseKey;
+            _theirIdentityKey = theirIdentityKey;
+            _theirSignedPreKey = theirSignedPreKey;
+            _theirRatchetKey = theirRatchetKey;
+            _theirOneTimePreKey = theirOneTimePreKey;
 
             if (ourIdentityKey == null || ourBaseKey == null || theirIdentityKey == null ||
                 theirSignedPreKey == null || theirRatchetKey == null || theirOneTimePreKey == null)
@@ -97,37 +97,37 @@ namespace Libsignal.Ratchet
 
             public Builder SetOurIdentityKey(IdentityKeyPair ourIdentityKey)
             {
-                this._ourIdentityKey = ourIdentityKey;
+                _ourIdentityKey = ourIdentityKey;
                 return this;
             }
 
             public Builder SetOurBaseKey(EcKeyPair ourBaseKey)
             {
-                this._ourBaseKey = ourBaseKey;
+                _ourBaseKey = ourBaseKey;
                 return this;
             }
 
             public Builder SetTheirRatchetKey(IEcPublicKey theirRatchetKey)
             {
-                this._theirRatchetKey = theirRatchetKey;
+                _theirRatchetKey = theirRatchetKey;
                 return this;
             }
 
             public Builder SetTheirIdentityKey(IdentityKey theirIdentityKey)
             {
-                this._theirIdentityKey = theirIdentityKey;
+                _theirIdentityKey = theirIdentityKey;
                 return this;
             }
 
             public Builder SetTheirSignedPreKey(IEcPublicKey theirSignedPreKey)
             {
-                this._theirSignedPreKey = theirSignedPreKey;
+                _theirSignedPreKey = theirSignedPreKey;
                 return this;
             }
 
             public Builder SetTheirOneTimePreKey(May<IEcPublicKey> theirOneTimePreKey)
             {
-                this._theirOneTimePreKey = theirOneTimePreKey;
+                _theirOneTimePreKey = theirOneTimePreKey;
                 return this;
             }
 

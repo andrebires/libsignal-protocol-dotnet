@@ -30,8 +30,8 @@ namespace Libsignal.Ratchet
 
         public RootKey(Hkdf kdf, byte[] key)
         {
-            this._kdf = kdf;
-            this._key = key;
+            _kdf = kdf;
+            _key = key;
         }
 
         public byte[] GetKeyBytes()
