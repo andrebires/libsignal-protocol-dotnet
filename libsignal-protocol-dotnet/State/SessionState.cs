@@ -14,7 +14,7 @@ namespace Libsignal.State
 	{
 		private static readonly int MaxMessageKeys = 2000;
 
-		private SessionStructure _sessionStructure;
+		private readonly SessionStructure _sessionStructure;
 
 		public SessionState()
 		{

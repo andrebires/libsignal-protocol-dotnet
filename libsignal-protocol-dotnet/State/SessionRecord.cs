@@ -8,11 +8,11 @@ namespace Libsignal.State
     /// A SessionRecord encapsulates the state of an ongoing session.</summary>
     public class SessionRecord
     {
-        private static int _archivedStatesMaxLength = 40;
+        private static readonly int _archivedStatesMaxLength = 40;
 
         private SessionState _sessionState = new SessionState();
-        private LinkedList<SessionState> _previousStates = new LinkedList<SessionState>();
-        private bool _fresh = false;
+        private readonly LinkedList<SessionState> _previousStates = new LinkedList<SessionState>();
+        private readonly bool _fresh = false;
 
         public SessionRecord()
         {

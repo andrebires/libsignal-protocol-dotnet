@@ -20,54 +20,49 @@ using Libsignal.Ecc;
 
 namespace Libsignal
 {
-    /**
-     * A class for representing an identity key.
-     * 
-     * @author Moxie Marlinspike
-     */
-
+    /// <summary>
+    /// A class for representing an identity key. 
+    /// </summary>
     public class IdentityKey
     {
+        private readonly IEcPublicKey _publicKey;
 
-        private IEcPublicKey _publicKey;
-
-        public IdentityKey(IEcPublicKey publicKey)
+        public IdentityKey (IEcPublicKey publicKey)
         {
             _publicKey = publicKey;
         }
 
-        public IdentityKey(byte[] bytes, int offset)
+        public IdentityKey (byte[] bytes, int offset)
         {
-            _publicKey = Curve.DecodePoint(bytes, offset);
+            _publicKey = Curve.DecodePoint (bytes, offset);
         }
 
-        public IEcPublicKey GetPublicKey()
+        public IEcPublicKey GetPublicKey ()
         {
             return _publicKey;
         }
 
-        public byte[] Serialize()
+        public byte[] Serialize ()
         {
-            return _publicKey.Serialize();
+            return _publicKey.Serialize ();
         }
 
-        public String GetFingerprint()
+        public String GetFingerprint ()
         {
-            return _publicKey.Serialize().ToString(); //Hex
+            return _publicKey.Serialize ().ToString (); //Hex
         }
 
-        public override bool Equals(Object other)
+        public override bool Equals (Object other)
         {
             if (other == null) return false;
             if (!(other is IdentityKey)) return false;
 
-            return _publicKey.Equals(((IdentityKey)other).GetPublicKey());
+            return _publicKey.Equals (((IdentityKey) other).GetPublicKey ());
         }
 
-
-        public override int GetHashCode()
+        public override int GetHashCode ()
         {
-            return _publicKey.GetHashCode();
+            return _publicKey.GetHashCode ();
         }
     }
 }

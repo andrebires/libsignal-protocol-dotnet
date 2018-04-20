@@ -31,7 +31,7 @@ namespace Libsignal.Groups.State
     {
         private static readonly int MaxStates = 5;
 
-        private LinkedList<SenderKeyState> _senderKeyStates = new LinkedList<SenderKeyState>();
+        private readonly LinkedList<SenderKeyState> _senderKeyStates = new LinkedList<SenderKeyState>();
 
         public SenderKeyRecord() { }
 

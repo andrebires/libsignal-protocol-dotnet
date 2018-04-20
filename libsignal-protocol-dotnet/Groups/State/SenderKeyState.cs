@@ -32,7 +32,7 @@ namespace Libsignal.Groups.State
 	{
 		private static readonly int MaxMessageKeys = 2000;
 
-		private SenderKeyStateStructure _senderKeyStateStructure;
+		private readonly SenderKeyStateStructure _senderKeyStateStructure;
 
 		public SenderKeyState(uint id, uint iteration, byte[] chainKey, IEcPublicKey signatureKey)
 			: this(id, iteration, chainKey, signatureKey, May<IEcPrivateKey>.NoValue)

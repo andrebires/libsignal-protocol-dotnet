@@ -23,7 +23,7 @@ namespace Libsignal.State
     public class PreKeyRecord
     {
 
-        private PreKeyRecordStructure _structure;
+        private readonly PreKeyRecordStructure _structure;
 
         public PreKeyRecord(uint id, EcKeyPair keyPair)
         {

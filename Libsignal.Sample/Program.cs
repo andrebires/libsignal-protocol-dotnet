@@ -122,8 +122,11 @@ namespace Libsignal.Sample
 
 
                 PreKeySignalMessage incomingMessage = new PreKeySignalMessage(encryptedMessage);
-                var decryptedMessage = destinationToSenderSessionCipher.Decrypt(incomingMessage);
+                
 
+
+
+                var decryptedMessage = destinationToSenderSessionCipher.Decrypt(incomingMessage);                
                 Console.WriteLine("Decrypted message: {0}", Encoding.UTF8.GetString(decryptedMessage));
 
 

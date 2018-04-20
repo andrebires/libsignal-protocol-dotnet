@@ -25,7 +25,7 @@ namespace Libsignal.State.Impl
 
 		static object _lock = new object();
 
-		private IDictionary<SignalProtocolAddress, byte[]> _sessions = new Dictionary<SignalProtocolAddress, byte[]>();
+		private readonly IDictionary<SignalProtocolAddress, byte[]> _sessions = new Dictionary<SignalProtocolAddress, byte[]>();
 
 		public InMemorySessionStore() { }
 

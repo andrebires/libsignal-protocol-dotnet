@@ -35,10 +35,9 @@ namespace Libsignal
     ///  - A <see cref="PreKeySignalMessage"/> received from a client.
     ///  
     ///  Sessions are constructed per recipientId + deviceId tuple.  Remote logical users are identified
-    ///  by their recipientId, and each logical recipientId can have multiple physical devices.
-    ///  
-    ///  @author Moxie Marlinspike       
+    ///  by their recipientId, and each logical recipientId can have multiple physical devices.    
     /// </summary>
+    /// <author>Moxie Marlinspike</author>
     public class SessionBuilder
     {
 
@@ -48,19 +47,19 @@ namespace Libsignal
         private readonly IDentityKeyStore _identityKeyStore;
         private readonly SignalProtocolAddress _remoteAddress;
 
-        /**
-         * Constructs a SessionBuilder.
-         *
-         * @param sessionStore The {@link org.whispersystems.libsignal.state.SessionStore} to store the constructed session in.
-         * @param preKeyStore The {@link  org.whispersystems.libsignal.state.PreKeyStore} where the client's local {@link org.whispersystems.libsignal.state.PreKeyRecord}s are stored.
-         * @param identityKeyStore The {@link org.whispersystems.libsignal.state.IdentityKeyStore} containing the client's identity key information.
-         * @param remoteAddress The address of the remote user to build a session with.
-         */
+        /// <summary>
+        /// Constructs a SessionBuilder.
+        /// </summary>
+        /// <param name="sessionStore">The {@link org.whispersystems.libsignal.state.SessionStore} to store the constructed session in.</param>
+        /// <param name="preKeyStore">The {@link  org.whispersystems.libsignal.state.PreKeyStore} where the client's local {@link org.whispersystems.libsignal.state.PreKeyRecord}s are stored.</param>
+        /// <param name="signedPreKeyStore"></param>
+        /// <param name="identityKeyStore">The {@link org.whispersystems.libsignal.state.IdentityKeyStore} containing the client's identity key information.</param>
+        /// <param name="remoteAddress">The address of the remote user to build a session with.</param>                
         public SessionBuilder(ISessionStore sessionStore,
-                              IPreKeyStore preKeyStore,
-                              ISignedPreKeyStore signedPreKeyStore,
-                              IDentityKeyStore identityKeyStore,
-                              SignalProtocolAddress remoteAddress)
+            IPreKeyStore preKeyStore,
+            ISignedPreKeyStore signedPreKeyStore,
+            IDentityKeyStore identityKeyStore,
+            SignalProtocolAddress remoteAddress)
         {
             _sessionStore = sessionStore;
             _preKeyStore = preKeyStore;
@@ -69,15 +68,13 @@ namespace Libsignal
             _remoteAddress = remoteAddress;
         }
 
-        /**
-         * Constructs a SessionBuilder
-         * @param store The {@link SignalProtocolStore} to store all state information in.
-         * @param remoteAddress The address of the remote user to build a session with.
-         */
-        public SessionBuilder(ISignalProtocolStore store, SignalProtocolAddress remoteAddress)
-            : this(store, store, store, store, remoteAddress)
-        {
-        }
+        /// <summary>
+        /// Constructs a SessionBuilder
+        /// </summary>
+        /// <param name="store">The <see "SignalProtocolStore" /> to store all state information in.</param>
+        /// <param name="remoteAddress">The address of the remote user to build a session with.</param>
+        /// <returns></returns>
+        public SessionBuilder(ISignalProtocolStore store, SignalProtocolAddress remoteAddress) : this(store, store, store, store, remoteAddress) { }
 
         /**
          * Build a new session from a received {@link PreKeySignalMessage}.
@@ -124,10 +121,10 @@ namespace Libsignal
             BobSignalProtocolParameters.Builder parameters = BobSignalProtocolParameters.NewBuilder();
 
             parameters.SetTheirBaseKey(message.GetBaseKey())
-                      .SetTheirIdentityKey(message.GetIdentityKey())
-                      .SetOurIdentityKey(_identityKeyStore.GetIdentityKeyPair())
-                      .SetOurSignedPreKey(ourSignedPreKey)
-                      .SetOurRatchetKey(ourSignedPreKey);
+                .SetTheirIdentityKey(message.GetIdentityKey())
+                .SetOurIdentityKey(_identityKeyStore.GetIdentityKeyPair())
+                .SetOurSignedPreKey(ourSignedPreKey)
+                .SetOurRatchetKey(ourSignedPreKey);
 
             if (message.GetPreKeyId().HasValue)
             {
@@ -169,7 +166,7 @@ namespace Libsignal
          */
         public void Process(PreKeyBundle preKey)
         {
-            lock (SessionCipher.SessionLock)
+            lock(SessionCipher.SessionLock)
             {
                 if (!_identityKeyStore.IsTrustedIdentity(_remoteAddress, preKey.GetIdentityKey(), Direction.Sending))
                 {
@@ -178,8 +175,8 @@ namespace Libsignal
 
                 if (preKey.GetSignedPreKey() != null &&
                     !Curve.VerifySignature(preKey.GetIdentityKey().GetPublicKey(),
-                                           preKey.GetSignedPreKey().Serialize(),
-                                           preKey.GetSignedPreKeySignature()))
+                        preKey.GetSignedPreKey().Serialize(),
+                        preKey.GetSignedPreKeySignature()))
                 {
                     throw new InvalidKeyException("Invalid signature on device key!");
                 }
@@ -195,16 +192,16 @@ namespace Libsignal
                 IEcPublicKey test = preKey.GetPreKey();
                 May<IEcPublicKey> theirOneTimePreKey = (test == null) ? May<IEcPublicKey>.NoValue : new May<IEcPublicKey>(test);
                 May<uint> theirOneTimePreKeyId = theirOneTimePreKey.HasValue ? new May<uint>(preKey.GetPreKeyId()) :
-                                                                                              May<uint>.NoValue;
+                    May<uint>.NoValue;
 
                 AliceSignalProtocolParameters.Builder parameters = AliceSignalProtocolParameters.NewBuilder();
 
                 parameters.SetOurBaseKey(ourBaseKey)
-                              .SetOurIdentityKey(_identityKeyStore.GetIdentityKeyPair())
-                              .SetTheirIdentityKey(preKey.GetIdentityKey())
-                              .SetTheirSignedPreKey(theirSignedPreKey)
-                              .SetTheirRatchetKey(theirSignedPreKey)
-                              .SetTheirOneTimePreKey(theirOneTimePreKey);
+                    .SetOurIdentityKey(_identityKeyStore.GetIdentityKeyPair())
+                    .SetTheirIdentityKey(preKey.GetIdentityKey())
+                    .SetTheirSignedPreKey(theirSignedPreKey)
+                    .SetTheirRatchetKey(theirSignedPreKey)
+                    .SetTheirOneTimePreKey(theirOneTimePreKey);
 
                 if (!sessionRecord.IsFresh()) sessionRecord.ArchiveCurrentState();
 
