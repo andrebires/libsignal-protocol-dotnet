@@ -76,20 +76,16 @@ namespace Libsignal
         /// <returns></returns>
         public SessionBuilder(ISignalProtocolStore store, SignalProtocolAddress remoteAddress) : this(store, store, store, store, remoteAddress) { }
 
-        /**
-         * Build a new session from a received {@link PreKeySignalMessage}.
-         *
-         * After a session is constructed in this way, the embedded {@link SignalMessage}
-         * can be decrypted.
-         *
-         * @param message The received {@link PreKeySignalMessage}.
-         * @throws org.whispersystems.libsignal.InvalidKeyIdException when there is no local
-         *                                                             {@link org.whispersystems.libsignal.state.PreKeyRecord}
-         *                                                             that corresponds to the PreKey ID in
-         *                                                             the message.
-         * @throws org.whispersystems.libsignal.InvalidKeyException when the message is formatted incorrectly.
-         * @throws org.whispersystems.libsignal.UntrustedIdentityException when the {@link IdentityKey} of the sender is untrusted.
-         */
+        /// <summary>
+        /// Build a new session from a received {@link PreKeySignalMessage}.
+        /// After a session is constructed in this way, the embedded {@link SignalMessage}
+        /// can be decrypted.
+        /// </summary>
+        /// <param name="message">The received {@link PreKeySignalMessage}.</param>        
+        /// <exception cref="InvalidKeyIdException">when there is no local {@link org.whispersystems.libsignal.state.PreKeyRecord} that corresponds to the PreKey ID in the message.</exception>
+        /// <exception cref="InvalidKeyException">when the message is formatted incorrectly.</exception>
+        /// <exception cref="UntrustedIdentityException">when the {@link IdentityKey} of the sender is untrusted.</exception>
+        /// 
         /*package*/
         internal May<uint> Process(SessionRecord sessionRecord, PreKeySignalMessage message)
         {
@@ -153,17 +149,17 @@ namespace Libsignal
             }
         }
 
-        /**
-         * Build a new session from a {@link org.whispersystems.libsignal.state.PreKeyBundle} retrieved from
-         * a server.
-         *
-         * @param preKey A PreKey for the destination recipient, retrieved from a server.
-         * @throws InvalidKeyException when the {@link org.whispersystems.libsignal.state.PreKeyBundle} is
-         *                             badly formatted.
-         * @throws org.whispersystems.libsignal.UntrustedIdentityException when the sender's
-         *                                                                  {@link IdentityKey} is not
-         *                                                                  trusted.
-         */
+        /// <summary>
+        /// Build a new session from a {@link org.whispersystems.libsignal.state.PreKeyBundle} retrieved from
+        /// a server.
+        /// </summary>
+        /// @param preKey A PreKey for the destination recipient, retrieved from a server.
+        /// @throws InvalidKeyException when the {@link org.whispersystems.libsignal.state.PreKeyBundle} is
+        ///                             badly formatted.
+        /// @throws org.whispersystems.libsignal.UntrustedIdentityException when the sender's
+        ///                                                                  {@link IdentityKey} is not
+        ///                                                                  trusted.
+        /// 
         public void Process(PreKeyBundle preKey)
         {
             lock(SessionCipher.SessionLock)
